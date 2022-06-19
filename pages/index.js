@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import client from "../apollo-client";
 import Head from 'next/head'
 import Image from 'next/image'
+import EmbedContainer from "react-oembed-container";
 
 export default function Home({ article }) {
   return (
@@ -25,7 +26,9 @@ export default function Home({ article }) {
         <div>
           <p>{ article.id }</p>
           <p>{ article.attributes.title }</p>
-          <p>{ article.attributes.body }</p>
+          <EmbedContainer markup={ article.attributes.body }>
+            <div dangerouslySetInnerHTML={{ __html: article.attributes.body }} />
+          </EmbedContainer>
         </div>
       </main>
 
