@@ -60,8 +60,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { data } = await client.query({
     query: gql`
-        query Article {
-            article(id: 4) {
+        query Article($slug: String!) {
+            article(slug: $slug) {
                 data {
                     attributes {
                         title
@@ -71,6 +71,9 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
             }
         }
     `,
+    variables: {
+      slug: params.slug
+    }
   });
 
   return {
