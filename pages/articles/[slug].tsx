@@ -4,7 +4,14 @@ import Head from "next/head";
 import { getScripts } from "../../utils/script-helpers";
 import Script from "next/script";
 
-export default function Article({ article }) {
+type ArticleProps = {
+  article: {
+    title: string
+    body: string
+  }
+}
+
+export default function Article({ article }: ArticleProps ) {
   const externalScripts = getScripts(article.body);
 
   return (
@@ -44,13 +51,13 @@ export async function getStaticPaths() {
     `
   })
 
-  const paths = data.articles.data.map((article) => ({
+  const paths = data.articles.data.map((article: { attributes: { slug: string } }) => ({
     params: { slug: article.attributes.slug }
   }))
   return { paths, fallback: 'blocking' };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { data } = await client.query({
     query: gql`
         query Article {
