@@ -1,4 +1,26 @@
 import Head from 'next/head'
+import { Card, CardBody, CardHeader, Typography } from '@material-tailwind/react';
+
+interface ArticleCardProps {
+  title: string;
+  size: "lg" | "sm";
+  className: string;
+}
+
+const ArticleCard = ({ title, size, className }: ArticleCardProps) => {
+  return (
+    <Card className={className}>
+      <CardHeader color="blue" shadow={false} floated={false} className="!m-0 w-full h-full">
+        <div className="w-full h-full"></div>
+      </CardHeader>
+      <CardBody className={size == "sm" ? "p-2" : ""}>
+        <Typography as="h5" variant={size == "sm" ? "small" : "h5"} className="mb-2">
+          {title}
+        </Typography>
+      </CardBody>
+    </Card>
+  )
+}
 
 export default function Home() {
   return (
@@ -10,26 +32,20 @@ export default function Home() {
       </Head>
 
       <div className="h-full py-16 md:pt-28 md:px-10 flex flex-col md:flex-row gap-16 justify-center items-center">
-        <div className="text-center">
-          <div className="w-screen md:w-[490px] h-[490px] bg-neutral-500"></div>
-          <h5 className="text-2xl">Lorem ipsum</h5>
-        </div>
+        <ArticleCard className="w-screen md:w-[490px] h-[490px]" title="Lorem ipsum" size="lg"/>
         <div className="flex flex-col items-center">
           <h2 className="pb-6 text-3xl">Latest News</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="text-center">
-                <div className="w-48 h-48 bg-neutral-500"></div>
-                <h5>Lorem ipsum</h5>
-              </div>
+              <ArticleCard key={i} className="w-48 h-48" title="Lorem ipsum" size="sm"/>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="w-screen h-[50px] mb-10 bg-neutral-200 flex flow-row gap-10 justify-center">
+      <div className="w-screen h-[50px] mb-10 bg-grey-200 flex flow-row gap-10 justify-center">
         {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className="w-6 h-6 my-auto bg-neutral-500"></div>
+          <div key={i} className="w-6 h-6 my-auto bg-grey-500"></div>
         ))}
       </div>
     </>
