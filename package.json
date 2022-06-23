@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.8",
+    "@material-tailwind/react": "^1.0.6",
     "graphql": "^16.5.0",
     "next": "12.1.6",
     "react": "18.2.0",
