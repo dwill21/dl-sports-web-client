@@ -1,6 +1,8 @@
 import Head from 'next/head';
+import ArticleCard from 'components/article-card';
+import { Card, CardBody, Typography } from '@material-tailwind/react';
 
-export default function Category() {
+export default function Category({ category }: { category: string }) {
   return (
     <>
       <Head>
@@ -9,23 +11,64 @@ export default function Category() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="my-20 md:px-20">
-        <h1 className="mt-4 mb-6 text-3xl text-center md:text-left">MLB</h1>
+      <div className="my-16 md:px-20">
+        <Typography as="h1" variant="lead" className="mt-4 mb-6 text-3xl text-center md:text-left">{category}</Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="w-full h-56 bg-neutral-500 order-first"></div>
-          <div className="w-full h-56 bg-neutral-500 order-2"></div>
-          <div className="w-full h-56 bg-neutral-500 order-3"></div>
-          <div className="w-full h-56 bg-neutral-500 order-4"></div>
-          <div className="w-full h-56 bg-neutral-200 md:col-span-2 order-last md:order-1">
-            <div className="h-full md:p-4 grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12">
-              <div className="w-full h-full bg-neutral-500"></div>
-              <div className="w-full h-full bg-neutral-500"></div>
-              <div className="w-full h-full bg-neutral-500"></div>
-              <div className="w-full h-full bg-neutral-500"></div>
+          <ArticleCard className="w-full h-56 order-first" title="Lorem ipsum" size="sm"/>
+
+          <Card className="w-full h-56 p-4 order-2" title="Lorem ipsum">
+            <Typography as="h3" className="text-center">Playoff Race</Typography>
+            <ul className="h-full py-6 flex flex-col justify-between">
+              <Typography as="li" variant="small">Foo</Typography>
+              <Typography as="li" variant="small">Bar</Typography>
+              <Typography as="li" variant="small">Baz</Typography>
+            </ul>
+          </Card>
+          <Card className="w-full h-56 p-4 order-3" title="Lorem ipsum">
+            <Typography as="h3" className="text-center">Power Rankings</Typography>
+            <ul className="h-full py-6 flex flex-col overflow-scroll">
+              {Array(30).fill(0).map((_, i) => (
+                <Typography key={i} as="li" variant="small">{i}.</Typography>
+              ))}
+            </ul>
+          </Card>
+          <Card className="w-full h-56 p-4 order-4" title="Lorem ipsum">
+            <Typography as="h3" className="text-center">Videos</Typography>
+            <ul className="h-full py-6 flex flex-col justify-between">
+              <Typography as="li" variant="small">Foo</Typography>
+              <Typography as="li" variant="small">Bar</Typography>
+              <Typography as="li" variant="small">Baz</Typography>
+            </ul>
+          </Card>
+
+          <div className="w-full h-56 md:col-span-2 order-last md:order-1">
+            <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
+              {[0, 1, 2, 3].map(i => (
+                <Card key={i} color="grey">
+                  <CardBody className="max-w-full max-h-full">
+                    <Typography as="h5" variant="small" className="mb-2 font-bold">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor eget augue sed convallis.
+                    </Typography>
+                  </CardBody>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </>
   )
+}
+
+export async function getStaticPaths() {
+  const paths = ['mlb', 'nfl', 'nhl', 'nba', 'ncaaf', 'ncaam'].map(sport => ({ params: { category: sport } }));
+  return { paths, fallback: 'blocking' };
+}
+
+export async function getStaticProps({ params }: { params: { category: string } }) {
+  return {
+    props: {
+      category: params.category.toUpperCase()
+    },
+  };
 }
