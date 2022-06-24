@@ -1,17 +1,39 @@
 import { Menu, MenuHandler, MenuItem, MenuList, Navbar, Typography } from '@material-tailwind/react';
 import { IoMdArrowDropdown, IoMdMenu, IoMdArrowDropleft } from 'react-icons/io';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
-const getWindowWidth = () => {
-  return window.innerWidth;
+const MenuLink = ({ href, children }: { href: string, children: ReactNode }) => {
+  return (
+    <Typography as="a" href={href} variant="paragraph" className="p-1 font-normal">
+      {children}
+    </Typography>
+  )
 }
+
+const navItems = [
+  (
+    <MenuLink key="Columns" href="/">
+      Columns
+    </MenuLink>
+  ),
+  (
+    <MenuLink key="On the DL" href="/">
+      &quot;On the DL&quot;
+    </MenuLink>
+  ),
+  (
+    <MenuLink key="Contact" href="/">
+      Contact
+    </MenuLink>
+  ),
+]
 
 const CondensedMenu = () => {
   return (
     <Menu>
       <MenuHandler>
         <button>
-          <IoMdMenu size="2rem"/>
+          <IoMdMenu size="2.25rem"/>
         </button>
       </MenuHandler>
       <MenuList>
@@ -27,15 +49,9 @@ const CondensedMenu = () => {
             <MenuItem>Baz</MenuItem>
           </MenuList>
         </Menu>
-        <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-          Columns
-        </Typography>
-        <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-          &quot;On the DL&quot;
-        </Typography>
-        <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-          Contact
-        </Typography>
+        {navItems.map((navItem, index) => (
+          <MenuItem key={index}>{navItem}</MenuItem>
+        ))}
       </MenuList>
     </Menu>
   )
@@ -56,17 +72,13 @@ const ExpandedMenu = () => {
           <MenuItem>Baz</MenuItem>
         </MenuList>
       </Menu>
-      <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-        Columns
-      </Typography>
-      <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-        &quot;On the DL&quot;
-      </Typography>
-      <Typography as="a" href="/" variant="paragraph" className="p-1 font-normal flex items-center">
-        Contact
-      </Typography>
+      {navItems}
     </>
   )
+}
+
+const getWindowWidth = () => {
+  return window.innerWidth;
 }
 
 export default function AppNavbar() {
