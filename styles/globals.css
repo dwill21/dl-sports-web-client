@@ -11,3 +11,8 @@ body {
 .twitter-tweet {
   @apply mx-auto
 }
+
+iframe {
+  max-width: 100%;
+  margin: auto;
+}
