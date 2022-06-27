@@ -5,6 +5,11 @@ import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
 
+interface SportPath {
+  attributes: {
+    slug: string
+  }
+}
 interface SportProps {
   sport: {
     name: string
@@ -60,7 +65,20 @@ export default function Sport({ sport }: SportProps) {
 }
 
 export async function getStaticPaths() {
-  const paths = ['mlb'].map(sport => ({ params: { slug: sport } }));
+  const { data } = await client.query({
+    query: gql`
+        query AllSports {
+            sports {
+                data {
+                    attributes {
+                        slug
+                    }
+                }
+            }
+        }
+    `
+  })
+  const paths = data.sports.data.map((sport: SportPath) => ({ params: { slug: sport.attributes.slug } }));
   return { paths, fallback: 'blocking' };
 }
 
