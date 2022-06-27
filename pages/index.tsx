@@ -1,5 +1,8 @@
 import Head from 'next/head'
 import ArticleCard from 'components/article-card';
+import client from 'utils/apollo-client';
+import { gql } from '@apollo/client';
+import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
 
 export default function Home() {
   return (
@@ -29,4 +32,20 @@ export default function Home() {
       </div>
     </>
   )
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql`
+        ${NAVBAR_FIELDS}
+        query Navbar {
+            ...NavbarFields
+        }
+    `
+  });
+  return {
+    props: {
+      sports: parseNavbarFields(data)
+    }
+  }
 }

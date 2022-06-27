@@ -1,8 +1,10 @@
 import { Navbar, Typography } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
-import NavbarMenuLink from './navbar-menu-link';
-import FullNavbarMenu from './full-navbar-menu';
-import CondensedNavbarMenu from './condensed-navbar-menu';
+import NavbarMenuLink from 'components/navbar-menu-link';
+import FullNavbarMenu from 'components/full-navbar-menu';
+import CondensedNavbarMenu from 'components/condensed-navbar-menu';
+import { NavbarProps, SportMetadata } from 'additional';
+import { gql } from '@apollo/client';
 
 const navItems = [
   (
@@ -21,17 +23,11 @@ const navItems = [
     </NavbarMenuLink>
   ),
 ]
-const sports = [
-  {
-    name: "MLB",
-    slug: "mlb",
-  }
-]
 const getWindowWidth = () => {
   return window.innerWidth;
 }
 
-export default function AppNavbar() {
+export default function AppNavbar({ sports }: NavbarProps) {
   const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
@@ -59,4 +55,27 @@ export default function AppNavbar() {
       </div>
     </Navbar>
   );
+}
+
+export const NAVBAR_FIELDS = gql`
+    fragment NavbarFields on Query {
+        sports {
+            data {
+                attributes {
+                    name
+                    slug
+                }
+            }
+        }
+    }
+`
+interface NavbarFields {
+  sports: {
+    data: {
+      attributes: SportMetadata
+    }[]
+  }
+}
+export function parseNavbarFields(data: NavbarFields) {
+  return data.sports.data.map(sport => sport.attributes);
 }

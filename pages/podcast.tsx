@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
-import { SpotifyAPI } from '../additional';
-import spotifyClient from '../utils/apollo-client-spotify';
+import { SpotifyAPI } from 'additional';
+import spotifyClient from 'utils/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button } from '@material-tailwind/react';
+import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
+import apolloClient from 'utils/apollo-client';
 
 type Episode = {
   id: string
@@ -92,7 +94,7 @@ export default function Podcast({ episodes }: PodcastProps) {
 
 export async function getStaticProps() {
   const showId = process.env.SPOTIFY_SHOW_ID;
-  const { data } = await spotifyClient.query({
+  const spotifyData = await spotifyClient.query({
     query: gql`
         query podcastEpisodes {
             show @rest(type: "Show", path: "shows/${showId}/episodes?offset=0&limit=5&market=US") {
@@ -105,9 +107,20 @@ export async function getStaticProps() {
         }
     `
   });
+
+  const navbarData = await apolloClient.query({
+    query: gql`
+        ${NAVBAR_FIELDS}
+        query Navbar {
+            ...NavbarFields
+        }
+    `
+  });
+
   return {
     props: {
-      episodes: data.show.items
+      episodes: spotifyData.data.show.items,
+      sports: parseNavbarFields(navbarData.data),
     }
   }
 }

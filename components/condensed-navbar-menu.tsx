@@ -1,7 +1,7 @@
 import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import { IoMdArrowDropleft, IoMdMenu } from 'react-icons/io';
-import { NavbarMenuProps } from '../additional';
-import NavbarMenuLink from './navbar-menu-link';
+import { NavbarMenuProps } from 'additional';
+import NavbarMenuLink from 'components/navbar-menu-link';
 
 export default function CondensedNavbarMenu({ sports, navItems }: NavbarMenuProps) {
   return (

@@ -1,11 +1,14 @@
 import { ReactNode } from 'react';
 
-interface Sport {
+interface SportMetadata {
   name: string
   slug: string
 }
+interface NavbarProps {
+  sports: SportMetadata[]
+}
 interface NavbarMenuProps {
-  sports: Sport[]
+  sports: SportMetadata[]
   navItems: ReactNode[]
 }
 
@@ -23,4 +26,4 @@ declare global {
   }
 }
 
-export { Sport, NavbarProps, NavbarMenuProps, SpotifyAPI }
+export { SportMetadata, NavbarProps, NavbarMenuProps, SpotifyAPI }
