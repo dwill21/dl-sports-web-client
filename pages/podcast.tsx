@@ -120,7 +120,7 @@ export async function getStaticProps() {
   return {
     props: {
       episodes: spotifyData.data.show.items,
-      sports: parseNavbarFields(navbarData.data),
+      navbar: parseNavbarFields(navbarData.data),
     }
   }
 }

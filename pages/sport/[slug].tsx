@@ -1,8 +1,21 @@
 import Head from 'next/head';
 import ArticleCard from 'components/article-card';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
+import { gql } from '@apollo/client';
+import client from 'utils/apollo-client';
+import { NAVBAR_FIELDS, parseNavbarFields } from '../../components/navbar';
 
-export default function Category({ category }: { category: string }) {
+interface SportProps {
+  sport: {
+    name: string
+    topic: {
+      title: string
+      content: string
+    }[]
+  }
+}
+
+export default function Sport({ sport }: SportProps) {
   return (
     <>
       <Head>
@@ -12,7 +25,9 @@ export default function Category({ category }: { category: string }) {
       </Head>
 
       <div className="my-16 md:px-20">
-        <Typography as="h1" variant="lead" className="mt-4 mb-6 text-3xl text-center md:text-left">{category}</Typography>
+        <Typography as="h1" variant="lead" className="mt-4 mb-6 text-3xl text-center md:text-left">
+          {sport.name}
+        </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <ArticleCard className="w-full h-56 order-first" title="Lorem ipsum" size="sm"/>
 
@@ -61,14 +76,37 @@ export default function Category({ category }: { category: string }) {
 }
 
 export async function getStaticPaths() {
-  const paths = ['mlb', 'nfl', 'nhl', 'nba', 'ncaaf', 'ncaam'].map(sport => ({ params: { category: sport } }));
+  const paths = ['mlb'].map(sport => ({ params: { slug: sport } }));
   return { paths, fallback: 'blocking' };
 }
 
-export async function getStaticProps({ params }: { params: { category: string } }) {
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const { data } = await client.query({
+    query: gql`
+        ${NAVBAR_FIELDS}
+        query Sport($slug: String!) {
+            sport(slug: $slug) {
+                data {
+                    attributes {
+                        name
+                        topic {
+                            title
+                            content
+                        }
+                    }
+                }
+            }
+            ...NavbarFields
+        }
+    `,
+    variables: {
+      slug: params.slug
+    }
+  })
   return {
     props: {
-      category: params.category.toUpperCase()
-    },
+      sport: data.sport.data.attributes,
+      navbar: parseNavbarFields(data),
+    }
   };
 }

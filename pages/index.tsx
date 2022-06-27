@@ -45,7 +45,7 @@ export async function getStaticProps() {
   });
   return {
     props: {
-      sports: parseNavbarFields(data)
+      navbar: parseNavbarFields(data)
     }
   }
 }

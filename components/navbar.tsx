@@ -77,5 +77,7 @@ interface NavbarFields {
   }
 }
 export function parseNavbarFields(data: NavbarFields) {
-  return data.sports.data.map(sport => sport.attributes);
+  return {
+    sports: data.sports.data.map(sport => sport.attributes)
+  };
 }

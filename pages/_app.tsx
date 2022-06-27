@@ -6,7 +6,7 @@ import { ThemeProvider } from '@material-tailwind/react';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
-      <Layout navbarProps={{ sports: pageProps.sports }}>
+      <Layout navbarProps={{...pageProps.navbar}}>
         <Component {...pageProps} />
       </Layout>
     </ThemeProvider>
