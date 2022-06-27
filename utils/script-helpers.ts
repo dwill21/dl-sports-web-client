@@ -44,7 +44,7 @@ const extractScriptURL = ( script: string ) => (
  *
  * @param {String[]} scripts Array script file URIs.
  */
-const uniqueURIs = ( scripts: string[] ) => Object.keys( scripts.reduce( ( keys, script ) => (
+const uniqueURIs = ( scripts: (string|null)[] ) => Object.keys( scripts.reduce( ( keys, script ) => (
   script ? {
     ...keys,
     [script]: true,

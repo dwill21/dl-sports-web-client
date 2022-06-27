@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
-import { spotifyAPI } from '../additional';
+import { SpotifyAPI } from '../additional';
 import spotifyClient from '../utils/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button } from '@material-tailwind/react';
@@ -36,7 +36,7 @@ export default function Podcast({ episodes }: PodcastProps) {
   const [embedController, setEmbedController] = useState<{ loadUri: (uri: string) => void } | null>(null);
 
   useEffect(() => {
-    window.onSpotifyIframeApiReady = (iFrameAPI: spotifyAPI) => {
+    window.onSpotifyIframeApiReady = (iFrameAPI: SpotifyAPI) => {
       const element = document.getElementById('embed-iframe');
       const options = {
         ...spotifyPlayerOptions,

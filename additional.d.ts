@@ -1,22 +1,26 @@
+import { ReactNode } from 'react';
 
-type spotifyControllerOptions = {
+interface Sport {
+  name: string
+  slug: string
+}
+interface NavbarMenuProps {
+  sports: Sport[]
+  navItems: ReactNode[]
+}
+
+type SpotifyControllerOptions = {
   width?: string,
   height?: string,
   uri?: string,
 }
-
-type embedController = {
-  loadUri: (uri: string) => void
+interface SpotifyAPI {
+  createController: (element: HTMLElement|null, options: SpotifyControllerOptions, callback: (embedController) => void) => void
 }
-
-interface spotifyAPI {
-  createController: (element: HTMLElement|null, options: spotifyControllerOptions, callback: (embedController) => void) => void
-}
-
 declare global {
   interface Window {
-    onSpotifyIframeApiReady: (IFrameAPI: spotifyAPI) => void
+    onSpotifyIframeApiReady: (IFrameAPI: SpotifyAPI) => void
   }
 }
 
-export { spotifyAPI }
+export { Sport, NavbarProps, NavbarMenuProps, SpotifyAPI }

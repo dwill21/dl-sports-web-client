@@ -1,82 +1,32 @@
-import { Menu, MenuHandler, MenuItem, MenuList, Navbar, Typography } from '@material-tailwind/react';
-import { IoMdArrowDropdown, IoMdMenu, IoMdArrowDropleft } from 'react-icons/io';
-import { ReactNode, useEffect, useState } from 'react';
-
-const MenuLink = ({ href, children }: { href: string, children: ReactNode }) => {
-  return (
-    <Typography as="a" href={href} variant="paragraph" className="p-1 font-normal">
-      {children}
-    </Typography>
-  )
-}
+import { Navbar, Typography } from '@material-tailwind/react';
+import { useEffect, useState } from 'react';
+import NavbarMenuLink from './navbar-menu-link';
+import FullNavbarMenu from './full-navbar-menu';
+import CondensedNavbarMenu from './condensed-navbar-menu';
 
 const navItems = [
   (
-    <MenuLink key="Columns" href="/">
+    <NavbarMenuLink key="Columns" href="/">
       Columns
-    </MenuLink>
+    </NavbarMenuLink>
   ),
   (
-    <MenuLink key="On the DL" href="/podcast">
+    <NavbarMenuLink key="On the DL" href="/podcast">
       &quot;On the DL&quot;
-    </MenuLink>
+    </NavbarMenuLink>
   ),
   (
-    <MenuLink key="Contact" href="/">
+    <NavbarMenuLink key="Contact" href="/">
       Contact
-    </MenuLink>
+    </NavbarMenuLink>
   ),
 ]
-
-const CondensedMenu = () => {
-  return (
-    <Menu>
-      <MenuHandler>
-        <button>
-          <IoMdMenu size="2.25rem"/>
-        </button>
-      </MenuHandler>
-      <MenuList>
-        <Menu placement="left-start" offset={10}>
-          <MenuHandler>
-            <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
-              <IoMdArrowDropleft size="1.25rem"/>&nbsp;Articles
-            </Typography>
-          </MenuHandler>
-          <MenuList>
-            <MenuItem>Foo</MenuItem>
-            <MenuItem>Bar</MenuItem>
-            <MenuItem>Baz</MenuItem>
-          </MenuList>
-        </Menu>
-        {navItems.map((navItem, index) => (
-          <MenuItem key={index}>{navItem}</MenuItem>
-        ))}
-      </MenuList>
-    </Menu>
-  )
-}
-
-const ExpandedMenu = () => {
-  return (
-    <>
-      <Menu>
-        <MenuHandler>
-          <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
-            Articles&nbsp;<IoMdArrowDropdown />
-          </Typography>
-        </MenuHandler>
-        <MenuList>
-          <MenuItem>Foo</MenuItem>
-          <MenuItem>Bar</MenuItem>
-          <MenuItem>Baz</MenuItem>
-        </MenuList>
-      </Menu>
-      {navItems}
-    </>
-  )
-}
-
+const sports = [
+  {
+    name: "MLB",
+    slug: "mlb",
+  }
+]
 const getWindowWidth = () => {
   return window.innerWidth;
 }
@@ -103,7 +53,9 @@ export default function AppNavbar() {
           DL Sports
         </Typography>
 
-        {windowWidth >= 1024 ? <ExpandedMenu /> : <CondensedMenu />}
+        {windowWidth >= 1024
+          ? <FullNavbarMenu sports={sports} navItems={navItems}/>
+          : <CondensedNavbarMenu sports={sports} navItems={navItems}/>}
       </div>
     </Navbar>
   );
