@@ -15,7 +15,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
         <MenuList>
           {sports.map(sport => (
             <MenuItem key={sport.slug}>
-              <NavbarMenuLink href={"/" + sport.slug}>
+              <NavbarMenuLink href={"/sport/" + sport.slug}>
                 {sport.name}
               </NavbarMenuLink>
             </MenuItem>

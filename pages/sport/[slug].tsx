@@ -3,12 +3,12 @@ import ArticleCard from 'components/article-card';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
-import { NAVBAR_FIELDS, parseNavbarFields } from '../../components/navbar';
+import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
 
 interface SportProps {
   sport: {
     name: string
-    topic: {
+    topics: {
       title: string
       content: string
     }[]
@@ -29,34 +29,9 @@ export default function Sport({ sport }: SportProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <ArticleCard className="w-full h-56 order-first" title="Lorem ipsum" size="sm"/>
+          <ArticleCard className="w-full h-64" title="Lorem ipsum" size="sm"/>
 
-          <Card className="w-full h-56 p-4 order-2" title="Lorem ipsum">
-            <Typography as="h3" className="text-center">Playoff Race</Typography>
-            <ul className="h-full py-6 flex flex-col justify-between">
-              <Typography as="li" variant="small">Foo</Typography>
-              <Typography as="li" variant="small">Bar</Typography>
-              <Typography as="li" variant="small">Baz</Typography>
-            </ul>
-          </Card>
-          <Card className="w-full h-56 p-4 order-3" title="Lorem ipsum">
-            <Typography as="h3" className="text-center">Power Rankings</Typography>
-            <ul className="h-full py-6 flex flex-col overflow-scroll">
-              {Array(30).fill(0).map((_, i) => (
-                <Typography key={i} as="li" variant="small">{i}.</Typography>
-              ))}
-            </ul>
-          </Card>
-          <Card className="w-full h-56 p-4 order-4" title="Lorem ipsum">
-            <Typography as="h3" className="text-center">Videos</Typography>
-            <ul className="h-full py-6 flex flex-col justify-between">
-              <Typography as="li" variant="small">Foo</Typography>
-              <Typography as="li" variant="small">Bar</Typography>
-              <Typography as="li" variant="small">Baz</Typography>
-            </ul>
-          </Card>
-
-          <div className="w-full h-56 md:col-span-2 order-last md:order-1">
+          <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
               {[0, 1, 2, 3].map(i => (
                 <Card key={i} color="grey">
@@ -69,6 +44,15 @@ export default function Sport({ sport }: SportProps) {
               ))}
             </div>
           </div>
+
+          {sport.topics.map(topic => (
+            <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card">
+              <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
+                {topic.title}
+              </Typography>
+              <div dangerouslySetInnerHTML={{ __html: topic.content }}/>
+            </Card>
+          ))}
         </div>
       </div>
     </>
@@ -89,7 +73,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                 data {
                     attributes {
                         name
-                        topic {
+                        topics {
                             title
                             content
                         }
