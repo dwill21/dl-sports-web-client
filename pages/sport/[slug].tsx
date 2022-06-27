@@ -17,6 +17,22 @@ interface SportProps {
       title: string
       content: string
     }[]
+    articles: {
+      title: string
+      coverUrl: string
+    }[]
+  }
+}
+interface ArticleResponse {
+  attributes: {
+    title: string
+    cover: {
+      data: {
+        attributes: {
+          url: string
+        }
+      }
+    }
   }
 }
 
@@ -34,15 +50,15 @@ export default function Sport({ sport }: SportProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <ArticleCard className="w-full h-64" title="Lorem ipsum" size="sm"/>
+          <ArticleCard className="w-full h-64" title={sport.articles?.[0].title} size="sm"/>
 
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
-              {[0, 1, 2, 3].map(i => (
-                <Card key={i} color="grey">
+              {sport.articles.slice(1).map(article => (
+                <Card key={article.title} color="grey">
                   <CardBody className="max-w-full max-h-full">
                     <Typography as="h5" variant="small" className="mb-2 font-bold">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor eget augue sed convallis.
+                      {article.title}
                     </Typography>
                   </CardBody>
                 </Card>
@@ -95,6 +111,20 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                             title
                             content
                         }
+                        articles(pagination: {page: 1, pageSize: 5}) {
+                            data {
+                                attributes {
+                                    title
+                                    cover {
+                                        data {
+                                            attributes {
+                                                url
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -105,9 +135,14 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
       slug: params.slug
     }
   })
+
+  const articles = data.sport.data.attributes.articles.data.map((article: ArticleResponse) => ({
+    coverUrl: article.attributes.cover.data.attributes.url,
+    title: article.attributes.title
+  }));
   return {
     props: {
-      sport: data.sport.data.attributes,
+      sport: {...data.sport.data.attributes, articles},
       navbar: parseNavbarFields(data),
     }
   };
