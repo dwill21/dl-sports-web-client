@@ -17,7 +17,7 @@ const navItems = [
     </MenuLink>
   ),
   (
-    <MenuLink key="On the DL" href="/">
+    <MenuLink key="On the DL" href="/podcast">
       &quot;On the DL&quot;
     </MenuLink>
   ),
