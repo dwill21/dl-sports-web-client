@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { spotifyAPI } from '../additional';
-import restClient from '../utils/apollo-client-rest';
+import spotifyClient from '../utils/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button } from '@material-tailwind/react';
 
@@ -92,7 +92,7 @@ export default function Podcast({ episodes }: PodcastProps) {
 
 export async function getStaticProps() {
   const showId = process.env.SPOTIFY_SHOW_ID;
-  const { data } = await restClient.query({
+  const { data } = await spotifyClient.query({
     query: gql`
         query podcastEpisodes {
             show @rest(type: "Show", path: "shows/${showId}/episodes?offset=0&limit=5&market=US") {
