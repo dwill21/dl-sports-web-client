@@ -26,4 +26,12 @@ declare global {
   }
 }
 
-export { SportMetadata, NavbarProps, NavbarMenuProps, SpotifyAPI }
+interface ArticleCardProps {
+  title: string
+  cover: {
+    url: string
+    alternativeText: string
+  }
+}
+
+export { SportMetadata, NavbarProps, NavbarMenuProps, SpotifyAPI, ArticlePreview }

@@ -1,24 +1,20 @@
 import { Card, CardBody, CardHeader, Typography } from '@material-tailwind/react';
 import Image from 'next/image';
+import { ArticlePreview } from 'additional';
 
-interface ArticleCardProps {
-  title: string;
-  coverImage: {
-    url: string;
-    alt: string;
-  }
+type ArticleCardProps = ArticlePreview & {
   size?: "lg" | "sm";
   className?: string;
 }
 
-const ArticleCard = ({ title, size = "sm", className, coverImage }: ArticleCardProps) => {
+const ArticleCard = ({ title, size = "sm", className, cover }: ArticleCardProps) => {
   return (
     <Card className={className}>
       <CardHeader shadow={false} floated={false} className="!m-0 w-full h-full">
         <Image
-          src={coverImage.url}
+          src={cover.url}
           priority={true}
-          alt={coverImage.alt}
+          alt={cover.alternativeText}
           layout="fill"
           objectFit="cover"
         />

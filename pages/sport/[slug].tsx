@@ -4,6 +4,8 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
+import { flatten } from 'utils/graphql-utils';
+import { ArticlePreview } from 'additional';
 
 interface SportPath {
   attributes: {
@@ -17,36 +19,16 @@ interface SportProps {
       title: string
       content: string
     }[]
-    articles: Article[]
-  }
-}
-interface ArticleResponse {
-  attributes: {
-    title: string
-    cover: {
-      data: {
-        attributes: {
-          url: string
-          alternativeText: string
-        }
-      }
-    }
-  }
-}
-interface Article {
-  title: string
-  coverImage: {
-    url: string
-    alt: string
+    articles: ArticlePreview[]
   }
 }
 
-const CoverArticle = ({ article }: { article: Article }) => {
+const CoverArticle = ({ article }: { article: ArticlePreview }) => {
   if (!article) {
     return null;
   }
   return (
-    <ArticleCard className="w-full h-64" title={article.title} coverImage={article.coverImage}/>
+    <ArticleCard className="w-full h-64" title={article.title} cover={article.cover}/>
   )
 }
 
@@ -151,16 +133,14 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   })
 
-  const articles = data.sport.data.attributes.articles.data.map((article: ArticleResponse) => ({
-    title: article.attributes.title,
-    coverImage: {
-      url: process.env.STRAPI_URL + article.attributes.cover.data.attributes.url,
-      alt: article.attributes.cover.data.attributes.alternativeText,
-    }
-  }));
+  const flattened = flatten(data.sport);
+  flattened.articles.forEach((article: ArticlePreview) => {
+    article.cover.url = process.env.STRAPI_URL + article.cover.url
+  });
+
   return {
     props: {
-      sport: {...data.sport.data.attributes, articles},
+      sport: flattened,
       navbar: parseNavbarFields(data),
     }
   };
