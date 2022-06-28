@@ -5,8 +5,9 @@ import { SpotifyAPI } from 'additional';
 import spotifyClient from 'utils/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button } from '@material-tailwind/react';
-import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
 import apolloClient from 'utils/apollo-client';
+import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { flatten } from '../utils/graphql-utils';
 
 type Episode = {
   id: string
@@ -110,9 +111,9 @@ export async function getStaticProps() {
 
   const navbarData = await apolloClient.query({
     query: gql`
-        ${NAVBAR_FIELDS}
+        ${NAVBAR_FRAGMENT}
         query Navbar {
-            ...NavbarFields
+            ...Navbar
         }
     `
   });
@@ -120,7 +121,9 @@ export async function getStaticProps() {
   return {
     props: {
       episodes: spotifyData.data.show.items,
-      navbar: parseNavbarFields(navbarData.data),
+      navbar: {
+        sports: flatten(navbarData.data.sports)
+      },
     }
   }
 }

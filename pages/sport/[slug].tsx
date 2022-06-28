@@ -3,9 +3,9 @@ import ArticleCard from 'components/article-card';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
-import { NAVBAR_FIELDS, parseNavbarFields } from 'components/navbar';
 import { flatten } from 'utils/graphql-utils';
 import { ArticlePreview } from 'additional';
+import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 
 interface SportPath {
   attributes: {
@@ -97,7 +97,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { data } = await client.query({
     query: gql`
-        ${NAVBAR_FIELDS}
+        ${NAVBAR_FRAGMENT}
         query Sport($slug: String!) {
             sport(slug: $slug) {
                 data {
@@ -125,7 +125,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                     }
                 }
             }
-            ...NavbarFields
+            ...Navbar
         }
     `,
     variables: {
@@ -133,15 +133,16 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   })
 
-  const flattened = flatten(data.sport);
-  flattened.articles.forEach((article: ArticlePreview) => {
+  const flattenedSports = flatten(data.sport);
+  flattenedSports.articles.forEach((article: ArticlePreview) => {
     article.cover.url = process.env.STRAPI_URL + article.cover.url
   });
-
   return {
     props: {
-      sport: flattened,
-      navbar: parseNavbarFields(data),
+      sport: flattenedSports,
+      navbar: {
+        sports: flatten(data.sports)
+      },
     }
   };
 }

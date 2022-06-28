@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import NavbarMenuLink from 'components/navbar-menu-link';
 import FullNavbarMenu from 'components/full-navbar-menu';
 import CondensedNavbarMenu from 'components/condensed-navbar-menu';
-import { NavbarProps, SportMetadata } from 'additional';
-import { gql } from '@apollo/client';
+import { NavbarProps } from 'additional';
 
 const navItems = [
   (
@@ -55,29 +54,4 @@ export default function AppNavbar({ sports }: NavbarProps) {
       </div>
     </Navbar>
   );
-}
-
-export const NAVBAR_FIELDS = gql`
-    fragment NavbarFields on Query {
-        sports {
-            data {
-                attributes {
-                    name
-                    slug
-                }
-            }
-        }
-    }
-`
-interface NavbarFields {
-  sports: {
-    data: {
-      attributes: SportMetadata
-    }[]
-  }
-}
-export function parseNavbarFields(data: NavbarFields) {
-  return {
-    sports: data.sports.data.map(sport => sport.attributes)
-  };
 }
