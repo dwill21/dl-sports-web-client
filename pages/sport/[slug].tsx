@@ -17,10 +17,7 @@ interface SportProps {
       title: string
       content: string
     }[]
-    articles: {
-      title: string
-      coverUrl: string
-    }[]
+    articles: Article[]
   }
 }
 interface ArticleResponse {
@@ -30,10 +27,27 @@ interface ArticleResponse {
       data: {
         attributes: {
           url: string
+          alternativeText: string
         }
       }
     }
   }
+}
+interface Article {
+  title: string
+  coverImage: {
+    url: string
+    alt: string
+  }
+}
+
+const CoverArticle = ({ article }: { article: Article }) => {
+  if (!article) {
+    return null;
+  }
+  return (
+    <ArticleCard className="w-full h-64" title={article.title} coverImage={article.coverImage}/>
+  )
 }
 
 export default function Sport({ sport }: SportProps) {
@@ -50,7 +64,7 @@ export default function Sport({ sport }: SportProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <ArticleCard className="w-full h-64" title={sport.articles?.[0].title} size="sm"/>
+          <CoverArticle article={sport.articles?.[0]}/>
 
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
@@ -119,6 +133,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                                         data {
                                             attributes {
                                                 url
+                                                alternativeText
                                             }
                                         }
                                     }
@@ -137,8 +152,11 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   })
 
   const articles = data.sport.data.attributes.articles.data.map((article: ArticleResponse) => ({
-    coverUrl: article.attributes.cover.data.attributes.url,
-    title: article.attributes.title
+    title: article.attributes.title,
+    coverImage: {
+      url: process.env.STRAPI_URL + article.attributes.cover.data.attributes.url,
+      alt: article.attributes.cover.data.attributes.alternativeText,
+    }
   }));
   return {
     props: {
