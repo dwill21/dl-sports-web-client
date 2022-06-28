@@ -23,15 +23,6 @@ interface SportProps {
   }
 }
 
-const CoverArticle = ({ article }: { article: ArticlePreview }) => {
-  if (!article) {
-    return null;
-  }
-  return (
-    <ArticleCard className="w-full h-64" title={article.title} cover={article.cover}/>
-  )
-}
-
 export default function Sport({ sport }: SportProps) {
   return (
     <>
@@ -46,7 +37,7 @@ export default function Sport({ sport }: SportProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <CoverArticle article={sport.articles?.[0]}/>
+          <ArticleCard className="w-full h-64" article={sport.articles?.[0]}/>
 
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">

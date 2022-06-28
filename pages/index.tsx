@@ -4,8 +4,13 @@ import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/graphql-utils';
+import { ArticlePreview } from 'additional';
 
-export default function Home() {
+interface HomeProps {
+  articles: ArticlePreview[]
+}
+
+export default function Home({ articles }: HomeProps) {
   return (
     <>
       <Head>
@@ -15,12 +20,12 @@ export default function Home() {
       </Head>
 
       <div className="h-full py-16 md:pt-28 md:px-10 flex flex-col md:flex-row gap-16 justify-center items-center">
-        <ArticleCard className="w-screen md:w-[490px] h-[490px]" title="Lorem ipsum" size="lg"/>
+        <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]}/>
         <div className="flex flex-col items-center">
           <h2 className="pb-6 text-3xl">Latest News</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[0, 1, 2, 3].map((i) => (
-              <ArticleCard key={i} className="w-48 h-48" title="Lorem ipsum" size="sm"/>
+            {articles.slice(1).map((article) => (
+              <ArticleCard key={article.title} className="w-48 h-48" size="sm" article={article}/>
             ))}
           </div>
         </div>
@@ -39,13 +44,34 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
         ${NAVBAR_FRAGMENT}
-        query Navbar {
+        query HomePage {
+            articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+                data {
+                    attributes {
+                        title
+                        cover {
+                            data {
+                                attributes {
+                                    url
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             ...Navbar
         }
     `
   });
+
+  const flattenedArticles = flatten(data.articles);
+  flattenedArticles.forEach((article: ArticlePreview) => {
+    article.cover.url = process.env.STRAPI_URL + article.cover.url
+  });
   return {
     props: {
+      articles: flattenedArticles,
       navbar: {
         sports: flatten(data.sports)
       }
