@@ -6,12 +6,15 @@ import client from 'utils/apollo-client';
 import { flatten } from 'utils/graphql-utils';
 import { Article, Sport } from 'additional';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { useRouter } from 'next/router';
 
 interface SportPageProps {
   sport: Partial<Sport>
 }
 
 export default function SportPage({ sport }: SportPageProps) {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -30,7 +33,12 @@ export default function SportPage({ sport }: SportPageProps) {
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
               {sport.articles?.slice(1).map(article => (
-                <Card key={article.title} color="grey">
+                <Card
+                  key={article.title}
+                  color="grey"
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/article/${article.slug}`)}
+                >
                   <CardBody className="max-w-full max-h-full">
                     <Typography as="h5" variant="small" className="mb-2 font-bold">
                       {article.title}
@@ -90,6 +98,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                             data {
                                 attributes {
                                     title
+                                    slug
                                     cover {
                                         data {
                                             attributes {

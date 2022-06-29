@@ -49,6 +49,7 @@ export async function getStaticProps() {
                 data {
                     attributes {
                         title
+                        slug
                         cover {
                             data {
                                 attributes {

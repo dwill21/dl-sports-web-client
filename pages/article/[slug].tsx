@@ -89,6 +89,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                 data {
                     attributes {
                         title
+                        slug
                         body
                         cover {
                             data {
@@ -127,8 +128,12 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
 
   const flattenedArticle = flatten(data.article);
-  flattenedArticle.cover.url = process.env.STRAPI_URL + flattenedArticle.cover.url;
-  flattenedArticle.author.avatar.url = process.env.STRAPI_URL + flattenedArticle.author.avatar.url;
+  if (flattenedArticle.cover.url) {
+    flattenedArticle.cover.url = process.env.STRAPI_URL + flattenedArticle.cover.url;
+  }
+  if (flattenedArticle.author.avatar.url) {
+    flattenedArticle.author.avatar.url = process.env.STRAPI_URL + flattenedArticle.author.avatar.url;
+  }
 
   return {
     props: {
