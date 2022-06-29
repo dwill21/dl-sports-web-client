@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { flatten } from 'utils/graphql-utils';
 import { Article, Sport } from 'additional';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { expandImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { useRouter } from 'next/router';
 
 interface SportPageProps {
@@ -122,11 +122,8 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   })
 
   const flattenedSports = flatten(data.sport);
-  flattenedSports.articles.forEach((article: Article) => {
-    if (article.cover.url) {
-      article.cover.url = process.env.STRAPI_URL + article.cover.url
-    }
-  });
+  flattenedSports.articles.forEach(expandImageURLs);
+
   return {
     props: {
       sport: flattenedSports,

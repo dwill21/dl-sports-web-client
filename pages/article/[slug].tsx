@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 import Head from "next/head";
 import { getScripts } from "utils/script-helpers";
 import Script from "next/script";
-import { NAVBAR_FRAGMENT } from '../../utils/graphql-fragments';
+import { expandImageURLs, NAVBAR_FRAGMENT } from '../../utils/graphql-fragments';
 import { flatten } from '../../utils/graphql-utils';
 import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
@@ -128,12 +128,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
 
   const flattenedArticle = flatten(data.article);
-  if (flattenedArticle.cover.url) {
-    flattenedArticle.cover.url = process.env.STRAPI_URL + flattenedArticle.cover.url;
-  }
-  if (flattenedArticle.author.avatar.url) {
-    flattenedArticle.author.avatar.url = process.env.STRAPI_URL + flattenedArticle.author.avatar.url;
-  }
+  expandImageURLs(flattenedArticle);
 
   return {
     props: {

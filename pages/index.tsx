@@ -2,7 +2,7 @@ import Head from 'next/head'
 import ArticleCard from 'components/article-card';
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { expandImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/graphql-utils';
 import { Article } from 'additional';
 
@@ -67,11 +67,7 @@ export async function getStaticProps() {
   });
 
   const flattenedArticles = flatten(data.articles);
-  flattenedArticles.forEach((article: Article) => {
-    if (article.cover.url) {
-      article.cover.url = process.env.STRAPI_URL + article.cover.url
-    }
-  });
+  flattenedArticles.forEach(expandImageURLs);
 
   return {
     props: {
