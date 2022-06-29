@@ -4,26 +4,14 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { flatten } from 'utils/graphql-utils';
-import { ArticlePreview } from 'additional';
+import { Article, Sport } from 'additional';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 
-interface SportPath {
-  attributes: {
-    slug: string
-  }
-}
-interface SportProps {
-  sport: {
-    name: string
-    topics: {
-      title: string
-      content: string
-    }[]
-    articles: ArticlePreview[]
-  }
+interface SportPageProps {
+  sport: Partial<Sport>
 }
 
-export default function Sport({ sport }: SportProps) {
+export default function SportPage({ sport }: SportPageProps) {
   return (
     <>
       <Head>
@@ -37,11 +25,11 @@ export default function Sport({ sport }: SportProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <ArticleCard className="w-full h-64" article={sport.articles?.[0]}/>
+          {sport.articles?.[0] && <ArticleCard className="w-full h-64" article={sport.articles[0]}/>}
 
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
-              {sport.articles.slice(1).map(article => (
+              {sport.articles?.slice(1).map(article => (
                 <Card key={article.title} color="grey">
                   <CardBody className="max-w-full max-h-full">
                     <Typography as="h5" variant="small" className="mb-2 font-bold">
@@ -53,12 +41,12 @@ export default function Sport({ sport }: SportProps) {
             </div>
           </div>
 
-          {sport.topics.map(topic => (
+          {sport.topics?.map(topic => (
             <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card">
               <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
                 {topic.title}
               </Typography>
-              <div dangerouslySetInnerHTML={{ __html: topic.content }}/>
+              <div dangerouslySetInnerHTML={{ __html: topic.content ?? "" }}/>
             </Card>
           ))}
         </div>
@@ -81,7 +69,7 @@ export async function getStaticPaths() {
         }
     `
   })
-  const paths = data.sports.data.map((sport: SportPath) => ({ params: { slug: sport.attributes.slug } }));
+  const paths = flatten(data.sports).map((sport: Sport) => ({ params: { slug: sport.slug } }));
   return { paths, fallback: 'blocking' };
 }
 
@@ -125,8 +113,10 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   })
 
   const flattenedSports = flatten(data.sport);
-  flattenedSports.articles.forEach((article: ArticlePreview) => {
-    article.cover.url = process.env.STRAPI_URL + article.cover.url
+  flattenedSports.articles.forEach((article: Article) => {
+    if (article.cover.url) {
+      article.cover.url = process.env.STRAPI_URL + article.cover.url
+    }
   });
   return {
     props: {

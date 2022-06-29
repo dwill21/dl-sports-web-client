@@ -4,13 +4,13 @@ import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/graphql-utils';
-import { ArticlePreview } from 'additional';
+import { Article } from 'additional';
 
-interface HomeProps {
-  articles: ArticlePreview[]
+interface HomePageProps {
+  articles: Partial<Article>[]
 }
 
-export default function Home({ articles }: HomeProps) {
+export default function HomePage({ articles }: HomePageProps) {
   return (
     <>
       <Head>
@@ -24,8 +24,8 @@ export default function Home({ articles }: HomeProps) {
         <div className="flex flex-col items-center">
           <h2 className="pb-6 text-3xl">Latest News</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {articles.slice(1).map((article) => (
-              <ArticleCard key={article.title} className="w-48 h-48" size="sm" article={article}/>
+            {articles.slice(1).map((article, index) => (
+              <ArticleCard key={article.title ?? index} className="w-48 h-48" size="sm" article={article}/>
             ))}
           </div>
         </div>
@@ -66,9 +66,12 @@ export async function getStaticProps() {
   });
 
   const flattenedArticles = flatten(data.articles);
-  flattenedArticles.forEach((article: ArticlePreview) => {
-    article.cover.url = process.env.STRAPI_URL + article.cover.url
+  flattenedArticles.forEach((article: Article) => {
+    if (article.cover.url) {
+      article.cover.url = process.env.STRAPI_URL + article.cover.url
+    }
   });
+
   return {
     props: {
       articles: flattenedArticles,

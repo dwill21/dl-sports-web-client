@@ -8,28 +8,14 @@ import { flatten } from '../../utils/graphql-utils';
 import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import AuthorCard from '../../components/author-card';
+import { Article } from 'additional';
 
-type ArticleProps = {
-  article: {
-    title: string
-    body: string
-    cover: {
-      url: string
-      alternativeText: string
-    }
-    author: {
-      name: string
-      email: string
-      avatar: {
-        url: string
-        alternativeText: string
-      }
-    }
-  }
+interface ArticlePageProps {
+  article: Partial<Article>
 }
 
-export default function Article({ article }: ArticleProps ) {
-  const externalScripts = getScripts(article.body);
+export default function ArticlePage({ article }: ArticlePageProps ) {
+  const externalScripts = article.body ? getScripts(article.body) : [];
 
   return (
     <>
@@ -45,27 +31,29 @@ export default function Article({ article }: ArticleProps ) {
         </Typography>
 
         <div className="flex justify-center">
-          <Image
-            src={article.cover.url}
-            alt={article.cover.alternativeText}
-            layout="intrinsic"
-            width="1000"
-            height="400"
-            objectFit="cover"
-            priority={true}
-          />
+          {article.cover?.url &&
+            <Image
+              src={article.cover.url}
+              alt={article.cover.alternativeText}
+              layout="intrinsic"
+              width="1000"
+              height="400"
+              objectFit="cover"
+              priority={true}
+            />
+          }
         </div>
 
         <div className="py-8">
           <Typography as="div">
-            <div dangerouslySetInnerHTML={{ __html: article.body }} />
+            <div dangerouslySetInnerHTML={{ __html: article.body ?? "" }} />
             {externalScripts.map((script) => (
               <Script key={script} src={script} strategy="lazyOnload"/>
             ))}
           </Typography>
         </div>
 
-        <AuthorCard author={article.author}/>
+        {article.author && <AuthorCard author={article.author}/>}
       </div>
     </>
   )

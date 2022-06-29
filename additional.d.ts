@@ -1,14 +1,44 @@
 import { ReactNode } from 'react';
 
-interface SportMetadata {
+interface Author {
+  id: number
+  name: string
+  email: string
+  avatar: Partial<Media>
+  articles: Partial<Article>[]
+}
+interface Sport {
+  id: number
   name: string
   slug: string
+  description: string
+  topics: Partial<Topic>[]
+  articles: Partial<Article>[]
 }
+interface Article {
+  id: number
+  title: string
+  slug: string
+  description: string
+  body: string
+  cover: Partial<Media>
+  author: Partial<Author>
+  sport: Partial<Sport>
+}
+interface Media {
+  url: string
+  alternativeText: string
+}
+interface Topic {
+  title: string
+  content: string
+}
+
 interface NavbarProps {
-  sports: SportMetadata[]
+  sports: Partial<Sport>[]
 }
 interface NavbarMenuProps {
-  sports: SportMetadata[]
+  sports: Partial<Sport>[]
   navItems: ReactNode[]
 }
 
@@ -26,12 +56,4 @@ declare global {
   }
 }
 
-interface ArticleCardProps {
-  title: string
-  cover: {
-    url: string
-    alternativeText: string
-  }
-}
-
-export { SportMetadata, NavbarProps, NavbarMenuProps, SpotifyAPI, ArticlePreview }
+export { Article, Author, Sport, NavbarProps, NavbarMenuProps, SpotifyAPI }

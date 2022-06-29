@@ -14,7 +14,7 @@ type Episode = {
   name: string
   html_description: string
 }
-type PodcastProps = {
+type PodcastPageProps = {
   episodes: Episode[]
 }
 const spotifyPlayerOptions = {
@@ -34,7 +34,7 @@ const EpisodeText = ({ episode }: { episode: Episode }) => {
   );
 }
 
-export default function Podcast({ episodes }: PodcastProps) {
+export default function PodcastPage({ episodes }: PodcastPageProps) {
   const [selectedEpisode, setSelectedEpisode] = useState(episodes?.[0]);
   const [embedController, setEmbedController] = useState<{ loadUri: (uri: string) => void } | null>(null);
 
