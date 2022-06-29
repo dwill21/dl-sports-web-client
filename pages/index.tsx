@@ -2,15 +2,23 @@ import Head from 'next/head'
 import ArticleCard from 'components/article-card';
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
-import { expandImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import {
+  expandArticleImageURLs,
+  expandContactImageURLs,
+  NAVBAR_FRAGMENT,
+  SOCIAL_MEDIA_FRAGMENT
+} from 'utils/graphql-fragments';
 import { flatten } from 'utils/graphql-utils';
-import { Article } from 'additional';
+import { Article, ContactMethod } from 'additional';
+import Image from 'next/image';
+import { Fragment } from 'react';
 
 interface HomePageProps {
   articles: Partial<Article>[]
+  socials: Partial<ContactMethod>[]
 }
 
-export default function HomePage({ articles }: HomePageProps) {
+export default function HomePage({ articles, socials }: HomePageProps) {
   return (
     <>
       <Head>
@@ -32,8 +40,22 @@ export default function HomePage({ articles }: HomePageProps) {
       </div>
 
       <div className="w-screen h-[50px] mb-10 bg-grey-200 flex flow-row gap-10 justify-center">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className="w-6 h-6 my-auto bg-grey-500"></div>
+        {socials.map((social) => (
+          <Fragment key={social.info}>
+            {social.icon?.url &&
+              <a href={social.info} className="contents">
+                <Image
+                  key={social.info}
+                  src={social.icon.url}
+                  alt={social.icon.alternativeText}
+                  width={24}
+                  height={24}
+                  layout="intrinsic"
+                  objectFit="contain"
+                />
+              </a>
+            }
+          </Fragment>
         ))}
       </div>
     </>
@@ -44,6 +66,7 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
         ${NAVBAR_FRAGMENT}
+        ${SOCIAL_MEDIA_FRAGMENT}
         query HomePage {
             articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                 data {
@@ -62,16 +85,21 @@ export async function getStaticProps() {
                 }
             }
             ...Navbar
+            ...SocialMedia
         }
     `
   });
 
   const flattenedArticles = flatten(data.articles);
-  flattenedArticles.forEach(expandImageURLs);
+  flattenedArticles.forEach(expandArticleImageURLs);
+  const flattenedSocials = flatten(data.contact).contactMethod
+    .map((e: { icon: never }) => ({ ...e, icon: flatten(e.icon) }));
+  flattenedSocials.forEach(expandContactImageURLs);
 
   return {
     props: {
       articles: flattenedArticles,
+      socials: flattenedSocials,
       navbar: {
         sports: flatten(data.sports)
       }
