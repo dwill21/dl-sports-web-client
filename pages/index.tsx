@@ -3,6 +3,7 @@ import ArticleCard from 'components/article-card';
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
 import {
+  ARTICLE_PREVIEW_FRAGMENT,
   expandArticleImageURLs,
   expandContactImageURLs,
   NAVBAR_FRAGMENT,
@@ -66,22 +67,12 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
         ${NAVBAR_FRAGMENT}
+        ${ARTICLE_PREVIEW_FRAGMENT}
         ${SOCIAL_MEDIA_FRAGMENT}
         query HomePage {
             articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                 data {
-                    attributes {
-                        title
-                        slug
-                        cover {
-                            data {
-                                attributes {
-                                    url
-                                    alternativeText
-                                }
-                            }
-                        }
-                    }
+                    ...ArticlePreview
                 }
             }
             ...Navbar

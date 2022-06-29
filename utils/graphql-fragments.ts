@@ -15,6 +15,23 @@ export const NAVBAR_FRAGMENT = gql`
     }
 `
 
+export const ARTICLE_PREVIEW_FRAGMENT = gql`
+    fragment ArticlePreview on ArticleEntity {
+        attributes {
+            title
+            slug
+            cover {
+                data {
+                    attributes {
+                        url
+                        alternativeText
+                    }
+                }
+            }
+        }
+    }
+`
+
 export const SOCIAL_MEDIA_FRAGMENT = gql`
     fragment SocialMedia on Query {
         contact {

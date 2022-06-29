@@ -4,8 +4,8 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { flatten } from 'utils/graphql-utils';
-import { Article, Sport } from 'additional';
-import { expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { Sport } from 'additional';
+import { ARTICLE_PREVIEW_FRAGMENT, expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { useRouter } from 'next/router';
 
 interface SportPageProps {
@@ -85,6 +85,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { data } = await client.query({
     query: gql`
         ${NAVBAR_FRAGMENT}
+        ${ARTICLE_PREVIEW_FRAGMENT}
         query Sport($slug: String!) {
             sport(slug: $slug) {
                 data {
@@ -94,20 +95,9 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                             title
                             content
                         }
-                        articles(pagination: {page: 1, pageSize: 5}) {
+                        articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
-                                attributes {
-                                    title
-                                    slug
-                                    cover {
-                                        data {
-                                            attributes {
-                                                url
-                                                alternativeText
-                                            }
-                                        }
-                                    }
-                                }
+                                ...ArticlePreview
                             }
                         }
                     }
