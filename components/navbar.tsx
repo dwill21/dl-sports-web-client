@@ -33,6 +33,7 @@ export default function AppNavbar({ sports }: NavbarProps) {
     debouncedResizeHandler();
     window.addEventListener('resize', debouncedResizeHandler as EventListener);
     return () => {
+      debouncedResizeHandler.cancel();
       window.removeEventListener('resize', debouncedResizeHandler as EventListener);
     }
   }, [debouncedResizeHandler]);
