@@ -1,9 +1,10 @@
 import { Navbar, Typography } from '@material-tailwind/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NavbarMenuLink from 'components/navbar-menu-link';
 import FullNavbarMenu from 'components/full-navbar-menu';
 import CondensedNavbarMenu from 'components/condensed-navbar-menu';
 import { NavbarProps } from 'additional';
+import debounce from 'lodash.debounce';
 
 const navItems = [
   (
@@ -22,24 +23,19 @@ const navItems = [
     </NavbarMenuLink>
   ),
 ]
-const getWindowWidth = () => {
-  return window.innerWidth;
-}
 
 export default function AppNavbar({ sports }: NavbarProps) {
-  const [windowWidth, setWindowWidth] = useState(0);
+  const [smallScreen, setSmallScreen] = useState<boolean | null>(null);
+  const handleWindowResize = () => setSmallScreen(window.innerWidth < 768);
+  const debouncedResizeHandler = useMemo(() => debounce(handleWindowResize, 300), []);
 
   useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowWidth(getWindowWidth());
-    }
-    handleWindowResize();
-
-    window.addEventListener('resize', handleWindowResize);
+    debouncedResizeHandler();
+    window.addEventListener('resize', debouncedResizeHandler as EventListener);
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener('resize', debouncedResizeHandler as EventListener);
     }
-  });
+  }, [debouncedResizeHandler]);
 
   return (
     <Navbar fullWidth={true}>
@@ -48,9 +44,11 @@ export default function AppNavbar({ sports }: NavbarProps) {
           DL Sports
         </Typography>
 
-        {windowWidth >= 1024
-          ? <FullNavbarMenu sports={sports} navItems={navItems}/>
-          : <CondensedNavbarMenu sports={sports} navItems={navItems}/>}
+        {smallScreen !== null && (
+          smallScreen
+            ? <CondensedNavbarMenu sports={sports} navItems={navItems}/>
+            : <FullNavbarMenu sports={sports} navItems={navItems}/>
+        )}
       </div>
     </Navbar>
   );
