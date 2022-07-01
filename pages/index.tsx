@@ -9,7 +9,7 @@ import {
   NAVBAR_FRAGMENT,
   SOCIAL_MEDIA_FRAGMENT
 } from 'utils/graphql-fragments';
-import { flatten } from 'utils/graphql-utils';
+import { flatten } from 'utils/flatten';
 import { Article, ContactMethod } from 'additional';
 import Image from 'next/image';
 import { Fragment } from 'react';

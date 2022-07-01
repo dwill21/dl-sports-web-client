@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import { Article, ContactMethod } from 'additional';
-import { flatten } from './graphql-utils';
 
 export const NAVBAR_FRAGMENT = gql`
     fragment Navbar on Query {

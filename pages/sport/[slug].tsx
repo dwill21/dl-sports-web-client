@@ -3,7 +3,7 @@ import ArticleCard from 'components/article-card';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
-import { flatten } from 'utils/graphql-utils';
+import { flatten } from 'utils/flatten';
 import { Sport } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { useRouter } from 'next/router';
