@@ -27,10 +27,10 @@ const navItems = [
 export default function AppNavbar({ sports }: NavbarProps) {
   const [smallScreen, setSmallScreen] = useState<boolean | null>(null);
   const handleWindowResize = () => setSmallScreen(window.innerWidth < 768);
-  const debouncedResizeHandler = useMemo(() => debounce(handleWindowResize, 100), []);
+  const debouncedResizeHandler = useMemo(() => debounce(handleWindowResize, 300), []);
 
   useEffect(() => {
-    debouncedResizeHandler();
+    handleWindowResize();
     window.addEventListener('resize', debouncedResizeHandler as EventListener);
     return () => {
       debouncedResizeHandler.cancel();
