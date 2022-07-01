@@ -1,4 +1,4 @@
-import { Navbar, Typography } from '@material-tailwind/react';
+import { Navbar } from '@material-tailwind/react';
 import { useEffect, useMemo, useState } from 'react';
 import NavbarMenuLink from 'components/navbar-menu-link';
 import FullNavbarMenu from 'components/full-navbar-menu';
