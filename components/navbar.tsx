@@ -41,9 +41,9 @@ export default function AppNavbar({ sports }: NavbarProps) {
   return (
     <Navbar fullWidth={true}>
       <div className="mx-auto container flex items-center justify-between text-grey-900">
-        <Typography as="a" href="/" variant="h4" className="py-1.5 font-normal">
+        <NavbarMenuLink href="/" variant="h4" className="py-1.5 font-normal">
           DL Sports
-        </Typography>
+        </NavbarMenuLink>
 
         {smallScreen !== null && (
           smallScreen

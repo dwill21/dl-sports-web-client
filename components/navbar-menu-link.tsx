@@ -1,10 +1,20 @@
 import { ReactNode } from 'react';
 import { Typography } from '@material-tailwind/react';
+import Link from 'next/link';
 
-export default function NavbarMenuLink({ href, children }: { href: string, children: ReactNode }) {
+interface NavbarMenuLinkProps {
+  href: string
+  children: ReactNode
+  variant?: string
+  className?: string
+}
+
+export default function NavbarMenuLink({ href, children, variant="paragraph", className="p-1 font-normal" }: NavbarMenuLinkProps) {
   return (
-    <Typography as="a" href={href} variant="paragraph" className="p-1 font-normal">
-      {children}
-    </Typography>
+    <Link href={href} passHref>
+      <Typography as="a" variant={variant} className={className}>
+        {children}
+      </Typography>
+    </Link>
   )
 }
