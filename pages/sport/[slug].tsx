@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { flatten } from 'utils/flatten';
 import { Sport } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-utils';
 import { useRouter } from 'next/router';
 
 interface SportPageProps {

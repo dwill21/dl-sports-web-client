@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 import Head from "next/head";
 import { getScripts } from "utils/script-helpers";
 import Script from "next/script";
-import { expandArticleImageURLs, NAVBAR_FRAGMENT } from '../../utils/graphql-fragments';
+import { expandArticleImageURLs, NAVBAR_FRAGMENT } from '../../utils/graphql-utils';
 import { flatten } from '../../utils/flatten';
 import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';

@@ -6,7 +6,7 @@ import spotifyClient from 'utils/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button } from '@material-tailwind/react';
 import apolloClient from 'utils/apollo-client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql-utils';
 import { flatten } from '../utils/flatten';
 
 type Episode = {
