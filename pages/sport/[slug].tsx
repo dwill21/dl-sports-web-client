@@ -111,12 +111,18 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   })
 
-  const flattenedSports = flatten(data.sport);
-  flattenedSports.articles.forEach(expandArticleImageURLs);
+  if (data.sport.data == null) {
+    return {
+      notFound: true
+    }
+  }
+
+  const flattenedSport = flatten(data.sport);
+  flattenedSport.articles.forEach(expandArticleImageURLs);
 
   return {
     props: {
-      sport: flattenedSports,
+      sport: flattenedSport,
       navbar: {
         sports: flatten(data.sports)
       },
