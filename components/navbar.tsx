@@ -1,14 +1,56 @@
-import { IoSearch } from "react-icons/io5";
+import { Navbar } from '@material-tailwind/react';
+import { useEffect, useMemo, useState } from 'react';
+import NavbarMenuLink from 'components/navbar-menu-link';
+import FullNavbarMenu from 'components/full-navbar-menu';
+import CondensedNavbarMenu from 'components/condensed-navbar-menu';
+import { NavbarProps } from 'additional';
+import debounce from 'lodash.debounce';
 
-export default function Navbar() {
+const navItems = [
+  (
+    <NavbarMenuLink key="Columns" href="/">
+      Columns
+    </NavbarMenuLink>
+  ),
+  (
+    <NavbarMenuLink key="On the DL" href="/podcast">
+      &quot;On the DL&quot;
+    </NavbarMenuLink>
+  ),
+  (
+    <NavbarMenuLink key="Contact" href="/">
+      Contact
+    </NavbarMenuLink>
+  ),
+]
+
+export default function AppNavbar({ sports }: NavbarProps) {
+  const [smallScreen, setSmallScreen] = useState<boolean | null>(null);
+  const handleWindowResize = () => setSmallScreen(window.innerWidth < 768);
+  const debouncedResizeHandler = useMemo(() => debounce(handleWindowResize, 300), []);
+
+  useEffect(() => {
+    handleWindowResize();
+    window.addEventListener('resize', debouncedResizeHandler as EventListener);
+    return () => {
+      debouncedResizeHandler.cancel();
+      window.removeEventListener('resize', debouncedResizeHandler as EventListener);
+    }
+  }, [debouncedResizeHandler]);
+
   return (
-    <header className="w-screen px-10 py-4 flex justify-between items-center bg-neutral-800 text-neutral-50">
-      <p className="text-3xl">DL Sports</p>
-      <div className="text-lg flex items-center space-x-3">
-        <IoSearch size="1.25em"/>
-        <p>Podcasts</p>
-        <p>Contact</p>
+    <Navbar fullWidth={true}>
+      <div className="mx-auto container flex items-center justify-between text-grey-900">
+        <NavbarMenuLink href="/" variant="h4" className="py-1.5 font-normal">
+          DL Sports
+        </NavbarMenuLink>
+
+        {smallScreen !== null && (
+          smallScreen
+            ? <CondensedNavbarMenu sports={sports} navItems={navItems}/>
+            : <FullNavbarMenu sports={sports} navItems={navItems}/>
+        )}
       </div>
-    </header>
-  )
+    </Navbar>
+  );
 }

@@ -6,8 +6,24 @@ html,
 body {
   padding: 0;
   margin: 0;
+  @apply bg-grey-100
 }
 
 .twitter-tweet {
   @apply mx-auto
+}
+
+iframe {
+  max-width: 100%;
+  margin: auto;
+}
+
+.topic-card ul {
+  @apply list-disc
+}
+.topic-card ul, .topic-card ol {
+  @apply pl-4 pt-1
+}
+.topic-card a {
+  @apply underline
 }
