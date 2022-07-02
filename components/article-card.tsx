@@ -17,10 +17,10 @@ const ArticleCard = ({ article, size = "md", className }: ArticleCardProps) => {
 
   return (
     <Card
-      className={`cursor-pointer ${className}`}
+      className={`cursor-pointer rounded-none ${className}`}
       onClick={() => router.push(`/article/${article.slug}`)}
     >
-      <CardHeader shadow={false} floated={false} className="!m-0 w-full h-full">
+      <CardHeader shadow={false} floated={false} className="!m-0 w-full h-full rounded-none">
         {article.cover?.url &&
           <Image
             src={article.cover.url}
@@ -31,8 +31,8 @@ const ArticleCard = ({ article, size = "md", className }: ArticleCardProps) => {
           />
         }
       </CardHeader>
-      <CardBody className={size == 'lg' ? '' : 'p-2'}>
-        <Typography as="h4" variant={size == 'sm' ? 'small' : 'lead'} className="mb-2">
+      <CardBody className="p-2">
+        <Typography as="h4" variant={size == 'sm' ? 'paragraph' : 'lead'} className="my-2 leading-5">
           {article.title}
         </Typography>
       </CardBody>

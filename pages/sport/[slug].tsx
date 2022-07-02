@@ -31,12 +31,12 @@ export default function SportPage({ sport }: SportPageProps) {
           {sport.articles?.[0] && <ArticleCard className="w-full h-64" article={sport.articles[0]}/>}
 
           <div className="w-full md:h-64 md:col-span-2">
-            <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-12 lg:overflow-scroll">
+            <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-8 lg:overflow-scroll">
               {sport.articles?.slice(1).map(article => (
                 <Card
                   key={article.title}
                   color="grey"
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded-none"
                   onClick={() => router.push(`/article/${article.slug}`)}
                 >
                   <CardBody className="max-w-full max-h-full">
@@ -50,7 +50,7 @@ export default function SportPage({ sport }: SportPageProps) {
           </div>
 
           {sport.topics?.map(topic => (
-            <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card">
+            <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card rounded-none">
               <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
                 {topic.title}
               </Typography>

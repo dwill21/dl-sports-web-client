@@ -32,9 +32,9 @@ export default function HomePage({ articles, socials }: HomePageProps) {
         <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]}/>
         <div className="flex flex-col items-center">
           <h2 className="pb-6 text-3xl">Latest News</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="w-screen md:w-[490px] grid grid-cols-1 md:grid-cols-2 gap-8">
             {articles.slice(1).map((article, index) => (
-              <ArticleCard key={article.title ?? index} className="w-48 h-48" size="sm" article={article}/>
+              <ArticleCard key={article.title ?? index} className="w-full h-48" size="sm" article={article}/>
             ))}
           </div>
         </div>
