@@ -3,13 +3,37 @@ import client from '../utils/apollo-client';
 import { gql } from '@apollo/client';
 import { NAVBAR_FRAGMENT } from '../utils/graphql-utils';
 import { flatten } from '../utils/flatten';
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import { string } from 'yup';
 
-const Error = ({ message }: { message: string }) => {
-  return (
-    <Typography variant="small" color="red" className="px-2">{message}</Typography>
-  )
-}
+const requiredMessage = "This field is required";
+const emailOrPhoneMessage = "At least one of email address or phone number is required";
+const validEmailMessage = "Must be a valid email address";
+const validPhoneMessage = "Must be a valid phone number";
+const phoneRegex = /^\+?\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4,6}$/;  // taken from https://ihateregex.io/expr/phone/
+
+const newsTipSchema = Yup.object().shape({
+    firstName: string().required(requiredMessage),
+    lastName: string().required(requiredMessage),
+    tip: string().required(requiredMessage),
+    email: string().email(validEmailMessage).when('phone', {
+      is: (phone: string) => !phone || phone.length === 0,
+      then: Yup.string().email(validEmailMessage).required(emailOrPhoneMessage),
+      otherwise: Yup.string(),
+    }),
+    phone: string().when('email', {
+      is: (email: string) => !email || email.length === 0,
+      then: Yup.string().matches(phoneRegex, { message: validPhoneMessage }).required(emailOrPhoneMessage),
+      otherwise: Yup.string().matches(phoneRegex, { message: validPhoneMessage }),
+    }),
+  },
+  [[ 'email', 'phone' ]]
+)
+
+const wrapError = (message: string) => (
+  <Typography variant="small" color="red" className="px-2">{message}</Typography>
+)
 
 export default function ContactPage() {
   return (
@@ -40,6 +64,7 @@ export default function ContactPage() {
               email: '',
               phone: '',
             }}
+            validationSchema={newsTipSchema}
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
                 alert(JSON.stringify(values, null, 2));
@@ -47,7 +72,7 @@ export default function ContactPage() {
               }, 400);
             }}
           >
-            {({ errors, touched, isSubmitting }) => (
+            {({ isSubmitting }) => (
               <Form className="py-4 flex flex-col">
                 <div className="py-2 flex flex-col">
                   <Field
@@ -56,7 +81,7 @@ export default function ContactPage() {
                     as={Input}
                     label="* First name"
                   />
-                  {errors.firstName && touched.firstName ? <Error message={errors.firstName}/> : null}
+                  <ErrorMessage name="firstName" render={wrapError}/>
                 </div>
 
                 <div className="py-2 flex flex-col">
@@ -66,7 +91,7 @@ export default function ContactPage() {
                     as={Input}
                     label="* Last name"
                   />
-                  {errors.lastName && touched.lastName ? <Error message={errors.lastName}/> : null}
+                  <ErrorMessage name="lastName" render={wrapError}/>
                 </div>
 
                 <div className="py-2 flex flex-col">
@@ -76,7 +101,7 @@ export default function ContactPage() {
                     label="* News to report"
                     rows="10"
                   />
-                  {errors.tip && touched.tip ? <Error message={errors.tip}/> : null}
+                  <ErrorMessage name="tip" render={wrapError}/>
                 </div>
 
                 <div className="py-2 flex flex-col">
@@ -86,6 +111,7 @@ export default function ContactPage() {
                     as={Input}
                     label="Email address"
                   />
+                  <ErrorMessage name="email" render={wrapError}/>
                 </div>
 
                 <Typography variant="small" className="text-center font-bold">OR</Typography>
@@ -97,6 +123,7 @@ export default function ContactPage() {
                     as={Input}
                     label="Phone number"
                   />
+                  <ErrorMessage name="phone" render={wrapError}/>
                 </div>
 
                 <Button type="submit" disabled={isSubmitting} className="my-2">
