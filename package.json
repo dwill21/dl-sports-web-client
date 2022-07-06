@@ -12,6 +12,7 @@
     "@apollo/client": "^3.6.8",
     "@material-tailwind/react": "^1.0.6",
     "apollo-link-rest": "^0.9.0-rc.1",
+    "formik": "^2.2.9",
     "graphql": "^16.5.0",
     "graphql-anywhere": "^4.2.7",
     "lodash.debounce": "^4.0.8",
@@ -20,7 +21,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
-    "simple-oauth2": "^4.3.0"
+    "simple-oauth2": "^4.3.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.7",

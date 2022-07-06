@@ -25,7 +25,7 @@ interface Article {
   author: Partial<Author>
   sport: Partial<Sport>
 }
-interface ContactMethod {
+interface SocialMedia {
   icon: Media
   info: string
 }
@@ -60,4 +60,4 @@ declare global {
   }
 }
 
-export { Article, Author, Sport, ContactMethod, NavbarProps, NavbarMenuProps, SpotifyAPI }
+export { Article, Author, Sport, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }

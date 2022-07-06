@@ -19,7 +19,7 @@ export default function CondensedNavbarMenu({ sports, navItems }: NavbarMenuProp
             </Typography>
           </MenuHandler>
           <MenuList>
-            {sports.map(sport => (
+            {sports?.map(sport => (
               <MenuItem key={sport.slug}>
                 <NavbarMenuLink href={"/sport/" + sport.slug}>
                   {sport.name}

@@ -13,7 +13,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
           </Typography>
         </MenuHandler>
         <MenuList>
-          {sports.map(sport => (
+          {sports?.map(sport => (
             <MenuItem key={sport.slug}>
               <NavbarMenuLink href={"/sport/" + sport.slug}>
                 {sport.name}

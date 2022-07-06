@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Article, ContactMethod } from 'additional';
+import { Article, SocialMedia } from 'additional';
 
 export const NAVBAR_FRAGMENT = gql`
     fragment Navbar on Query {
@@ -36,7 +36,7 @@ export const SOCIAL_MEDIA_FRAGMENT = gql`
         contact {
             data {
                 attributes {
-                    contactMethod(filters: { socialMedia: { eq: true } }) {
+                    socials {
                         info
                         icon {
                             data {
@@ -62,8 +62,8 @@ export const expandArticleImageURLs = (article: Article) => {
   }
 }
 
-export const expandContactImageURLs = (contactMethod: ContactMethod) => {
-  if (contactMethod.icon?.url) {
-      contactMethod.icon.url = process.env.STRAPI_URL + contactMethod.icon.url;
+export const expandSocialMediaImageURLs = (socialMedia: SocialMedia) => {
+  if (socialMedia.icon?.url) {
+      socialMedia.icon.url = process.env.STRAPI_URL + socialMedia.icon.url;
   }
 }

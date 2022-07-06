@@ -126,6 +126,11 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   });
 
+  if (data.article.data == null) {
+    return {
+      notFound: true
+    }
+  }
 
   const flattenedArticle = flatten(data.article);
   expandArticleImageURLs(flattenedArticle);

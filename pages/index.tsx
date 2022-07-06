@@ -5,18 +5,18 @@ import { gql } from '@apollo/client';
 import {
   ARTICLE_PREVIEW_FRAGMENT,
   expandArticleImageURLs,
-  expandContactImageURLs,
+  expandSocialMediaImageURLs,
   NAVBAR_FRAGMENT,
   SOCIAL_MEDIA_FRAGMENT
 } from 'utils/graphql-utils';
 import { flatten } from 'utils/flatten';
-import { Article, ContactMethod } from 'additional';
+import { Article, SocialMedia } from 'additional';
 import Image from 'next/image';
 import { Fragment } from 'react';
 
 interface HomePageProps {
   articles: Partial<Article>[]
-  socials: Partial<ContactMethod>[]
+  socials: Partial<SocialMedia>[]
 }
 
 export default function HomePage({ articles, socials }: HomePageProps) {
@@ -83,9 +83,9 @@ export async function getStaticProps() {
 
   const flattenedArticles = flatten(data.articles);
   flattenedArticles.forEach(expandArticleImageURLs);
-  const flattenedSocials = flatten(data.contact).contactMethod
+  const flattenedSocials = flatten(data.contact).socials
     .map((e: { icon: never }) => ({ ...e, icon: flatten(e.icon) }));
-  flattenedSocials.forEach(expandContactImageURLs);
+  flattenedSocials.forEach(expandSocialMediaImageURLs);
 
   return {
     props: {

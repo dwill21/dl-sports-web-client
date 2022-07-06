@@ -18,7 +18,7 @@ const navItems = [
     </NavbarMenuLink>
   ),
   (
-    <NavbarMenuLink key="Contact" href="/">
+    <NavbarMenuLink key="Contact" href="/contact">
       Contact
     </NavbarMenuLink>
   ),
