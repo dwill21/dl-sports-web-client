@@ -27,3 +27,8 @@ iframe {
 .topic-card a {
   @apply underline
 }
+
+.rich-text a:hover {
+  color: blue;
+  text-decoration: underline;
+}
