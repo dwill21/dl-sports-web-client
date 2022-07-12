@@ -25,6 +25,11 @@ interface Article {
   author: Partial<Author>
   sport: Partial<Sport>
 }
+interface Column {
+  id: number
+  title: string
+  articles: Partial<Article>[]
+}
 interface SocialMedia {
   icon: Media
   info: string
@@ -60,4 +65,4 @@ declare global {
   }
 }
 
-export { Article, Author, Sport, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }
+export { Article, Author, Column, Sport, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }
