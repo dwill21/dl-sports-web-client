@@ -8,7 +8,7 @@ import debounce from 'lodash.debounce';
 
 const navItems = [
   (
-    <NavbarMenuLink key="Columns" href="/">
+    <NavbarMenuLink key="Columns" href="/thorntons-thoughts">
       Columns
     </NavbarMenuLink>
   ),

@@ -70,7 +70,7 @@ export async function getStaticProps() {
         ${ARTICLE_PREVIEW_FRAGMENT}
         ${SOCIAL_MEDIA_FRAGMENT}
         query HomePage {
-            articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+            articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc", filters: {column: {id: {eq: null}}}) {
                 data {
                     ...ArticlePreview
                 }
