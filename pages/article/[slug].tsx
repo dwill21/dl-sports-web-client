@@ -44,7 +44,7 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
           }
         </div>
 
-        <div className="py-8">
+        <div className="py-8 px-2">
           <Typography as="div">
             <div dangerouslySetInnerHTML={{ __html: article.body ?? "" }} />
             {externalScripts.map((script) => (
