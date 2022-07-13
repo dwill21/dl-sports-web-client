@@ -8,7 +8,7 @@ import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import AuthorCard from '../../components/author-card';
 import { Article } from 'additional';
-import { NextSeo } from 'next-seo';
+import { ArticleJsonLd, NextSeo } from 'next-seo';
 
 interface ArticlePageProps {
   article: Partial<Article>
@@ -16,6 +16,7 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ article }: ArticlePageProps ) {
   const externalScripts = article.body ? getScripts(article.body) : [];
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/article/${article.slug}`;
 
   return (
     <>
@@ -26,6 +27,7 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
           title: article.title,
           description: article.description,
           type: 'article',
+          url: url,
           article: {
             publishedTime: article.publishedAt,
             modifiedTime: article.updatedAt,
@@ -39,6 +41,17 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
             height: article.cover?.height,
           }]
         }}
+      />
+      <ArticleJsonLd
+        url={url}
+        title={article.title ?? ""}
+        images={[
+          article.cover?.url ?? ""
+        ]}
+        datePublished={article.publishedAt ?? ""}
+        dateModified={article.updatedAt}
+        authorName={`${article.author?.firstName} ${article.author?.lastName}`}
+        description={article.description ?? ""}
       />
 
       <div className="md:w-3/4 xl:w-2/3 mx-auto py-14 items-center">
