@@ -2,14 +2,19 @@ import 'styles/globals.css'
 import Layout from "components/layout";
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-tailwind/react';
+import { DefaultSeo } from 'next-seo';
+import SEO from 'next-seo.config';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider>
-      <Layout navbarProps={{...pageProps.navbar}}>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <>
+      <DefaultSeo {...SEO} />
+      <ThemeProvider>
+        <Layout navbarProps={{...pageProps.navbar}}>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </>
   )
 }
 

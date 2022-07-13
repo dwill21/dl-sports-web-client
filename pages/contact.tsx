@@ -5,6 +5,7 @@ import { NAVBAR_FRAGMENT } from 'utils/graphql-utils';
 import { flatten } from 'utils/flatten';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { NextSeo } from 'next-seo';
 
 interface ContactPageProps {
   contact: {
@@ -42,6 +43,11 @@ const newsTipSchema = Yup.object().shape({
 export default function ContactPage({ contact }: ContactPageProps) {
   return (
     <>
+      <NextSeo
+        title="Contact"
+        description="Reach out to Sam Thornton or send in a news tip"
+      />
+
       <Typography as="h1" variant="lead" className="py-12 text-center text-2xl">
         Contact Details
       </Typography>

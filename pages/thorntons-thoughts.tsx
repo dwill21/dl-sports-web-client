@@ -5,6 +5,7 @@ import { flatten } from 'utils/flatten';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { Column } from 'additional';
 import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 interface ColumnsPageProps {
   columns: Column[]
@@ -13,6 +14,11 @@ interface ColumnsPageProps {
 export default function ColumnsPage({ columns }: ColumnsPageProps) {
   return (
     <>
+      <NextSeo
+        title="Thornton's Thoughts"
+        description="Hear a fan's perspective on his personal favorite teams and other topics"
+      />
+
       <div className="my-20 md:px-8 w-screen">
         <Typography as="h1" variant="lead" className="mt-4 mb-10 text-3xl text-center">
           Thornton&apos;s Thoughts
@@ -31,9 +37,9 @@ export default function ColumnsPage({ columns }: ColumnsPageProps) {
 
                 <ul className="pl-2 list-disc">
                   {column.articles?.map(article => (
-                    <li key={article.id}>
+                    <li key={article.id} className="my-1">
                       <Link href={`/article/${article.slug}`} passHref>
-                        <Typography as="a" variant="small" color="black" className="hover:text-[#0000FFFF] hover:underline">
+                        <Typography as="a" color="black" className="hover:text-[#0000FFFF] hover:underline">
                           {article.title}
                         </Typography>
                       </Link>

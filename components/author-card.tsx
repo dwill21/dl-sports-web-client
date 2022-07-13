@@ -21,7 +21,7 @@ export default function AuthorCard({ author }: AuthorCardProps) {
         />
       }
       <Typography as="p" className="text-center font-normal">
-        <b>{author.name}</b> - {author.email}
+        <b>{author.firstName} {author.lastName}</b> - {author.email}
       </Typography>
     </div>
   )

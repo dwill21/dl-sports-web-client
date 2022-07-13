@@ -6,10 +6,17 @@ import { Button, Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import searchParty from 'public/searchparty2.webp'
 import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 export default function NotFoundPage() {
   return (
     <>
+      <NextSeo
+        title="404"
+        description="Page not found"
+        noindex={true}
+      />
+
       <div className="w-screen h-screen relative flex justify-center items-center">
         <Image src={searchParty} alt="Lost golf ball" layout="fill" objectFit="cover" className="opacity-90"/>
       </div>
