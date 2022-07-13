@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 
 interface Author {
   id: number
-  name: string
+  firstName: string
+  lastName: string
   email: string
   avatar: Partial<Media>
   articles: Partial<Article>[]
@@ -21,9 +22,12 @@ interface Article {
   slug: string
   description: string
   body: string
+  publishedAt: string
+  updatedAt: string
   cover: Partial<Media>
   author: Partial<Author>
   sport: Partial<Sport>
+  column: Partial<Column>
 }
 interface Column {
   id: number
@@ -37,6 +41,8 @@ interface SocialMedia {
 interface Media {
   url: string
   alternativeText: string
+  width: number
+  height: number
 }
 interface Topic {
   title: string
