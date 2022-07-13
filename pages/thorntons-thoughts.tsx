@@ -37,9 +37,9 @@ export default function ColumnsPage({ columns }: ColumnsPageProps) {
 
                 <ul className="pl-2 list-disc">
                   {column.articles?.map(article => (
-                    <li key={article.id}>
+                    <li key={article.id} className="my-1">
                       <Link href={`/article/${article.slug}`} passHref>
-                        <Typography as="a" variant="small" color="black" className="hover:text-[#0000FFFF] hover:underline">
+                        <Typography as="a" color="black" className="hover:text-[#0000FFFF] hover:underline">
                           {article.title}
                         </Typography>
                       </Link>
