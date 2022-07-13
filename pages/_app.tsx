@@ -2,17 +2,13 @@ import 'styles/globals.css'
 import Layout from "components/layout";
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-tailwind/react';
-import Head from 'next/head';
+import { DefaultSeo } from 'next-seo';
+import SEO from 'next-seo.config';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>DL Sports</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta charSet="UTF-8"/>
-      </Head>
+      <DefaultSeo {...SEO} />
       <ThemeProvider>
         <Layout navbarProps={{...pageProps.navbar}}>
           <Component {...pageProps} />
