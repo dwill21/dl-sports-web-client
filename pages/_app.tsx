@@ -1,4 +1,5 @@
 import 'styles/globals.css'
+import 'styles/search-bar.css';
 import Layout from "components/layout";
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-tailwind/react';

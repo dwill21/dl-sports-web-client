@@ -1,0 +1,15 @@
+.search-bar-enter {
+    @apply opacity-0;
+}
+.search-bar-enter-active {
+    @apply opacity-100;
+}
+.search-bar-exit {
+    @apply opacity-100;
+}
+.search-bar-exit-active {
+    @apply opacity-0;
+}
+.search-bar-enter-active, .search-bar-exit-active {
+    transition: opacity 150ms;
+}
