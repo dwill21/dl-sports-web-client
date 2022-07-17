@@ -13,7 +13,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
   const closeSearchBar = useCallback(() => setShowSearchBar(false), [setShowSearchBar]);
 
   const menu = useMemo(() => (
-    <div className="flex justify-between items-center basis-5/6">
+    <div className="flex justify-between items-center md:basis-3/4 lg:basis-5/6">
       <Menu>
         <MenuHandler>
           <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
