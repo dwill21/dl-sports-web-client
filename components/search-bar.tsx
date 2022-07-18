@@ -2,6 +2,7 @@ import { IconButton, Input } from '@material-tailwind/react';
 import { IoCloseSharp, IoSearchSharp } from 'react-icons/io5';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { search } from 'utils/search';
 
 interface SearchBarProps {
   closeHandler: () => void
@@ -9,7 +10,7 @@ interface SearchBarProps {
 }
 
 const searchBarSchema = Yup.object().shape({
-  search: Yup.string().required("We need something to search for"),
+  searchInput: Yup.string().required("We need something to search for"),
 })
 
 export default function SearchBar({ closeHandler, className }: SearchBarProps) {
@@ -25,19 +26,18 @@ export default function SearchBar({ closeHandler, className }: SearchBarProps) {
         <IoCloseSharp size={24} className="cursor-pointer"/>
       </IconButton>
       <Formik
-        initialValues={{search: ''}}
+        initialValues={{searchInput: ''}}
         validationSchema={searchBarSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+        onSubmit={async (values, { setSubmitting }) => {
+          const results = await search('article', values.searchInput);
+          alert(JSON.stringify(results, null, 2));
+          setSubmitting(false);
         }}
       >
         {({ isSubmitting }) => (
           <Form className="w-full">
             <Field
-              name="search"
+              name="searchInput"
               as={Input}
               type="search"
               label="Search"
@@ -45,7 +45,7 @@ export default function SearchBar({ closeHandler, className }: SearchBarProps) {
               autoFocus
             />
           </Form>
-          )}
+        )}
       </Formik>
     </div>
   )
