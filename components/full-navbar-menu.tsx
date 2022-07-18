@@ -39,7 +39,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
     <SwitchTransition mode="out-in">
       <CSSTransition key={showSearchBar ? 'menu' : 'search-bar'} timeout={200} classNames="search-bar">
         {showSearchBar ?
-          <SearchBar closeHandler={closeSearchBar} className="w-3/4"/> :
+          <SearchBar closeHandler={closeSearchBar} className="w-3/4 relative -right-3"/> :
           menu}
       </CSSTransition>
     </SwitchTransition>
