@@ -13,7 +13,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
   const closeSearchBar = useCallback(() => setShowSearchBar(false), [setShowSearchBar]);
 
   const menu = useMemo(() => (
-    <div className="flex justify-between items-center md:basis-3/4 lg:basis-5/6">
+    <div className="flex justify-between items-center md:basis-3/4 lg:basis-[80%] xl:basis-5/6">
       <Menu>
         <MenuHandler>
           <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
@@ -39,7 +39,7 @@ export default function FullNavbarMenu({ sports, navItems }: NavbarMenuProps) {
     <SwitchTransition mode="out-in">
       <CSSTransition key={showSearchBar ? 'menu' : 'search-bar'} timeout={200} classNames="search-bar">
         {showSearchBar ?
-          <SearchBar closeHandler={closeSearchBar} className="w-full relative -right-3"/> :
+          <SearchBar closeHandler={closeSearchBar} className="w-3/4"/> :
           menu}
       </CSSTransition>
     </SwitchTransition>
