@@ -2,19 +2,20 @@ import client from "utils/apollo-client";
 import { gql } from "@apollo/client";
 import { getScripts } from "utils/script-helpers";
 import Script from "next/script";
-import { expandArticleImageURLs, NAVBAR_FRAGMENT } from '../../utils/graphql-utils';
-import { flatten } from '../../utils/flatten';
+import { NAVBAR_FRAGMENT } from 'utils/graphql-utils';
+import { flatten } from 'utils/flatten';
 import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
-import AuthorCard from '../../components/author-card';
+import AuthorCard from 'components/author-card';
 import { Article } from 'additional';
 import { ArticleJsonLd, NextSeo } from 'next-seo';
 
 interface ArticlePageProps {
   article: Partial<Article>
+  cmsUrl: string
 }
 
-export default function ArticlePage({ article }: ArticlePageProps ) {
+export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
   const externalScripts = article.body ? getScripts(article.body) : [];
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/article/${article.slug}`;
 
@@ -62,7 +63,7 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
         <div className="flex justify-center">
           {article.cover?.url &&
             <Image
-              src={article.cover.url}
+              src={`${cmsUrl}${article.cover.url}`}
               alt={article.cover.alternativeText}
               layout="intrinsic"
               width="1000"
@@ -82,7 +83,7 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
           </Typography>
         </div>
 
-        {article.author && <AuthorCard author={article.author}/>}
+        {article.author && <AuthorCard author={article.author} cmsUrl={cmsUrl}/>}
       </div>
     </>
   )
@@ -181,12 +182,10 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   }
 
-  const flattenedArticle = flatten(data.article);
-  expandArticleImageURLs(flattenedArticle);
-
   return {
     props: {
-      article: flattenedArticle,
+      article: flatten(data.article),
+      cmsUrl: process.env.STRAPI_URL,
       navbar: {
         sports: flatten(data.sports)
       },

@@ -52,18 +52,3 @@ export const SOCIAL_MEDIA_FRAGMENT = gql`
         }
     }
 `
-
-export const expandArticleImageURLs = (article: Article) => {
-  if (article.cover?.url) {
-    article.cover.url = process.env.STRAPI_URL + article.cover.url;
-  }
-  if (article.author?.avatar?.url) {
-    article.author.avatar.url = process.env.STRAPI_URL + article.author.avatar.url;
-  }
-}
-
-export const expandSocialMediaImageURLs = (socialMedia: SocialMedia) => {
-  if (socialMedia.icon?.url) {
-      socialMedia.icon.url = process.env.STRAPI_URL + socialMedia.icon.url;
-  }
-}
