@@ -1,7 +1,7 @@
 import ArticleCard from 'components/article-card';
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, SOCIAL_MEDIA_FRAGMENT } from 'utils/graphql-utils';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, SOCIAL_MEDIA_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { Article, SocialMedia } from 'additional';
 import Image from 'next/image';

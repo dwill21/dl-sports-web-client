@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { Article, SocialMedia } from 'additional';
 
 export const NAVBAR_FRAGMENT = gql`
     fragment Navbar on Query {
