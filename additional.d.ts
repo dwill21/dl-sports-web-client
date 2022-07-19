@@ -43,6 +43,11 @@ interface Media {
   alternativeText: string
   width: number
   height: number
+  formats: {
+    [key: string]: {
+      url: string
+    }
+  }
 }
 interface Topic {
   title: string

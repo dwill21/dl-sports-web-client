@@ -7,17 +7,24 @@ import { search } from 'utils/search';
 import { Article } from 'additional';
 import { useEffect, useState } from 'react';
 import { Typography } from '@material-tailwind/react';
+import Image from 'next/image';
 
-export default function SearchResultsPage() {
+interface SearchResultsPageProps {
+  cmsUrl: string
+}
+
+export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
   const { query } = useRouter();
   const [searchResults, setSearchResults] = useState<Article[]>([]);
   const searchQuery = Array.isArray(query.q) ? query.q[0] : query.q;
 
   useEffect(() => {
-    search('article', searchQuery ?? '')
-      .then(response => {
-        setSearchResults(response.hits as Article[])
-      });
+    if (searchQuery) {
+      search('article', searchQuery)
+        .then(response => {
+          setSearchResults(response.hits as Article[])
+        });
+    }
   }, [searchQuery]);
 
   return (
@@ -26,11 +33,24 @@ export default function SearchResultsPage() {
         Search results for &quot;{searchQuery}&quot;
       </Typography>
       <div className="px-12">
-        <Typography as="ul">
+        <ul className="border-t">
           {searchResults.map(article => (
-            <li key={article.id}>{article.title}</li>
+            <li key={article.id} className="flex py-2 gap-x-2 border-b">
+              <Image
+                src={`${cmsUrl}${article.cover.formats?.['thumbnail']?.url ?? article.cover.url}`}
+                alt={article.cover.alternativeText}
+                layout="intrinsic"
+                width={150}
+                height={150}
+                objectFit="cover"
+              />
+              <div>
+                <Typography variant="lead">{article.title}</Typography>
+                <Typography>{article.description}</Typography>
+              </div>
+            </li>
           ))}
-        </Typography>
+        </ul>
       </div>
     </>
   )
@@ -48,6 +68,7 @@ export async function getStaticProps() {
 
   return {
     props: {
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }
