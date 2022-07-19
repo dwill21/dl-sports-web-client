@@ -84,7 +84,7 @@ export async function getStaticProps() {
     props: {
       articles: flattenedArticles,
       socials: flattenedSocials,
-      cmsUrl: process.env.STRAPI_URL,
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

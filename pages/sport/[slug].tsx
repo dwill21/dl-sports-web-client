@@ -120,7 +120,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   return {
     props: {
       sport: flatten(data.sport),
-      cmsUrl: process.env.STRAPI_URL,
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       },
