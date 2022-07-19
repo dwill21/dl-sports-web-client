@@ -7,9 +7,9 @@ const searchClient = new MeiliSearch({
 
 type Index = "article";
 
-const search = async (indexName: Index, input: string) => {
+const search = async (indexName: Index, input: string, offset = 0, limit = 10) => {
   const index = searchClient.index(indexName);
-  return await index.search(input);
+  return await index.search(input, { offset, limit });
 };
 
 export { search }
