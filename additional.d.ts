@@ -57,10 +57,6 @@ interface Topic {
 interface NavbarProps {
   sports: Partial<Sport>[]
 }
-interface NavbarMenuProps {
-  sports: Partial<Sport>[]
-  navItems: ReactNode[]
-}
 
 type SpotifyControllerOptions = {
   width?: string,

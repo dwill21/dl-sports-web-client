@@ -9,7 +9,7 @@ interface NavbarMenuLinkProps {
   className?: string
 }
 
-export default function NavbarMenuLink({ href, children, variant="paragraph", className="p-1 font-normal" }: NavbarMenuLinkProps) {
+export default function NavbarLink({ href, children, variant="paragraph", className="p-1 font-normal" }: NavbarMenuLinkProps) {
   return (
     <Link href={href} passHref>
       <Typography as="a" variant={variant} className={className}>
