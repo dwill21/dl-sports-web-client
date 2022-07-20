@@ -13,3 +13,19 @@
 .search-bar-enter-active, .search-bar-exit-active {
     transition: opacity 150ms;
 }
+
+.page-load-enter {
+    @apply opacity-0;
+}
+.page-load-enter-active {
+    @apply opacity-50;
+}
+.page-load-exit {
+    @apply opacity-50;
+}
+.page-load-exit-active {
+    @apply opacity-0;
+}
+.page-load-enter-active, .page-load-exit-active {
+    transition: opacity 300ms;
+}
