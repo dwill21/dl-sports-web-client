@@ -5,14 +5,15 @@ import Link from 'next/link';
 interface NavbarMenuLinkProps {
   href: string
   children: ReactNode
-  variant?: string
-  className?: string
+}
+type TypographyProps = {
+  [key: string]: string | number
 }
 
-export default function NavbarLink({ href, children, variant="paragraph", className="p-1 font-normal" }: NavbarMenuLinkProps) {
+export default function TypographyLink({ href, children, ...typographyProps }: NavbarMenuLinkProps & TypographyProps) {
   return (
     <Link href={href} passHref>
-      <Typography as="a" variant={variant} className={className}>
+      <Typography as="a" {...typographyProps}>
         {children}
       </Typography>
     </Link>

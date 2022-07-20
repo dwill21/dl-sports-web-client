@@ -1,6 +1,6 @@
 import { Menu, MenuHandler, Navbar } from '@material-tailwind/react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import NavbarLink from 'components/navbar/navbar-link';
+import TypographyLink from 'components/typography-link';
 import SearchBarTransition from 'components/search/search-bar-transition';
 import { NavbarProps } from 'additional';
 import debounce from 'lodash.debounce';
@@ -54,9 +54,9 @@ export default function AppNavbar({ sports }: NavbarProps) {
     <SearchBarTransition>
       <ArticlesMenu display={<>Articles&nbsp;<IoMdArrowDropdown size={20} className="-ml-0.5"/></>}/>
       {navLinks.map(navLink => (
-        <NavbarLink key={navLink.name} href={navLink.href}>
+        <TypographyLink key={navLink.name} href={navLink.href} className="p-1 font-normal">
           {navLink.name}
-        </NavbarLink>
+        </TypographyLink>
       ))}
     </SearchBarTransition>
   );
@@ -81,9 +81,9 @@ export default function AppNavbar({ sports }: NavbarProps) {
   return (
     <Navbar fullWidth={true}>
       <div className="mx-auto container flex items-center justify-between text-grey-900">
-        <NavbarLink href="/" variant="h4" className="py-1.5 font-normal">
+        <TypographyLink href="/" variant="h4" className="py-1.5 font-normal">
           DL Sports
-        </NavbarLink>
+        </TypographyLink>
 
         {smallScreen !== null && (
           smallScreen

@@ -1,5 +1,5 @@
 import { MenuItem, MenuList } from '@material-tailwind/react';
-import NavbarLink from 'components/navbar/navbar-link';
+import TypographyLink from 'components/typography-link';
 import { ReactNode } from 'react';
 
 interface DropdownMenuProps {
@@ -16,9 +16,9 @@ export default function DropdownMenuContent({ items, children }: DropdownMenuPro
       {children}
       {items.map((item) => (
         <MenuItem key={item.name}>
-          <NavbarLink href={item.href}>
+          <TypographyLink href={item.href} className="p-1 font-normal">
             {item.name}
-          </NavbarLink>
+          </TypographyLink>
         </MenuItem>
       ))}
     </MenuList>

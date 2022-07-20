@@ -6,6 +6,7 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { Column } from 'additional';
 import Link from 'next/link';
 import { NextSeo } from 'next-seo';
+import TypographyLink from '../components/typography-link';
 
 interface ColumnsPageProps {
   columns: Column[]
@@ -38,11 +39,9 @@ export default function ColumnsPage({ columns }: ColumnsPageProps) {
                 <ul className="pl-2 list-disc">
                   {column.articles?.map(article => (
                     <li key={article.id} className="my-1">
-                      <Link href={`/article/${article.slug}`} passHref>
-                        <Typography as="a" color="black" className="hover:text-[#0000FFFF] hover:underline">
-                          {article.title}
-                        </Typography>
-                      </Link>
+                      <TypographyLink href={`/article/${article.slug}`} color="black" className="hover:text-[#0000FFFF] hover:underline">
+                        {article.title ?? ""}
+                      </TypographyLink>
                     </li>
                   ))}
                 </ul>
