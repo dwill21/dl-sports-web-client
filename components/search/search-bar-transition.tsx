@@ -1,4 +1,4 @@
-import SearchBar from 'components/search-bar';
+import SearchBar from 'components/search/search-bar';
 import { ReactNode, useCallback, useState } from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';

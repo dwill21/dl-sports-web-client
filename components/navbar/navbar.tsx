@@ -1,7 +1,7 @@
 import { Menu, MenuHandler, Navbar } from '@material-tailwind/react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import NavbarLink from 'components/navbar/navbar-link';
-import SearchBarTransition from 'components/search-bar-transition';
+import SearchBarTransition from 'components/search/search-bar-transition';
 import { NavbarProps } from 'additional';
 import debounce from 'lodash.debounce';
 import DropdownMenuButton from 'components/navbar/dropdown-menu-button';
