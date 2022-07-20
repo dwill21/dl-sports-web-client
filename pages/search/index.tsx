@@ -23,14 +23,15 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResponse<Article>>({ hits: [], nbHits: 0});
   const searchQuery = Array.isArray(query.q) ? query.q[0] : query.q;
 
-  useEffect(() => {
+  const searchHandler = (offset?: number, limit?: number) => {
     if (searchQuery) {
-      search('article', searchQuery)
+      search('article', searchQuery, offset, limit)
         .then(response => {
           setSearchResults(response as any as SearchResponse<Article>)
         });
     }
-  }, [searchQuery]);
+  }
+  useEffect(searchHandler, [searchQuery]);
 
   return (
     <>
@@ -57,7 +58,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
           ))}
         </ul>
 
-        <SearchPaginationForm className="my-4" totalHits={searchResults.nbHits}/>
+        <SearchPaginationForm className="my-4" totalHits={searchResults.nbHits} handleSearch={searchHandler}/>
       </div>
     </>
   )
