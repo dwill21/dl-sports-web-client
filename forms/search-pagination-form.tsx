@@ -93,7 +93,11 @@ export default function SearchPaginationForm({ className, totalHits, handleSearc
         page: 0,
         limit: 10
       }}
-      onSubmit={console.log}
+      onSubmit={(values) => {
+        const limit = +values.limit;
+        const page = +values.page;
+        handleSearch(page * limit, limit);
+      }}
     >
       <Form className={`w-full flex justify-end ${className}`}>
         <div className="flex gap-12 items-center">
