@@ -6,7 +6,7 @@ import { ChangeEvent, useEffect } from 'react';
 interface SearchPaginationFormProps {
   totalHits: number
   className?: string
-  handleSearch: (offset?: number, limit?: number) => void
+  onSubmit: (offset?: number, limit?: number) => void
 }
 
 const PageSizeSelector = () => {
@@ -86,7 +86,7 @@ const AutoUpdate = () => {
   return null;
 }
 
-export default function SearchPaginationForm({ className, totalHits, handleSearch }: SearchPaginationFormProps) {
+export default function SearchPaginationForm({ className, totalHits, onSubmit }: SearchPaginationFormProps) {
   return (
     <Formik
       initialValues={{
@@ -96,7 +96,7 @@ export default function SearchPaginationForm({ className, totalHits, handleSearc
       onSubmit={(values) => {
         const limit = +values.limit;
         const page = +values.page;
-        handleSearch(page * limit, limit);
+        onSubmit(page * limit, limit);
       }}
     >
       <Form className={`w-full flex flex-col md:flex-row justify-end items-center gap-y-4 gap-12 ${className}`}>
