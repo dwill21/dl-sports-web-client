@@ -33,8 +33,9 @@ export default function SearchBar({ closeHandler, className }: SearchBarProps) {
       <Formik
         initialValues={{searchInput: ''}}
         validationSchema={searchBarSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, formikHelpers) => {
           router.push(`/search?q=${values.searchInput}`)
+          formikHelpers.setSubmitting(false);
         }}
       >
         {({ isSubmitting }) => (
