@@ -1,4 +1,4 @@
-import { Menu, MenuHandler, Navbar } from '@material-tailwind/react';
+import { IconButton, Menu, MenuHandler, Navbar } from '@material-tailwind/react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import TypographyLink from 'components/typography-link';
 import SearchBarTransition from 'components/search/search-bar-transition';
@@ -7,6 +7,8 @@ import debounce from 'lodash.debounce';
 import DropdownMenuButton from 'components/navbar/dropdown-menu-button';
 import DropdownMenuContent from 'components/navbar/dropdown-menu-content';
 import { IoMdArrowDropdown, IoMdArrowDropleft, IoMdMenu } from 'react-icons/io';
+import { IoSearchSharp } from 'react-icons/io5';
+import { useRouter } from 'next/router';
 
 const navLinks = [
   {
@@ -24,6 +26,7 @@ const navLinks = [
 ]
 
 export default function AppNavbar({ sports }: NavbarProps) {
+  const router = useRouter();
   const [smallScreen, setSmallScreen] = useState<boolean | null>(null);
   const handleWindowResize = () => setSmallScreen(window.innerWidth < 768);
   const debouncedResizeHandler = useMemo(() => debounce(handleWindowResize, 300), []);
@@ -85,10 +88,14 @@ export default function AppNavbar({ sports }: NavbarProps) {
           DL Sports
         </TypographyLink>
 
-        {smallScreen !== null && (
-          smallScreen
-            ? <HamburgerMenu />
-            : <FullNavbar />
+        {smallScreen !== null && (smallScreen ?
+          <div className="flex items-center">
+            <HamburgerMenu />
+            <IconButton variant="text" onClick={() => router.push('/search')}>
+              <IoSearchSharp size={24} className="cursor-pointer text-black"/>
+            </IconButton>
+          </div>
+          : <FullNavbar />
         )}
       </div>
     </Navbar>
