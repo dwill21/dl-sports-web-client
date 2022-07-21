@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useRouter } from 'next/router';
 
 interface SearchBarProps {
-  closeHandler: () => void
+  closeHandler?: () => void
   className?: string
 }
 
@@ -24,9 +24,12 @@ export default function SearchBar({ closeHandler, className }: SearchBarProps) {
 
   return (
     <div className={`flex items-center ${className}`}>
-      <IconButton variant="text" color="grey" onClick={closeHandler}>
-        <IoCloseSharp size={24} className="cursor-pointer"/>
-      </IconButton>
+      {closeHandler &&
+        <IconButton variant="text" color="grey" onClick={closeHandler}>
+          <IoCloseSharp size={24} className="cursor-pointer"/>
+        </IconButton>
+      }
+
       <Formik
         initialValues={{searchInput: ''}}
         validationSchema={searchBarSchema}

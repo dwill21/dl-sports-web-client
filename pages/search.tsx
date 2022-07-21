@@ -11,6 +11,7 @@ import Image from 'next/image';
 import SearchPaginationForm from 'forms/search-pagination-form';
 import { SyncLoader } from 'react-spinners';
 import { CSSTransition } from 'react-transition-group';
+import SearchBar from '../components/search/search-bar';
 
 interface SearchResultsPageProps {
   cmsUrl: string
@@ -40,10 +41,14 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
 
   return (
     <>
-      <Typography as="h1" variant="lead" className="py-12 text-center text-2xl">
-        Search results for &quot;{searchQuery}&quot;
-      </Typography>
       <div className="md:px-12">
+        <div className="py-12 flex flex-col gap-y-6">
+          <SearchBar className="px-4 md:px-12"/>
+          <Typography as="h1" variant="lead" className="text-center text-2xl">
+            Search results for &quot;{searchQuery}&quot;
+          </Typography>
+        </div>
+
         <ul className="border-t">
           {searchResults.hits.map(article => (
             <li key={article.id} className="flex py-2 gap-x-2 border-b">
