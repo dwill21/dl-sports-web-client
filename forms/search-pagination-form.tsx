@@ -99,13 +99,11 @@ export default function SearchPaginationForm({ className, totalHits, handleSearc
         handleSearch(page * limit, limit);
       }}
     >
-      <Form className={`w-full flex justify-end ${className}`}>
-        <div className="flex gap-12 items-center">
-          <PageSizeSelector/>
-          <RangeDisplay totalHits={totalHits}/>
-          <PageArrows totalHits={totalHits}/>
-          <AutoUpdate/>
-        </div>
+      <Form className={`w-full flex flex-col md:flex-row justify-end items-center gap-y-4 gap-12 ${className}`}>
+        <PageSizeSelector/>
+        <RangeDisplay totalHits={totalHits}/>
+        <PageArrows totalHits={totalHits}/>
+        <AutoUpdate/>
       </Form>
     </Formik>
   )

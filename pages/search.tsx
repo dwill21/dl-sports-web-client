@@ -41,7 +41,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
 
   return (
     <>
-      <div className="md:px-12">
+      <div className="px-1 md:px-12">
         <div className="py-12 flex flex-col gap-y-6">
           <SearchBar className="px-4 md:px-12"/>
           <Typography as="h1" variant="lead" className="text-center text-2xl">
@@ -60,15 +60,15 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
                 height={150}
                 objectFit="cover"
               />
-              <div>
-                <Typography variant="lead">{article.title}</Typography>
-                <Typography>{article.description}</Typography>
+              <div className="min-w-[300px]">
+                <Typography variant="lead" className="mb-0.5 md:mb-1 leading-6 text-lg md:text-xl">{article.title}</Typography>
+                <Typography variant="small" className="leading-5 md:text-base">{article.description}</Typography>
               </div>
             </li>
           ))}
         </ul>
 
-        <SearchPaginationForm className="my-4" totalHits={searchResults.nbHits} handleSearch={searchHandler}/>
+        <SearchPaginationForm className="mt-8 md:mt-4 mb-4" totalHits={searchResults.nbHits} handleSearch={searchHandler}/>
       </div>
 
       <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
