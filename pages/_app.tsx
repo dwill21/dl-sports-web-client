@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Layout>
       </ThemeProvider>
 
-      <CSSTransition in={loading} classNames="page-load" timeout={200} unmountOnExit>
+      <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
         <Spinner/>
       </CSSTransition>
     </>

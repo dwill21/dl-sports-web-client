@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { Typography } from '@material-tailwind/react';
 import Image from 'next/image';
 import SearchPaginationForm from 'forms/search-pagination-form';
+import { SyncLoader } from 'react-spinners';
+import { CSSTransition } from 'react-transition-group';
 
 interface SearchResultsPageProps {
   cmsUrl: string
@@ -21,13 +23,16 @@ interface SearchResponse<T> {
 export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
   const { query } = useRouter();
   const [searchResults, setSearchResults] = useState<SearchResponse<Article>>({ hits: [], nbHits: 0});
+  const [loading, setLoading] = useState(false);
   const searchQuery = Array.isArray(query.q) ? query.q[0] : query.q;
 
   const searchHandler = (offset?: number, limit?: number) => {
     if (searchQuery) {
+      setLoading(true);
       search('article', searchQuery, offset, limit)
         .then(response => {
           setSearchResults(response as any as SearchResponse<Article>)
+          setLoading(false);
         });
     }
   }
@@ -38,7 +43,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
       <Typography as="h1" variant="lead" className="py-12 text-center text-2xl">
         Search results for &quot;{searchQuery}&quot;
       </Typography>
-      <div className="px-12">
+      <div className="md:px-12">
         <ul className="border-t">
           {searchResults.hits.map(article => (
             <li key={article.id} className="flex py-2 gap-x-2 border-b">
@@ -60,6 +65,12 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
 
         <SearchPaginationForm className="my-4" totalHits={searchResults.nbHits} handleSearch={searchHandler}/>
       </div>
+
+      <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
+        <div className="fixed inset-0 bg-grey-200 opacity-50">
+          <SyncLoader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
+        </div>
+      </CSSTransition>
     </>
   )
 }

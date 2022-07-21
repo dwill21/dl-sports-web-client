@@ -14,18 +14,18 @@
     transition: opacity 150ms;
 }
 
-.page-load-enter {
+.loading-spinner-enter {
     @apply opacity-0;
 }
-.page-load-enter-active {
+.loading-spinner-enter-active {
     @apply opacity-50;
 }
-.page-load-exit {
+.loading-spinner-exit {
     @apply opacity-50;
 }
-.page-load-exit-active {
+.loading-spinner-active {
     @apply opacity-0;
 }
-.page-load-enter-active, .page-load-exit-active {
+.loading-spinner-enter-active, .loading-spinner-exit-active {
     transition: opacity 300ms;
 }
