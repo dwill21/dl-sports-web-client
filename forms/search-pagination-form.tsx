@@ -1,7 +1,7 @@
 import { Form, Formik, useFormikContext } from 'formik';
 import { IconButton, Typography } from '@material-tailwind/react';
 import { MdChevronLeft, MdChevronRight, MdFirstPage, MdLastPage } from 'react-icons/md';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 
 interface SearchPaginationFormProps {
   totalHits: number
@@ -49,29 +49,45 @@ const RangeDisplay = ({ totalHits }: { totalHits: number }) => {
 const PageArrows = ({ totalHits }: { totalHits: number }) => {
   const { setFieldValue, values } = useFormikContext<{ page: number, limit: number }>();
   const lastPage = Math.ceil(totalHits / values.limit) - 1;
-  const isDisabled = (index: number) => (index < 2 && values.page === 0) || (index >= 2 && values.page === lastPage);
+
+  const arrows = [
+    {
+      Icon: MdFirstPage,
+      nextPage: useMemo(() => 0, []),
+      disabled: useMemo(() => values.page === 0, [values.page]),
+    },
+    {
+      Icon: MdChevronLeft,
+      nextPage: useMemo(() => Math.max(values.page - 1, 0), [values.page]),
+      disabled: useMemo(() => values.page === 0, [values.page]),
+    },
+    {
+      Icon: MdChevronRight,
+      nextPage: useMemo(() => Math.min(values.page + 1, lastPage), [values.page, lastPage]),
+      disabled: useMemo(() => values.page === lastPage, [values.page, lastPage]),
+    },
+    {
+      Icon: MdLastPage,
+      nextPage: useMemo(() => lastPage, [lastPage]),
+      disabled: useMemo(() => values.page === lastPage, [values.page, lastPage]),
+    },
+  ]
 
   return (
     <div className="flex items-center gap-x-2">
-      {[MdFirstPage, MdChevronLeft, MdChevronRight, MdLastPage].map((Icon, index) => (
-        <IconButton key={index} variant="text" size="md" disabled={isDisabled(index)} onClick={() => {
-          let newPage = 0;
-          if (index === 1) {
-            newPage = Math.max(values.page - 1, 0);
-          } else if (index === 2) {
-            newPage = Math.max(values.page + 1, lastPage);
-          } else if (index === 3) {
-            newPage = lastPage;
-          }
-
-          if (newPage !== values.page) {
-            setFieldValue('page', newPage);
-          }
-        }}>
-          <Icon
-            size={24}
-            color={isDisabled(index) ? 'gray' : 'black'}
-          />
+      {arrows.map(({Icon, nextPage, disabled}, index) => (
+        <IconButton
+          key={index}
+          variant="text"
+          size="md"
+          disabled={disabled}
+          onClick={() => {
+            if (nextPage !== values.page) {
+              setFieldValue('page', nextPage);
+            }
+          }}
+        >
+          <Icon size={24} color={disabled ? 'gray' : 'black'}/>
         </IconButton>
       ))}
     </div>
