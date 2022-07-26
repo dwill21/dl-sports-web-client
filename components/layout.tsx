@@ -1,5 +1,5 @@
-import Navbar from "./navbar";
-import Footer from "./footer";
+import Navbar from "components/navbar/navbar";
+import Footer from "components/footer";
 import { ReactNode } from 'react';
 import { NavbarProps } from 'additional';
 

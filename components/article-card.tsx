@@ -5,11 +5,12 @@ import { useRouter } from 'next/router';
 
 type ArticleCardProps = {
   article: Partial<Article>;
+  cmsUrl: string;
   size?: "lg" | "md" | "sm";
   className?: string;
 }
 
-const ArticleCard = ({ article, size = "md", className }: ArticleCardProps) => {
+const ArticleCard = ({ article, size = "md", className, cmsUrl }: ArticleCardProps) => {
   const router = useRouter();
   if (!article) {
     return null;
@@ -23,7 +24,7 @@ const ArticleCard = ({ article, size = "md", className }: ArticleCardProps) => {
       <CardHeader shadow={false} floated={false} className="!m-0 w-full h-full rounded-none">
         {article.cover?.url &&
           <Image
-            src={article.cover.url}
+            src={`${cmsUrl}${article.cover.url}`}
             priority={true}
             alt={article.cover.alternativeText}
             layout="fill"

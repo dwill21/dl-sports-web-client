@@ -1,13 +1,7 @@
 import ArticleCard from 'components/article-card';
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
-import {
-  ARTICLE_PREVIEW_FRAGMENT,
-  expandArticleImageURLs,
-  expandSocialMediaImageURLs,
-  NAVBAR_FRAGMENT,
-  SOCIAL_MEDIA_FRAGMENT
-} from 'utils/graphql-utils';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, SOCIAL_MEDIA_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { Article, SocialMedia } from 'additional';
 import Image from 'next/image';
@@ -18,9 +12,10 @@ import { NextSeo } from 'next-seo';
 interface HomePageProps {
   articles: Partial<Article>[]
   socials: Partial<SocialMedia>[]
+  cmsUrl: string
 }
 
-export default function HomePage({ articles, socials }: HomePageProps) {
+export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
   return (
     <>
       <NextSeo
@@ -28,12 +23,12 @@ export default function HomePage({ articles, socials }: HomePageProps) {
       />
 
       <div className="h-full py-16 md:pt-28 md:px-10 flex flex-col md:flex-row gap-16 justify-center items-center">
-        <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]}/>
+        <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]} cmsUrl={cmsUrl}/>
         <div className="flex flex-col items-center">
           <Typography as="h2" className="pb-6 text-3xl">Latest News</Typography>
           <div className="w-screen md:w-[490px] grid grid-cols-1 md:grid-cols-2 gap-8">
             {articles.slice(1).map((article, index) => (
-              <ArticleCard key={article.title ?? index} className="w-full h-48" size="sm" article={article}/>
+              <ArticleCard key={article.title ?? index} className="w-full h-48" size="sm" article={article} cmsUrl={cmsUrl}/>
             ))}
           </div>
         </div>
@@ -46,7 +41,7 @@ export default function HomePage({ articles, socials }: HomePageProps) {
               <a href={social.info} className="contents">
                 <Image
                   key={social.info}
-                  src={social.icon.url}
+                  src={`${cmsUrl}${social.icon.url}`}
                   alt={social.icon.alternativeText}
                   width={24}
                   height={24}
@@ -81,15 +76,15 @@ export async function getStaticProps() {
   });
 
   const flattenedArticles = flatten(data.articles);
-  flattenedArticles.forEach(expandArticleImageURLs);
-  const flattenedSocials = flatten(data.contact).socials
-    .map((e: { icon: never }) => ({ ...e, icon: flatten(e.icon) }));
-  flattenedSocials.forEach(expandSocialMediaImageURLs);
+  const flattenedSocials = flatten(data.contact).socials.map(
+    (e: { icon: never }) => ({ ...e, icon: flatten(e.icon) })
+  );
 
   return {
     props: {
       articles: flattenedArticles,
       socials: flattenedSocials,
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

@@ -1,6 +1,6 @@
 import client from 'utils/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-utils';
+import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { Button, Typography } from '@material-tailwind/react';
 import Image from 'next/image';

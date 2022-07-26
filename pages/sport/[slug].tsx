@@ -4,15 +4,16 @@ import { gql } from '@apollo/client';
 import client from 'utils/apollo-client';
 import { flatten } from 'utils/flatten';
 import { Sport } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, expandArticleImageURLs, NAVBAR_FRAGMENT } from 'utils/graphql-utils';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 
 interface SportPageProps {
   sport: Partial<Sport>
+  cmsUrl: string
 }
 
-export default function SportPage({ sport }: SportPageProps) {
+export default function SportPage({ sport, cmsUrl }: SportPageProps) {
   const router = useRouter();
 
   return (
@@ -27,7 +28,7 @@ export default function SportPage({ sport }: SportPageProps) {
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {sport.articles?.[0] && <ArticleCard className="w-full h-64" article={sport.articles[0]}/>}
+          {sport.articles?.[0] && <ArticleCard className="w-full h-64" article={sport.articles[0]} cmsUrl={cmsUrl}/>}
 
           <div className="w-full md:h-64 md:col-span-2">
             <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-8 lg:overflow-scroll">
@@ -116,12 +117,10 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   }
 
-  const flattenedSport = flatten(data.sport);
-  flattenedSport.articles.forEach(expandArticleImageURLs);
-
   return {
     props: {
-      sport: flattenedSport,
+      sport: flatten(data.sport),
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       },
