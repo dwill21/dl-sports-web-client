@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 interface Author {
   id: number
   firstName: string
