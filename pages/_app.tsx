@@ -7,13 +7,20 @@ import '@fontsource/roboto/700.css';
 
 import Layout from "components/layout";
 import { AppProps } from 'next/app';
-import { ThemeProvider } from '@material-tailwind/react';
 import { DefaultSeo } from 'next-seo';
 import SEO from 'next-seo.config';
 import Spinner from 'components/spinner';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const myTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -37,7 +44,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo {...SEO} />
-      <ThemeProvider>
+
+      <ThemeProvider theme={myTheme}>
+        <CssBaseline/>
         <Layout navbarProps={{...pageProps.navbar}}>
           <Component {...pageProps} />
         </Layout>

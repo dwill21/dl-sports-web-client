@@ -19,6 +19,7 @@
     "@types/react-transition-group": "^4.4.5",
     "apollo-link-rest": "^0.9.0-rc.1",
     "formik": "^2.2.9",
+    "formik-mui": "^5.0.0-alpha.0",
     "graphql": "^16.5.0",
     "graphql-anywhere": "^4.2.7",
     "html-react-parser": "^3.0.1",

@@ -4,9 +4,11 @@
 
 html,
 body {
-  padding: 0;
-  margin: 0;
   @apply bg-grey-100
+}
+
+.MuiTypography-body1, .MuiTypography-subtitle1 {
+  @apply font-light
 }
 
 .twitter-tweet {
