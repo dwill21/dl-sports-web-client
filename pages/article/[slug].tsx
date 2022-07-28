@@ -9,6 +9,7 @@ import Image from 'next/image';
 import AuthorCard from 'components/author-card';
 import { Article } from 'additional';
 import { ArticleJsonLd, NextSeo } from 'next-seo';
+import parse from 'html-react-parser';
 
 interface ArticlePageProps {
   article: Partial<Article>
@@ -76,7 +77,7 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
 
         <div className="py-8 px-2">
           <Typography as="div">
-            <div dangerouslySetInnerHTML={{ __html: article.body ?? "" }} />
+            {parse(article.body ?? "")}
             {externalScripts.map((script) => (
               <Script key={script} src={script} strategy="lazyOnload"/>
             ))}

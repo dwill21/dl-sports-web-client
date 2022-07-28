@@ -7,6 +7,7 @@ import { Sport } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
+import parse from 'html-react-parser';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -54,7 +55,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
               <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
                 {topic.title}
               </Typography>
-              <div dangerouslySetInnerHTML={{ __html: topic.content ?? "" }}/>
+              {parse(topic.content ?? "")}
             </Card>
           ))}
         </div>
