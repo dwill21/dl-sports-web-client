@@ -1,10 +1,9 @@
-import client from 'utils/apollo-client';
+import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { Column } from 'additional';
-import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import TypographyLink from '../components/typography-link';
 

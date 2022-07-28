@@ -1,4 +1,4 @@
-import client from "utils/apollo-client";
+import client from "utils/client/apollo-client";
 import { gql } from "@apollo/client";
 import { getScripts } from "utils/script-helpers";
 import Script from "next/script";

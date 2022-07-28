@@ -1,10 +1,10 @@
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { SpotifyAPI } from 'additional';
-import spotifyClient from 'utils/apollo-client-spotify';
+import spotifyClient from 'utils/client/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import { Button, Typography } from '@material-tailwind/react';
-import apolloClient from 'utils/apollo-client';
+import apolloClient from 'utils/client/apollo-client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { NextSeo } from 'next-seo';
