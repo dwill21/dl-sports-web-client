@@ -11,7 +11,7 @@ import Image from 'next/image';
 import SearchPaginationForm from 'forms/search-pagination-form';
 import { SyncLoader } from 'react-spinners';
 import { CSSTransition } from 'react-transition-group';
-import SearchBar from 'components/search/search-bar';
+import SearchBar from 'components/search-bar';
 import { NextSeo } from 'next-seo';
 
 interface SearchResultsPageProps {
