@@ -7,21 +7,6 @@ import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
 import { useSmallScreen } from 'utils/hooks/use-small-screen';
 
-const navLinks = [
-  {
-    name: "Columns",
-    href: "/thorntons-thoughts",
-  },
-  {
-    name: "On the DL",
-    href: "/podcast",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-];
-
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
   const isSmallScreen = useSmallScreen();
@@ -35,12 +20,12 @@ export default function AppNavbar({ sports }: NavbarProps) {
 
         {isSmallScreen !== null && (isSmallScreen ?
           <div className="flex items-center">
-            <HamburgerMenu sports={sports} navItems={navLinks}/>
+            <HamburgerMenu sports={sports}/>
             <IconButton variant="text" onClick={() => router.push('/search')}>
               <IoSearchSharp size={24} className="cursor-pointer text-black"/>
             </IconButton>
           </div>
-          : <NavbarContent sports={sports} navItems={navLinks}/>
+          : <NavbarContent sports={sports}/>
         )}
       </div>
     </Navbar>

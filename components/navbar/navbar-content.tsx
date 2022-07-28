@@ -5,12 +5,14 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import TypographyLink from 'components/typography-link';
-import { NavItem, Sport } from 'additional';
+import { Sport } from 'additional';
+import { useNavLinks } from 'utils/hooks/use-nav-links';
 
-export default function NavbarContent({ sports, navItems }: { sports: Partial<Sport>[], navItems: NavItem[] }) {
+export default function NavbarContent({ sports }: { sports: Partial<Sport>[] }) {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const openSearchBar = useCallback(() => setShowSearchBar(true), [setShowSearchBar]);
   const closeSearchBar = useCallback(() => setShowSearchBar(false), [setShowSearchBar]);
+  const navLinks = useNavLinks();
 
   const searchOverlay = useMemo(() => (
     <div className="flex items-center w-3/4 relative -right-3">
@@ -41,15 +43,15 @@ export default function NavbarContent({ sports, navItems }: { sports: Partial<Sp
         </MenuList>
       </Menu>
 
-      {navItems.map((item) => (
-        <TypographyLink key={item.name} href={item.href} className="p-1 font-normal">
-          {item.name}
+      {navLinks.map((link) => (
+        <TypographyLink key={link.name} href={link.href} className="p-1 font-normal">
+          {link.name}
         </TypographyLink>
       ))}
 
       <IoSearchSharp className="cursor-pointer" size={20} onClick={openSearchBar}/>
     </div>
-  ), [sports, openSearchBar])
+  ), [sports, navLinks, openSearchBar])
 
   return (
     <SwitchTransition mode="out-in">
