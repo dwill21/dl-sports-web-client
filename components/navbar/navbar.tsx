@@ -1,29 +1,12 @@
-import { IconButton, Menu, MenuHandler, Navbar } from '@material-tailwind/react';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { IconButton, Navbar } from '@material-tailwind/react';
+import { useEffect, useMemo, useState } from 'react';
 import TypographyLink from 'components/typography-link';
-import SearchBarTransition from 'components/search/search-bar-transition';
+import NavbarContent from 'components/navbar/navbar-content';
 import { NavbarProps } from 'additional';
 import debounce from 'lodash.debounce';
-import DropdownMenuButton from 'components/navbar/dropdown-menu-button';
-import DropdownMenuContent from 'components/navbar/dropdown-menu-content';
-import { IoMdArrowDropdown, IoMdArrowDropleft, IoMdMenu } from 'react-icons/io';
 import { IoSearchSharp } from 'react-icons/io5';
 import { useRouter } from 'next/router';
-
-const navLinks = [
-  {
-    name: "Columns",
-    href: "/thorntons-thoughts",
-  },
-  {
-    name: "On the DL",
-    href: "/podcast",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-]
+import HamburgerMenu from 'components/navbar/hamburger-menu';
 
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
@@ -40,47 +23,6 @@ export default function AppNavbar({ sports }: NavbarProps) {
     }
   }, [debouncedResizeHandler]);
 
-  const ArticlesMenu = ({ menuProps, display }: { menuProps?: { [key: string]: string | number }, display: ReactNode }) => (
-    <Menu {...menuProps}>
-      <DropdownMenuButton>
-        {display}
-      </DropdownMenuButton>
-      <DropdownMenuContent items={sports.map(sport => ({
-        name: sport.name ?? "",
-        href: `/sport/${sport.slug}`,
-      }))}
-      />
-    </Menu>
-  )
-
-  const FullNavbar = () => (
-    <SearchBarTransition>
-      <ArticlesMenu display={<>Articles&nbsp;<IoMdArrowDropdown size={20} className="-ml-0.5"/></>}/>
-      {navLinks.map(navLink => (
-        <TypographyLink key={navLink.name} href={navLink.href} className="p-1 font-normal">
-          {navLink.name}
-        </TypographyLink>
-      ))}
-    </SearchBarTransition>
-  );
-
-  const HamburgerMenu = () => (
-    <Menu>
-      <MenuHandler>
-        <button>
-          <IoMdMenu size={36}/>
-        </button>
-      </MenuHandler>
-
-      <DropdownMenuContent items={navLinks}>
-        <ArticlesMenu
-          menuProps={{ placement: "left-start", offset: 10 }}
-          display={<><IoMdArrowDropleft size={20} className="ml-[5px] -mr-1"/>&nbsp;Articles</>}
-        />
-      </DropdownMenuContent>
-    </Menu>
-  )
-
   return (
     <Navbar fullWidth={true}>
       <div className="mx-auto container flex items-center justify-between text-grey-900">
@@ -90,12 +32,12 @@ export default function AppNavbar({ sports }: NavbarProps) {
 
         {smallScreen !== null && (smallScreen ?
           <div className="flex items-center">
-            <HamburgerMenu />
+            <HamburgerMenu sports={sports}/>
             <IconButton variant="text" onClick={() => router.push('/search')}>
               <IoSearchSharp size={24} className="cursor-pointer text-black"/>
             </IconButton>
           </div>
-          : <FullNavbar />
+          : <NavbarContent sports={sports}/>
         )}
       </div>
     </Navbar>
