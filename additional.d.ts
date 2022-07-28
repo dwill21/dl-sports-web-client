@@ -57,6 +57,10 @@ interface Topic {
 interface NavbarProps {
   sports: Partial<Sport>[]
 }
+interface NavItem {
+  name: string
+  href: string
+}
 
 type SpotifyControllerOptions = {
   width?: string,
@@ -72,4 +76,4 @@ declare global {
   }
 }
 
-export { Article, Author, Column, Sport, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }
+export { Article, Author, Column, Sport, SocialMedia, NavbarProps, NavbarMenuProps, NavItem, SpotifyAPI }

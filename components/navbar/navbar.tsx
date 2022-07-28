@@ -8,6 +8,21 @@ import { IoSearchSharp } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
 
+const navLinks = [
+  {
+    name: "Columns",
+    href: "/thorntons-thoughts",
+  },
+  {
+    name: "On the DL",
+    href: "/podcast",
+  },
+  {
+    name: "Contact",
+    href: "/contact",
+  },
+];
+
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
   const [smallScreen, setSmallScreen] = useState<boolean | null>(null);
@@ -32,12 +47,12 @@ export default function AppNavbar({ sports }: NavbarProps) {
 
         {smallScreen !== null && (smallScreen ?
           <div className="flex items-center">
-            <HamburgerMenu sports={sports}/>
+            <HamburgerMenu sports={sports} navItems={navLinks}/>
             <IconButton variant="text" onClick={() => router.push('/search')}>
               <IoSearchSharp size={24} className="cursor-pointer text-black"/>
             </IconButton>
           </div>
-          : <NavbarContent sports={sports}/>
+          : <NavbarContent sports={sports} navItems={navLinks}/>
         )}
       </div>
     </Navbar>

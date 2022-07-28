@@ -1,24 +1,9 @@
 import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
 import { IoMdArrowDropleft, IoMdMenu } from 'react-icons/io';
 import TypographyLink from 'components/typography-link';
-import { Sport } from 'additional';
+import { NavItem, Sport } from 'additional';
 
-const navLinks = [
-  {
-    name: "Columns",
-    href: "/thorntons-thoughts",
-  },
-  {
-    name: "On the DL",
-    href: "/podcast",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-]
-
-export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) {
+export default function HamburgerMenu({ sports, navItems }: { sports: Partial<Sport>[], navItems: NavItem[] }) {
   return (
     <Menu>
       <MenuHandler>
@@ -46,10 +31,10 @@ export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) 
           </MenuList>
         </Menu>
 
-        {navLinks.map((link) => (
-          <MenuItem key={link.name}>
-            <TypographyLink href={link.href} className="p-1 font-normal">
-              {link.name}
+        {navItems.map((item) => (
+          <MenuItem key={item.name}>
+            <TypographyLink href={item.href} className="p-1 font-normal">
+              {item.name}
             </TypographyLink>
           </MenuItem>
         ))}
