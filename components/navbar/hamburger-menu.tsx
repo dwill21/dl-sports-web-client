@@ -1,4 +1,3 @@
-import TypographyLink from 'components/typography-link';
 import { Sport } from 'additional';
 import { useNavLinks } from 'utils/hooks/use-nav-links';
 import React, { useState } from 'react';
@@ -6,13 +5,23 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
+import Link from 'next/link';
+
+const LinkButton = ({ text, href, divider = false, onClick }: { text: string, href: string, divider?: boolean, onClick?: () => void }) => (
+  <Link href={href} passHref>
+    <ListItemButton component="a" divider={divider} onClick={onClick}>
+      <ListItemText>
+        {text}
+      </ListItemText>
+    </ListItemButton>
+  </Link>
+)
 
 export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) {
   const navLinks = useNavLinks();
@@ -22,19 +31,20 @@ export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) 
     const [expanded, setExpanded] = useState(false);
     return (
       <>
-        <ListItemButton onClick={() => setExpanded(!expanded)} className="px-6">
+        <ListItemButton onClick={() => setExpanded(!expanded)} className="px-4">
           <ListItemText>Articles</ListItemText>
           {expanded ? <ExpandLess/> : <ExpandMore/>}
         </ListItemButton>
 
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <List className="w-full py-0 pl-4">
+          <List className="w-full py-0 pl-2">
             {sports.map((sport) => (
-              <ListItem key={sport.name}>
-                <TypographyLink href={`/sport/${sport.slug}`} className="w-full">
-                  {sport.name ?? ""}
-                </TypographyLink>
-              </ListItem>
+              <LinkButton
+                key={sport.name}
+                text={sport.name ?? ""}
+                href={`/sport/${sport.slug}`}
+                onClick={() => setOpen(false)}
+              />
             ))}
           </List>
         </Collapse>
@@ -63,11 +73,13 @@ export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) 
         <List className="mt-2 min-w-[150px]">
           <ArticlesList/>
           {navLinks.map((link, index) => (
-            <ListItem key={link.name} divider={index !== navLinks.length-1}>
-              <TypographyLink href={link.href} className="px-2 w-full">
-                {link.name}
-              </TypographyLink>
-            </ListItem>
+            <LinkButton
+              key={link.name}
+              text={link.name}
+              href={link.href}
+              divider={index !== navLinks.length-1}
+              onClick={() => setOpen(false)}
+            />
           ))}
         </List>
       </Drawer>
