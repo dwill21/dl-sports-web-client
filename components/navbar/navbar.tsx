@@ -15,18 +15,19 @@ export default function AppNavbar({ sports }: NavbarProps) {
 
   return (
     <AppBar position="static" className="w-screen">
-      <Toolbar className="flex items-center gap-4">
+      <Toolbar className="flex items-center md:gap-4">
         <TypographyLink href="/" variant="h4" className="py-1.5 font-normal">
           DL Sports
         </TypographyLink>
 
         {isSmallScreen !== null && (isSmallScreen ?
-          <div className="flex items-center">
+          <>
+            <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
             <IconButton aria-label="search" onClick={() => router.push('/search')}>
               <SearchIcon fontSize="large" className="text-black"/>
             </IconButton>
-          </div>
+          </>
           : <NavbarContent sports={sports}/>
         )}
       </Toolbar>

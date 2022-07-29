@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { InputBase } from 'formik-mui';
 
-const ArticlesMenu = () => {
+const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,11 +41,15 @@ const ArticlesMenu = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+        MenuListProps={{ 'aria-labelledby': 'articles-button' }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {sports.map((sport) => (
+          <MenuItem key={sport.name} onClick={handleClose} className="mx-2 p-0">
+            <TypographyLink href={`/sport/${sport.slug}`} className="py-2 px-4 font-normal">
+              {sport.name ?? ""}
+            </TypographyLink>
+          </MenuItem>
+        ))}
       </Menu>
     </>
   )
@@ -72,7 +76,7 @@ export default function NavbarContent({ sports }: { sports: Partial<Sport>[] }) 
 
   return (
     <>
-      <ArticlesMenu/>
+      <ArticlesMenu sports={sports}/>
       {navLinks.map((link) => (
         <TypographyLink key={link.name} href={link.href} className="px-2">
           {link.name}

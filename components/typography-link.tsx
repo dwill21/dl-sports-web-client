@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
 interface NavbarMenuLinkProps {
@@ -13,7 +13,7 @@ type TypographyProps = {
 export default function TypographyLink({ href, children, ...typographyProps }: NavbarMenuLinkProps & TypographyProps) {
   return (
     <Link href={href} passHref>
-      <Typography as="a" {...typographyProps}>
+      <Typography component="a" {...typographyProps}>
         {children}
       </Typography>
     </Link>
