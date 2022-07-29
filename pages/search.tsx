@@ -47,7 +47,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
         description="Search the DL Sports site to find what you're looking for"
         canonical={`${process.env.NEXT_PUBLIC_BASE_URL}/search`}
       />
-      <SearchBar className="px-4 pt-12 pb-6 mx-auto max-w-[600px]"/>
+      <SearchBar className="px-4 pt-12 pb-6 mx-auto w-full max-w-[600px]"/>
 
       {searchQuery &&
         <div className="px-1 md:px-12">
