@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { search } from 'utils/search';
 import { Article } from 'additional';
 import { useEffect, useState } from 'react';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import SearchPaginationForm from 'forms/search-pagination-form';
 import { SyncLoader } from 'react-spinners';
@@ -51,7 +51,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
 
       {searchQuery &&
         <div className="px-1 md:px-12">
-          <Typography as="h1" variant="lead" className="pb-12 text-center text-2xl">
+          <Typography variant="h4" align="center" className="pb-12">
             Search results for &quot;{searchQuery}&quot;
           </Typography>
 
@@ -67,8 +67,8 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
                   objectFit="cover"
                 />
                 <div className="min-w-[300px]">
-                  <Typography variant="lead" className="mb-0.5 md:mb-1 leading-6 text-lg md:text-xl">{article.title}</Typography>
-                  <Typography variant="small" className="leading-5 md:text-base">{article.description}</Typography>
+                  <Typography variant="h6" className="mb-0.5 md:mb-1 leading-6 text-lg md:text-xl">{article.title}</Typography>
+                  <Typography variant="body2" className="leading-5">{article.description}</Typography>
                 </div>
               </li>
             ))}

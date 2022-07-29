@@ -16,9 +16,16 @@ import { CSSTransition } from 'react-transition-group';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const myTheme = createTheme({
-  palette: {
-    mode: 'light',
+const theme = createTheme({
+  components: {
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          h4: 'h1',
+          h5: 'h3',
+        },
+      },
+    },
   },
 });
 
@@ -45,7 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <DefaultSeo {...SEO} />
 
-      <ThemeProvider theme={myTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline/>
         <Layout navbarProps={{...pageProps.navbar}}>
           <Component {...pageProps} />

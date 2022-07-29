@@ -1,5 +1,8 @@
 import ArticleCard from 'components/article-card';
-import { Card, CardBody, Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import Paper from '@mui/material/Paper';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
@@ -25,7 +28,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
       />
 
       <div className="my-16 md:px-20">
-        <Typography as="h1" variant="lead" className="mt-4 mb-6 text-3xl text-center md:text-left">
+        <Typography variant="h4" className="mt-4 mb-6 text-center md:text-left">
           {sport.name}
         </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -36,27 +39,26 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
               {sport.articles?.slice(1).map(article => (
                 <Card
                   key={article.title}
-                  color="grey"
-                  className="cursor-pointer rounded-none"
+                  className="p-4"
                   onClick={() => router.push(`/article/${article.slug}`)}
                 >
-                  <CardBody className="max-w-full max-h-full">
-                    <Typography as="h5" variant="small" className="mb-2 font-bold">
+                  <CardActionArea>
+                    <Typography className="mb-2">
                       {article.title}
                     </Typography>
-                  </CardBody>
+                  </CardActionArea>
                 </Card>
               ))}
             </div>
           </div>
 
           {sport.topics?.map(topic => (
-            <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card rounded-none">
-              <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
+            <Paper key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card">
+              <Typography variant="h6" component="h3" align="center" className="mb-2">
                 {topic.title}
               </Typography>
               {parse(topic.content ?? "")}
-            </Card>
+            </Paper>
           ))}
         </div>
       </div>

@@ -6,7 +6,7 @@ import { flatten } from 'utils/flatten';
 import { Article, SocialMedia } from 'additional';
 import Image from 'next/image';
 import { Fragment } from 'react';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import { NextSeo } from 'next-seo';
 
 interface HomePageProps {
@@ -25,7 +25,7 @@ export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
       <div className="h-full py-16 md:pt-28 md:px-10 flex flex-col md:flex-row gap-16 justify-center items-center">
         <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]} cmsUrl={cmsUrl}/>
         <div className="flex flex-col items-center">
-          <Typography as="h2" className="pb-6 text-3xl">Latest News</Typography>
+          <Typography variant="h4" component="h2" className="pb-6 font-normal">Latest News</Typography>
           <div className="w-screen md:w-[490px] grid grid-cols-1 md:grid-cols-2 gap-8">
             {articles.slice(1).map((article, index) => (
               <ArticleCard key={article.title ?? index} className="w-full h-48" size="sm" article={article} cmsUrl={cmsUrl}/>

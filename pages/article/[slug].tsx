@@ -4,7 +4,7 @@ import { getScripts } from "utils/script-helpers";
 import Script from "next/script";
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import AuthorCard from 'components/author-card';
 import { Article } from 'additional';
@@ -57,7 +57,7 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
       />
 
       <div className="md:w-3/4 xl:w-2/3 mx-auto py-14 items-center">
-        <Typography as="h1" className="mb-8 text-center text-2xl">
+        <Typography variant="h4" align="center" className="mb-8">
           {article.title}
         </Typography>
 
@@ -76,7 +76,7 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
         </div>
 
         <div className="py-8 px-2">
-          <Typography as="div">
+          <Typography component="div">
             {parse(article.body ?? "")}
             {externalScripts.map((script) => (
               <Script key={script} src={script} strategy="lazyOnload"/>
