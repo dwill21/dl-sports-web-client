@@ -19,8 +19,3 @@ iframe {
   max-width: 100%;
   margin: auto;
 }
-
-.rich-text a:hover {
-  color: blue;
-  text-decoration: underline;
-}

@@ -3,12 +3,22 @@ import { useEffect, useState } from 'react';
 import { SpotifyAPI } from 'additional';
 import spotifyClient from 'utils/client/apollo-client-spotify';
 import { gql } from '@apollo/client';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import apolloClient from 'utils/client/apollo-client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { NextSeo } from 'next-seo';
+import parse from 'html-react-parser';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import Box from '@mui/material/Box';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 type Episode = {
   id: string
@@ -19,8 +29,8 @@ type PodcastPageProps = {
   episodes: Episode[]
 }
 const spotifyPlayerOptions = {
-  height: '160px',
-  width: '450px',
+  height: '180px',
+  width: '650px',
 }
 
 const EpisodeText = ({ episode }: { episode: Episode }) => {
@@ -28,9 +38,9 @@ const EpisodeText = ({ episode }: { episode: Episode }) => {
     return null;
   }
   return (
-    <Typography component="div" className="mt-4 p-1 md:h-[324px] md:overflow-y-scroll leading-6">
-      <Typography variant="h6" component="h2" className="font-bold">{episode.name}</Typography>
-      <div dangerouslySetInnerHTML={{ __html: episode.html_description }}/>
+    <Typography component="div" mt={4} p={1}>
+      <Typography variant="h6" component="h2" fontWeight={700} mb={1}>{episode.name}</Typography>
+      {parse(episode.html_description)}
     </Typography>
   );
 }
@@ -38,6 +48,7 @@ const EpisodeText = ({ episode }: { episode: Episode }) => {
 export default function PodcastPage({ episodes }: PodcastPageProps) {
   const [selectedEpisode, setSelectedEpisode] = useState(episodes?.[0]);
   const [embedController, setEmbedController] = useState<{ loadUri: (uri: string) => void } | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     window.onSpotifyIframeApiReady = (iFrameAPI: SpotifyAPI) => {
@@ -58,39 +69,66 @@ export default function PodcastPage({ episodes }: PodcastPageProps) {
       />
       <Script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async/>
 
-      <div className="my-12 w-screen">
-        <Typography variant="h4" align="center" className="mt-4 mb-16 mb-10">
+      <Container maxWidth="md" sx={{ my: 8 }}>
+        <Typography variant="h4" align="center" my={6}>
           &quot;On the DL&quot; Podcast
         </Typography>
-        <div className="flex flex-col md:flex-row gap-16 md:gap-24 justify-center">
-          <div className="w-full lg:w-[450px] max-w-screen">
-            <div id="embed-iframe"></div>
-            <EpisodeText episode={selectedEpisode} />
-          </div>
 
-          <div className="w-full lg:w-[450px] max-w-screen h-[500px] bg-neutral-200">
-            <div className="p-4 flex flex-col gap-6" id="other-episodes">
-              <Typography variant="h5" align="center">Other Episodes</Typography>
-              {episodes.map((episode) => (
-                <Button
-                  key={episode.id}
-                  className="w-full h-16 px-2"
-                  id={episode.id}
-                  variant="contained"
-                  onClick={() => {
-                    if (embedController) {
-                      setSelectedEpisode(episode);
-                      embedController.loadUri(`spotify:episode:${episode.id}`);
-                    }
-                  }}
-                >
-                  {episode.name}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+        <div id="embed-iframe"></div>
+
+        <Box mt={2} mb={4} mx={{ xs: 4, md: 12 }}>
+          <Accordion expanded={expanded} onChange={() => {
+            setExpanded(!expanded)
+          }}>
+            <AccordionSummary
+              id="other-episodes-header"
+              aria-controls="other-episodes-content"
+              expandIcon={<ExpandMoreIcon/>}
+            >
+              Other Episodes
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {episodes.map((episode, index) => (
+                  <ListItem key={episode.id} divider={index !== episodes.length-1}>
+                    <ListItemButton id={episode.id} onClick={() => {
+                      if (embedController) {
+                        setSelectedEpisode(episode);
+                        embedController.loadUri(`spotify:episode:${episode.id}`);
+                      }
+                      setExpanded(false);
+                    }}>
+                      {episode.name}
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+
+        <Paper sx={{ p: 2 }}>
+          <EpisodeText episode={selectedEpisode} />
+        </Paper>
+
+        {/*<Paper sx={{ p: 2 }}>*/}
+        {/*  <Typography variant="h5" align="center">Other Episodes</Typography>*/}
+        {/*  <List>*/}
+        {/*    {episodes.map((episode, index) => (*/}
+        {/*      <ListItem key={episode.id} divider={index !== episodes.length-1}>*/}
+        {/*        <ListItemButton id={episode.id} onClick={() => {*/}
+        {/*          if (embedController) {*/}
+        {/*            setSelectedEpisode(episode);*/}
+        {/*            embedController.loadUri(`spotify:episode:${episode.id}`);*/}
+        {/*          }*/}
+        {/*        }}>*/}
+        {/*          {episode.name}*/}
+        {/*        </ListItemButton>*/}
+        {/*      </ListItem>*/}
+        {/*    ))}*/}
+        {/*  </List>*/}
+        {/*</Paper>*/}
+      </Container>
     </>
   )
 }
