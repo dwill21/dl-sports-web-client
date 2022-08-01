@@ -12,7 +12,7 @@ export default function Spinner() {
   })
 
   return (
-    <div className="fixed inset-0 bg-grey-500 opacity-50">
+    <div className="fixed inset-0 bg-neutral-500 opacity-50">
       <PulseLoader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
     </div>
   )

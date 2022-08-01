@@ -68,7 +68,7 @@ export default function PodcastPage({ episodes }: PodcastPageProps) {
             <EpisodeText episode={selectedEpisode} />
           </div>
 
-          <div className="w-full lg:w-[450px] max-w-screen h-[500px] bg-grey-200">
+          <div className="w-full lg:w-[450px] max-w-screen h-[500px] bg-neutral-200">
             <div className="p-4 flex flex-col gap-6" id="other-episodes">
               <Typography variant="h5" align="center">Other Episodes</Typography>
               {episodes.map((episode) => (

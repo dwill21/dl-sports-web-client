@@ -7,6 +7,9 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
+/**
+ * Taken from https://mui.com/material-ui/react-table/#custom-pagination-actions
+ */
 export default function TablePaginationActions({ count, page, rowsPerPage, onPageChange }: TablePaginationProps) {
   const handleFirstButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     onPageChange(event, 0);

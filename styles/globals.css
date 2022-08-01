@@ -4,7 +4,7 @@
 
 html,
 body {
-  @apply bg-grey-100
+  @apply bg-neutral-100
 }
 
 .MuiTypography-body1, .MuiTypography-subtitle1 {

@@ -44,7 +44,7 @@ export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
             <Grid container spacing={2}>
               {articles.slice(1).map(article => (
                 <Grid key={article.title} item xs={12} md={6}>
-                  <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription/>
+                  <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription smallText/>
                 </Grid>
               ))}
             </Grid>

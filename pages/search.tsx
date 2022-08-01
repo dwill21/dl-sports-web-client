@@ -110,7 +110,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
       )}
 
       <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
-        <div className="fixed inset-0 bg-grey-200 opacity-50">
+        <div className="fixed inset-0 bg-neutral-200 opacity-50">
           <SyncLoader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
         </div>
       </CSSTransition>
