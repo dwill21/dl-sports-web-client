@@ -11,7 +11,7 @@ export const INJECTED_SCRIPT = /<script[\s\S]*?>[\s\S]*?createElement[\s\S]*?src
  * @param {String} script The string HTML of a <script> tag.
  * @returns {String|null} The URI of the requested external script, otherwise null.
  */
-const extractExternalScriptURL = ( script ) => {
+const extractExternalScriptURL = ( script: string ) => {
   const match = script.match( EXTERNAL_SCRIPT );
   // Return null if no match, otherwise return the second capture group.
   return match && match[2];
@@ -23,7 +23,7 @@ const extractExternalScriptURL = ( script ) => {
  * @param {String} script The string HTML of a <script> tag.
  * @returns {String|null} The URI of a script being injected from inline JS, otherwise null.
  */
-const extractInjectedScriptURL = ( script ) => {
+const extractInjectedScriptURL = ( script: string ) => {
   const match = script.match( INJECTED_SCRIPT );
   // Return null if no match, otherwise return the second capture group.
   return match && match[2];
@@ -35,16 +35,16 @@ const extractInjectedScriptURL = ( script ) => {
  * @param {String} script The string HTML of a <script> tag
  * @returns {String|null} The URI of the script file this script tag loads, or null.
  */
-const extractScriptURL = ( script ) => (
+const extractScriptURL = ( script: string ) => (
   extractExternalScriptURL( script ) || extractInjectedScriptURL( script )
 );
 
 /**
  * Remove duplicate or undefined values from an array of strings.
  *
- * @param {String[]} Array script file URIs.
+ * @param {String[]} scripts Array script file URIs.
  */
-const uniqueURIs = ( scripts ) => Object.keys( scripts.reduce( ( keys, script ) => (
+const uniqueURIs = ( scripts: (string|null)[] ) => Object.keys( scripts.reduce( ( keys, script ) => (
   script ? {
     ...keys,
     [script]: true,
@@ -57,7 +57,7 @@ const uniqueURIs = ( scripts ) => Object.keys( scripts.reduce( ( keys, script ) 
  * @param {String} string String containing HTML markup which may include script tags.
  * @returns {String[]} Array of any script URIs we believe to be loaded in this HTML.
  */
-export const getScripts = ( string ) => {
+export const getScripts = ( string: string ) => {
   const scripts = string.match( /<script[\s\S]*?<\/script>/gi );
   return scripts ? uniqueURIs( scripts.map( extractScriptURL ) ) : [];
 };
