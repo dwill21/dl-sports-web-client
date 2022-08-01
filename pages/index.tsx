@@ -6,8 +6,13 @@ import { flatten } from 'utils/flatten';
 import { Article, SocialMedia } from 'additional';
 import Image from 'next/image';
 import { Fragment } from 'react';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import { NextSeo } from 'next-seo';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 interface HomePageProps {
   articles: Partial<Article>[]
@@ -22,23 +27,42 @@ export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
         description="News, highlights, and analysis for all your favorite sports"
       />
 
-      <div className="h-full py-16 md:pt-28 md:px-10 flex flex-col md:flex-row gap-16 justify-center items-center">
-        <ArticleCard className="w-screen md:w-[490px] h-[490px]" size="lg" article={articles?.[0]} cmsUrl={cmsUrl}/>
-        <div className="flex flex-col items-center">
-          <Typography as="h2" className="pb-6 text-3xl">Latest News</Typography>
-          <div className="w-screen md:w-[490px] grid grid-cols-1 md:grid-cols-2 gap-8">
-            {articles.slice(1).map((article, index) => (
-              <ArticleCard key={article.title ?? index} className="w-full h-48" size="sm" article={article} cmsUrl={cmsUrl}/>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Container maxWidth="lg" className="py-16">
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          divider={<Divider orientation="vertical" flexItem/>}
+          spacing={2}
+        >
+          <Box className="w-full">
+            <ArticleCard article={articles?.[0]} cmsUrl={cmsUrl} height={500}/>
+          </Box>
 
-      <div className="w-screen h-[50px] mb-10 bg-grey-200 flex flow-row gap-10 justify-center">
-        {socials.map((social) => (
+          <Box className="w-full flex flex-col justify-between">
+            <Typography variant="h4" component="h2" align="center" className="pb-6 font-normal">
+              Latest News
+            </Typography>
+            <Grid container spacing={2}>
+              {articles.slice(1).map(article => (
+                <Grid key={article.title} item xs={12} md={6}>
+                  <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription smallText/>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </Stack>
+      </Container>
+
+      <Stack
+        direction="row"
+        divider={<Divider orientation="vertical" flexItem/>}
+        spacing={{ xs: 3, md: 5 }}
+        mb={2}
+        className="flex justify-center"
+      >
+        {socials.map(social => (
           <Fragment key={social.info}>
-            {social.icon?.url &&
-              <a href={social.info} className="contents">
+            {social.icon?.url && (
+              <a href={social.info}>
                 <Image
                   key={social.info}
                   src={`${cmsUrl}${social.icon.url}`}
@@ -49,10 +73,10 @@ export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
                   objectFit="contain"
                 />
               </a>
-            }
-          </Fragment>
+            )}
+            </Fragment>
         ))}
-      </div>
+      </Stack>
     </>
   )
 }

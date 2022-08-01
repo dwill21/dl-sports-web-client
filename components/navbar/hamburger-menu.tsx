@@ -1,47 +1,88 @@
-import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
-import { IoMdArrowDropleft, IoMdMenu } from 'react-icons/io';
-import TypographyLink from 'components/typography-link';
 import { Sport } from 'additional';
 import { useNavLinks } from 'utils/hooks/use-nav-links';
+import React, { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import Divider from '@mui/material/Divider';
+import Link from 'next/link';
+
+const LinkButton = ({ text, href, divider = false, onClick }: { text: string, href: string, divider?: boolean, onClick?: () => void }) => (
+  <Link href={href} passHref>
+    <ListItemButton component="a" divider={divider} onClick={onClick}>
+      <ListItemText>
+        {text}
+      </ListItemText>
+    </ListItemButton>
+  </Link>
+)
 
 export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) {
   const navLinks = useNavLinks();
+  const [open, setOpen] = useState(false);
+
+  const ArticlesList = () => {
+    const [expanded, setExpanded] = useState(false);
+    return (
+      <>
+        <ListItemButton onClick={() => setExpanded(!expanded)} className="px-4">
+          <ListItemText>Articles</ListItemText>
+          {expanded ? <ExpandLess/> : <ExpandMore/>}
+        </ListItemButton>
+
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <List className="w-full py-0 pl-2">
+            {sports.map((sport) => (
+              <LinkButton
+                key={sport.name}
+                text={sport.name ?? ""}
+                href={`/sport/${sport.slug}`}
+                onClick={() => setOpen(false)}
+              />
+            ))}
+          </List>
+        </Collapse>
+        <Divider/>
+      </>
+    )
+  }
 
   return (
-    <Menu>
-      <MenuHandler>
-        <button>
-          <IoMdMenu size={36}/>
-        </button>
-      </MenuHandler>
+    <>
+      <IconButton
+        id="hamburger-button"
+        aria-controls={open ? 'hamburger-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={() => setOpen(true)}
+      >
+        <MenuIcon fontSize="large" className="text-black"/>
+      </IconButton>
 
-      <MenuList>
-        <Menu placement="left-start" offset={10}>
-          <MenuHandler>
-            <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
-              <IoMdArrowDropleft size={20} className="ml-[5px] -mr-1"/>&nbsp;Articles
-            </Typography>
-          </MenuHandler>
-
-          <MenuList>
-            {sports.map((sport) => (
-              <MenuItem key={sport.name}>
-                <TypographyLink href={`/sport/${sport.slug}`} className="p-1 font-normal">
-                  {sport.name ?? ""}
-                </TypographyLink>
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
-
-        {navLinks.map((link) => (
-          <MenuItem key={link.name}>
-            <TypographyLink href={link.href} className="p-1 font-normal">
-              {link.name}
-            </TypographyLink>
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <List className="mt-2 min-w-[150px]">
+          <ArticlesList/>
+          {navLinks.map((link, index) => (
+            <LinkButton
+              key={link.name}
+              text={link.name}
+              href={link.href}
+              divider={index !== navLinks.length-1}
+              onClick={() => setOpen(false)}
+            />
+          ))}
+        </List>
+      </Drawer>
+    </>
   )
 }

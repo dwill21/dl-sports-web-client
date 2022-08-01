@@ -1,63 +1,89 @@
 import SearchBar from 'components/search-bar';
-import { useCallback, useMemo, useState } from 'react';
-import { IoCloseSharp, IoSearchSharp } from 'react-icons/io5';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react';
-import { IoMdArrowDropdown } from 'react-icons/io';
+import React, { useCallback } from 'react';
 import TypographyLink from 'components/typography-link';
 import { Sport } from 'additional';
 import { useNavLinks } from 'utils/hooks/use-nav-links';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
+import { InputBase } from 'formik-mui';
+
+const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, [setAnchorEl]);
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, [setAnchorEl]);
+
+  return (
+    <>
+      <Typography
+        id="articles-button"
+        variant="body1"
+        aria-controls={open ? 'articles-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+        component={Button}
+        endIcon={<ArrowDropDownIcon className="-ml-2"/>}
+        className="text-white normal-case"
+      >
+        Articles
+      </Typography>
+      <Menu
+        id="articles-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{ 'aria-labelledby': 'articles-button' }}
+      >
+        {sports.map((sport) => (
+          <MenuItem key={sport.name} onClick={handleClose} className="mx-2 p-0">
+            <TypographyLink href={`/sport/${sport.slug}`} className="py-2 px-4 font-normal">
+              {sport.name ?? ""}
+            </TypographyLink>
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  )
+}
+
+/**
+ * Taken from https://mui.com/material-ui/react-app-bar/
+ */
+const TransitionInputBase = styled(InputBase)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '24ch',
+      },
+    },
+  },
+}));
 
 export default function NavbarContent({ sports }: { sports: Partial<Sport>[] }) {
-  const [showSearchBar, setShowSearchBar] = useState(false);
-  const openSearchBar = useCallback(() => setShowSearchBar(true), [setShowSearchBar]);
-  const closeSearchBar = useCallback(() => setShowSearchBar(false), [setShowSearchBar]);
   const navLinks = useNavLinks();
 
-  const searchOverlay = useMemo(() => (
-    <div className="flex items-center w-3/4 relative -right-3">
-      <IconButton variant="text" color="grey" onClick={closeSearchBar}>
-        <IoCloseSharp size={24} className="cursor-pointer"/>
-      </IconButton>
-      <SearchBar autoFocus={true}/>
-    </div>
-  ), [closeSearchBar])
-
-  const navContent = useMemo(() => (
-    <div className="flex justify-between items-center md:basis-3/4 lg:basis-[80%] xl:basis-5/6">
-      <Menu>
-        <MenuHandler>
-          <Typography as="button" variant="paragraph" className="p-1 font-normal flex items-center">
-            Articles&nbsp;<IoMdArrowDropdown size={20} className="-ml-0.5"/>
-          </Typography>
-        </MenuHandler>
-
-        <MenuList>
-          {sports.map((sport) => (
-            <MenuItem key={sport.name}>
-              <TypographyLink href={`/sport/${sport.slug}`} className="p-1 font-normal">
-                {sport.name ?? ""}
-              </TypographyLink>
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-
+  return (
+    <>
+      <ArticlesMenu sports={sports}/>
       {navLinks.map((link) => (
-        <TypographyLink key={link.name} href={link.href} className="p-1 font-normal">
+        <TypographyLink key={link.name} href={link.href} className="px-2">
           {link.name}
         </TypographyLink>
       ))}
-
-      <IoSearchSharp className="cursor-pointer" size={20} onClick={openSearchBar}/>
-    </div>
-  ), [sports, navLinks, openSearchBar])
-
-  return (
-    <SwitchTransition mode="out-in">
-      <CSSTransition key={showSearchBar ? 'menu' : 'search-bar'} timeout={200} classNames="search-bar">
-        {showSearchBar ? searchOverlay : navContent}
-      </CSSTransition>
-    </SwitchTransition>
+      <span className="flex-grow"></span>
+      <SearchBar component={TransitionInputBase}/>
+    </>
   )
 }

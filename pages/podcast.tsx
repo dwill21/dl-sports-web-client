@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { SpotifyAPI } from 'additional';
 import spotifyClient from 'utils/client/apollo-client-spotify';
 import { gql } from '@apollo/client';
-import { Button, Typography } from '@material-tailwind/react';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import apolloClient from 'utils/client/apollo-client';
 import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
@@ -27,8 +28,8 @@ const EpisodeText = ({ episode }: { episode: Episode }) => {
     return null;
   }
   return (
-    <Typography as="div" className="mt-4 p-1 md:h-[324px] md:overflow-y-scroll leading-6">
-      <Typography as="h2" className="font-bold">{episode.name}</Typography>
+    <Typography component="div" className="mt-4 p-1 md:h-[324px] md:overflow-y-scroll leading-6">
+      <Typography variant="h6" component="h2" className="font-bold">{episode.name}</Typography>
       <div dangerouslySetInnerHTML={{ __html: episode.html_description }}/>
     </Typography>
   );
@@ -57,8 +58,8 @@ export default function PodcastPage({ episodes }: PodcastPageProps) {
       />
       <Script src="https://open.spotify.com/embed-podcast/iframe-api/v1" async/>
 
-      <div className="my-20 w-screen">
-        <Typography as="h1" variant="lead" className="mt-4 mb-10 text-3xl text-center">
+      <div className="my-12 w-screen">
+        <Typography variant="h4" align="center" className="mt-4 mb-16 mb-10">
           &quot;On the DL&quot; Podcast
         </Typography>
         <div className="flex flex-col md:flex-row gap-16 md:gap-24 justify-center">
@@ -67,14 +68,15 @@ export default function PodcastPage({ episodes }: PodcastPageProps) {
             <EpisodeText episode={selectedEpisode} />
           </div>
 
-          <div className="w-full lg:w-[450px] max-w-screen h-[500px] bg-grey-200">
+          <div className="w-full lg:w-[450px] max-w-screen h-[500px] bg-neutral-200">
             <div className="p-4 flex flex-col gap-6" id="other-episodes">
-              <Typography as="h3" variant="lead" className="text-center text-xl">Other Episodes</Typography>
+              <Typography variant="h5" align="center">Other Episodes</Typography>
               {episodes.map((episode) => (
                 <Button
                   key={episode.id}
                   className="w-full h-16 px-2"
                   id={episode.id}
+                  variant="contained"
                   onClick={() => {
                     if (embedController) {
                       setSelectedEpisode(episode);

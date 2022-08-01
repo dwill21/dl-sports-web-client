@@ -4,9 +4,11 @@
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  @apply bg-grey-100
+  @apply bg-neutral-100
+}
+
+.MuiTypography-body1, .MuiTypography-subtitle1 {
+  @apply font-light
 }
 
 .twitter-tweet {
@@ -16,16 +18,6 @@ body {
 iframe {
   max-width: 100%;
   margin: auto;
-}
-
-.topic-card ul {
-  @apply list-disc
-}
-.topic-card ul, .topic-card ol {
-  @apply pl-4 pt-1
-}
-.topic-card a {
-  @apply underline
 }
 
 .rich-text a:hover {

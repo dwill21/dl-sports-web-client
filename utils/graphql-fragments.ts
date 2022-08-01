@@ -17,6 +17,7 @@ export const ARTICLE_PREVIEW_FRAGMENT = gql`
     fragment ArticlePreview on ArticleEntity {
         attributes {
             title
+            description
             slug
             cover {
                 data {

@@ -1,14 +1,33 @@
 import 'styles/globals.css'
 import 'styles/transitions.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 import Layout from "components/layout";
 import { AppProps } from 'next/app';
-import { ThemeProvider } from '@material-tailwind/react';
 import { DefaultSeo } from 'next-seo';
 import SEO from 'next-seo.config';
 import Spinner from 'components/spinner';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  components: {
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          h4: 'h1',
+          h5: 'h3',
+        },
+      },
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -32,7 +51,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo {...SEO} />
-      <ThemeProvider>
+
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
         <Layout navbarProps={{...pageProps.navbar}}>
           <Component {...pageProps} />
         </Layout>
