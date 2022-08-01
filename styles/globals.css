@@ -20,16 +20,6 @@ iframe {
   margin: auto;
 }
 
-.topic-card ul {
-  @apply list-disc
-}
-.topic-card ul, .topic-card ol {
-  @apply pl-4 pt-1
-}
-.topic-card a {
-  @apply underline
-}
-
 .rich-text a:hover {
   color: blue;
   text-decoration: underline;
