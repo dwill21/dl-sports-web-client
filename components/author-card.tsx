@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
 import { Author } from 'additional';
 
 interface AuthorCardProps {
@@ -15,13 +15,13 @@ export default function AuthorCard({ author, cmsUrl }: AuthorCardProps) {
           src={`${cmsUrl}${author.avatar.url}`}
           alt={author.avatar.alternativeText}
           layout="intrinsic"
-          width="80"
-          height="80"
+          width={80}
+          height={80}
           objectFit="cover"
           className="rounded-full"
         />
       }
-      <Typography as="p" className="text-center font-normal">
+      <Typography align="center">
         <b>{author.firstName} {author.lastName}</b> - {author.email}
       </Typography>
     </div>
