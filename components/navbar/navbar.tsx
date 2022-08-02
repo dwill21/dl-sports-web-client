@@ -18,10 +18,10 @@ export default function AppNavbar({ sports }: NavbarProps) {
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <AppBar position="static" className="w-screen">
+    <AppBar position="static" className="w-screen" enableColorOnDark>
       <Toolbar className="flex items-center md:gap-4">
         <Link href="/">
-          <a className="flex">
+          <a className="flex bg-black rounded">
             <Image src={logo} alt="DL Sports logo" height={50} width={195}/>
           </a>
         </Link>
@@ -31,8 +31,8 @@ export default function AppNavbar({ sports }: NavbarProps) {
           <>
             <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
-            <IconButton aria-label="search" onClick={() => router.push('/search')}>
-              <SearchIcon fontSize="large" sx={{ color: theme.palette.text.primary }}/>
+            <IconButton aria-label="search" onClick={() => router.push('/search')} sx={{ ml: -1 }}>
+              <SearchIcon fontSize="large" sx={{ color: "black" }}/>
             </IconButton>
           </>
         }

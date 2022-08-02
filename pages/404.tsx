@@ -33,7 +33,10 @@ export default function NotFoundPage() {
 
         <Link href="/" passHref>
           <a>
-            <Button variant="contained" className="w-full" sx={{ bgcolor: `${theme.palette.primary.main}!important` }}>
+            <Button variant="contained" className="w-full" sx={{
+              bgcolor: `${theme.palette.primary.main}!important`,
+              color: `${theme.palette.text.primary}!important`
+            }}>
               Back to the tee box
             </Button>
           </a>

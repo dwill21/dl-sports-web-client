@@ -47,6 +47,11 @@ const InputField = ({ name, label, type, required=false, ...otherProps }: FieldA
 
 export default function NewsTipForm() {
   const theme = useTheme();
+  const buttonColors = {
+    bgcolor: `${theme.palette.primary.main}!important`,
+    color: `${theme.palette.text.primary}!important`,
+  }
+  const defaultButtonSx = { my: 2 };
 
   return (
     <Formik
@@ -80,7 +85,7 @@ export default function NewsTipForm() {
             type="submit"
             variant="contained"
             disabled={isSubmitting || !isValid}
-            sx={{ my: 2, bgcolor: `${theme.palette.primary.main}!important` }}
+            sx={(!isSubmitting && isValid) ? { ...buttonColors, ...defaultButtonSx} : defaultButtonSx}
           >
             Submit
           </Button>
