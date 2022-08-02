@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  @apply bg-neutral-100
-}
-
 .MuiTypography-body1, .MuiTypography-subtitle1 {
   @apply font-light
 }

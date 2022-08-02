@@ -1,7 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import TypographyLink from 'components/typography-link';
 import NavbarContent from 'components/navbar/navbar-content';
 import { NavbarProps } from 'additional';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,6 +8,9 @@ import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Image from 'next/image';
+import logo from 'public/logo.png';
+import Link from 'next/link';
 
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
@@ -18,9 +20,11 @@ export default function AppNavbar({ sports }: NavbarProps) {
   return (
     <AppBar position="static" className="w-screen">
       <Toolbar className="flex items-center md:gap-4">
-        <TypographyLink href="/" variant="h4" className="py-1.5 font-normal">
-          DL Sports
-        </TypographyLink>
+        <Link href="/">
+          <a className="flex">
+            <Image src={logo} alt="DL Sports logo" height={50} width={195}/>
+          </a>
+        </Link>
 
         {matches ?
           <NavbarContent sports={sports}/> :

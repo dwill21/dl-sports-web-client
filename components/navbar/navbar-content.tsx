@@ -8,10 +8,11 @@ import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { InputBase } from 'formik-mui';
 
 const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +33,8 @@ const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
         onClick={handleClick}
         component={Button}
         endIcon={<ArrowDropDownIcon className="-ml-2"/>}
-        className="text-white normal-case"
+        className="normal-case"
+        color={theme.palette.text.primary}
       >
         Articles
       </Typography>
@@ -60,6 +62,7 @@ const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
  */
 const TransitionInputBase = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
+    color: 'black',
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {

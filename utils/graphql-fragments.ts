@@ -30,25 +30,3 @@ export const ARTICLE_PREVIEW_FRAGMENT = gql`
         }
     }
 `
-
-export const SOCIAL_MEDIA_FRAGMENT = gql`
-    fragment SocialMedia on Query {
-        contact {
-            data {
-                attributes {
-                    socials {
-                        info
-                        icon {
-                            data {
-                                attributes {
-                                    url
-                                    alternativeText
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-`
