@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import * as Yup from 'yup';
 import * as React from 'react';
 import { TextField } from 'formik-mui';
+import { useTheme } from '@mui/material/styles';
 
 const requiredMessage = "This field is required";
 const emailOrPhoneMessage = "At least one of email address or phone number is required";
@@ -45,6 +46,8 @@ const InputField = ({ name, label, type, required=false, ...otherProps }: FieldA
 }
 
 export default function NewsTipForm() {
+  const theme = useTheme();
+
   return (
     <Formik
       initialValues={{
@@ -70,14 +73,14 @@ export default function NewsTipForm() {
           <InputField name="tip" label="News to report" required multiline rows={10}/>
 
           <InputField name="email" type="email" label="Email address"/>
-          <Typography variant="subtitle2" paragraph align="center" className="mb-0 font-bold">OR</Typography>
+          <Typography variant="subtitle2" paragraph align="center" mb={-1} className="font-bold">OR</Typography>
           <InputField name="phone" type="tel" label="Phone number"/>
 
           <Button
             type="submit"
             variant="contained"
             disabled={isSubmitting || !isValid}
-            className="my-2"
+            sx={{ my: 2, bgcolor: `${theme.palette.primary.main}!important` }}
           >
             Submit
           </Button>

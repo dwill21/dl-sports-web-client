@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import Box from '@mui/material/Box';
 
 interface SearchBarProps {
   component?: React.ComponentType<InputBaseProps>
@@ -41,7 +42,23 @@ export default function SearchBar({ component = InputBase, className }: SearchBa
             className="my-0"
           >
             {({ field, form, meta }: FieldProps) => (
-              <div className={`w-full flex items-center rounded bg-white${!focused ? ' opacity-95' : ''} hover:opacity-100`}>
+              <Box
+                className="w-full relative flex items-center rounded bg-white hover:opacity-100"
+                border="2px solid #65E1FF"
+                sx={{
+                  opacity: focused ? 1 : 0.95,
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    border: '1px solid black',
+                    borderRadius: '0.15rem',
+                  },
+                }}
+              >
                 <SearchIcon className="ml-2 text-black"/>
                 {React.createElement(component, {
                   field,
@@ -52,8 +69,9 @@ export default function SearchBar({ component = InputBase, className }: SearchBa
                   disabled: isSubmitting,
                   onFocus: handleFocus,
                   onBlur: handleBlur,
+                  sx: { color: 'black' },
                 })}
-              </div>
+              </Box>
             )}
           </Field>
         </Form>

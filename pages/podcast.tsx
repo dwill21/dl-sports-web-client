@@ -110,24 +110,6 @@ export default function PodcastPage({ episodes }: PodcastPageProps) {
         <Paper sx={{ p: 2 }}>
           <EpisodeText episode={selectedEpisode} />
         </Paper>
-
-        {/*<Paper sx={{ p: 2 }}>*/}
-        {/*  <Typography variant="h5" align="center">Other Episodes</Typography>*/}
-        {/*  <List>*/}
-        {/*    {episodes.map((episode, index) => (*/}
-        {/*      <ListItem key={episode.id} divider={index !== episodes.length-1}>*/}
-        {/*        <ListItemButton id={episode.id} onClick={() => {*/}
-        {/*          if (embedController) {*/}
-        {/*            setSelectedEpisode(episode);*/}
-        {/*            embedController.loadUri(`spotify:episode:${episode.id}`);*/}
-        {/*          }*/}
-        {/*        }}>*/}
-        {/*          {episode.name}*/}
-        {/*        </ListItemButton>*/}
-        {/*      </ListItem>*/}
-        {/*    ))}*/}
-        {/*  </List>*/}
-        {/*</Paper>*/}
       </Container>
     </>
   )

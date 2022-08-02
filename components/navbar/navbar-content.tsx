@@ -62,7 +62,6 @@ const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
  */
 const TransitionInputBase = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
-    color: 'black',
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
