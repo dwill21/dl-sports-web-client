@@ -12,6 +12,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
 import Link from 'next/link';
+import { useTheme } from '@mui/material/styles';
 
 const LinkButton = ({ text, href, divider = false, onClick }: { text: string, href: string, divider?: boolean, onClick?: () => void }) => (
   <Link href={href} passHref>
@@ -24,6 +25,7 @@ const LinkButton = ({ text, href, divider = false, onClick }: { text: string, hr
 )
 
 export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) {
+  const theme = useTheme();
   const navLinks = useNavLinks();
   const [open, setOpen] = useState(false);
 
@@ -62,7 +64,7 @@ export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) 
         aria-expanded={open ? 'true' : undefined}
         onClick={() => setOpen(true)}
       >
-        <MenuIcon fontSize="large" className="text-black"/>
+        <MenuIcon fontSize="large" sx={{ color: theme.palette.text.primary }}/>
       </IconButton>
 
       <Drawer

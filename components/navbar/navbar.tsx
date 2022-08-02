@@ -32,7 +32,7 @@ export default function AppNavbar({ sports }: NavbarProps) {
             <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
             <IconButton aria-label="search" onClick={() => router.push('/search')}>
-              <SearchIcon fontSize="large" className="text-black"/>
+              <SearchIcon fontSize="large" sx={{ color: theme.palette.text.primary }}/>
             </IconButton>
           </>
         }
