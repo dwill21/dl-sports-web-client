@@ -7,11 +7,13 @@ import { NavbarProps } from 'additional';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
-import { useSmallScreen } from 'utils/hooks/use-small-screen';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
-  const isSmallScreen = useSmallScreen();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <AppBar position="static" className="w-screen">
@@ -20,7 +22,8 @@ export default function AppNavbar({ sports }: NavbarProps) {
           DL Sports
         </TypographyLink>
 
-        {isSmallScreen !== null && (isSmallScreen ?
+        {matches ?
+          <NavbarContent sports={sports}/> :
           <>
             <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
@@ -28,8 +31,7 @@ export default function AppNavbar({ sports }: NavbarProps) {
               <SearchIcon fontSize="large" className="text-black"/>
             </IconButton>
           </>
-          : <NavbarContent sports={sports}/>
-        )}
+        }
       </Toolbar>
     </AppBar>
   );
