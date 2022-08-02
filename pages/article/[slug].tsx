@@ -76,7 +76,11 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
         </div>
 
         <div className="py-8 px-2">
-          <Typography component="div">
+          <Typography component="div" sx={{
+            '.twitter-tweet': {
+              mx: 'auto',
+            },
+          }}>
             {parse(article.body ?? "")}
             {externalScripts.map((script) => (
               <Script key={script} src={script} strategy="lazyOnload"/>
