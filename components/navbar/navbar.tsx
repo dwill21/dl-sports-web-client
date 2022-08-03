@@ -1,35 +1,41 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import TypographyLink from 'components/typography-link';
 import NavbarContent from 'components/navbar/navbar-content';
 import { NavbarProps } from 'additional';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
-import { useSmallScreen } from 'utils/hooks/use-small-screen';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Image from 'next/image';
+import logo from 'public/logo.png';
+import Link from 'next/link';
 
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
-  const isSmallScreen = useSmallScreen();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <AppBar position="static" className="w-screen">
+    <AppBar position="static" className="w-screen" enableColorOnDark>
       <Toolbar className="flex items-center md:gap-4">
-        <TypographyLink href="/" variant="h4" className="py-1.5 font-normal">
-          DL Sports
-        </TypographyLink>
+        <Link href="/">
+          <a className="flex bg-black rounded">
+            <Image src={logo} alt="DL Sports logo" height={50} width={195}/>
+          </a>
+        </Link>
 
-        {isSmallScreen !== null && (isSmallScreen ?
+        {matches ?
+          <NavbarContent sports={sports}/> :
           <>
             <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
-            <IconButton aria-label="search" onClick={() => router.push('/search')}>
-              <SearchIcon fontSize="large" className="text-black"/>
+            <IconButton aria-label="search" onClick={() => router.push('/search')} sx={{ ml: -1 }}>
+              <SearchIcon fontSize="large" sx={{ color: "black" }}/>
             </IconButton>
           </>
-          : <NavbarContent sports={sports}/>
-        )}
+        }
       </Toolbar>
     </AppBar>
   );

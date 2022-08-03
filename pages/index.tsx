@@ -1,11 +1,9 @@
 import ArticleCard from 'components/article-card';
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, SOCIAL_MEDIA_FRAGMENT } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
-import { Article, SocialMedia } from 'additional';
-import Image from 'next/image';
-import { Fragment } from 'react';
+import { Article } from 'additional';
 import Typography from '@mui/material/Typography';
 import { NextSeo } from 'next-seo';
 import Container from '@mui/material/Container';
@@ -16,11 +14,10 @@ import Grid from '@mui/material/Grid';
 
 interface HomePageProps {
   articles: Partial<Article>[]
-  socials: Partial<SocialMedia>[]
   cmsUrl: string
 }
 
-export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
+export default function HomePage({ articles, cmsUrl }: HomePageProps) {
   return (
     <>
       <NextSeo
@@ -51,32 +48,6 @@ export default function HomePage({ articles, socials, cmsUrl }: HomePageProps) {
           </Box>
         </Stack>
       </Container>
-
-      <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem/>}
-        spacing={{ xs: 3, md: 5 }}
-        mb={2}
-        className="flex justify-center"
-      >
-        {socials.map(social => (
-          <Fragment key={social.info}>
-            {social.icon?.url && (
-              <a href={social.info}>
-                <Image
-                  key={social.info}
-                  src={`${cmsUrl}${social.icon.url}`}
-                  alt={social.icon.alternativeText}
-                  width={24}
-                  height={24}
-                  layout="intrinsic"
-                  objectFit="contain"
-                />
-              </a>
-            )}
-            </Fragment>
-        ))}
-      </Stack>
     </>
   )
 }
@@ -86,7 +57,6 @@ export async function getStaticProps() {
     query: gql`
         ${NAVBAR_FRAGMENT}
         ${ARTICLE_PREVIEW_FRAGMENT}
-        ${SOCIAL_MEDIA_FRAGMENT}
         query HomePage {
             articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc", filters: {column: {id: {eq: null}}}) {
                 data {
@@ -94,20 +64,15 @@ export async function getStaticProps() {
                 }
             }
             ...Navbar
-            ...SocialMedia
         }
     `
   });
 
   const flattenedArticles = flatten(data.articles);
-  const flattenedSocials = flatten(data.contact).socials.map(
-    (e: { icon: never }) => ({ ...e, icon: flatten(e.icon) })
-  );
 
   return {
     props: {
       articles: flattenedArticles,
-      socials: flattenedSocials,
       cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)

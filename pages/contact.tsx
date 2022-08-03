@@ -6,6 +6,9 @@ import { flatten } from 'utils/flatten';
 import { NextSeo } from 'next-seo';
 import NewsTipForm from 'forms/news-tip-form';
 import parse from 'html-react-parser';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 interface ContactPageProps {
   contact: {
@@ -21,31 +24,43 @@ export default function ContactPage({ contact }: ContactPageProps) {
         description="Reach out to Sam Thornton or send in a news tip"
       />
 
-      <Typography variant="h4" align="center" className="py-12">
-        Contact Details
-      </Typography>
-      <div className="pb-12 md:px-16 lg:px-32 flex flex-col md:flex-row justify-center gap-12">
-        <div className="w-screen md:w-1/2 h-[500px]">
-          <Typography variant="h5" align="center" className="pb-10">
-            Get in touch with Sam Thornton
-          </Typography>
+      <Container maxWidth="md">
+        <Typography variant="h4" align="center" className="py-12">
+          Contact Details
+        </Typography>
 
-          <Typography component="div" className="pt-4 rich-text">
-            {parse(contact.body)}
-          </Typography>
-        </div>
+        <Grid container pb={12} spacing={8}>
+          <Grid item xs={12} md={6}>
+            <Paper className="p-4 h-full">
+              <Typography variant="h5" align="center" pb={6}>
+                Get in touch with Sam Thornton
+              </Typography>
 
-        <div className="w-screen md:w-1/2">
-          <Typography variant="h5" align="center">
-            News tips?
-          </Typography>
-          <Typography variant="subtitle1" align="center">
-            Fill one out below!
-          </Typography>
+              <Typography component="div" sx={{
+                'a:hover': {
+                  color: 'blue',
+                  textDecoration: 'underline',
+                }
+              }}>
+                {parse(contact.body)}
+              </Typography>
+            </Paper>
+          </Grid>
 
-          <NewsTipForm/>
-        </div>
-      </div>
+          <Grid item xs={12} md={6}>
+            <Paper className="p-4">
+              <Typography variant="h5" align="center">
+                News tips?
+              </Typography>
+              <Typography variant="subtitle1" align="center">
+                Fill one out below!
+              </Typography>
+
+              <NewsTipForm/>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   )
 }

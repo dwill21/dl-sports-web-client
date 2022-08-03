@@ -62,7 +62,7 @@ export default function HamburgerMenu({ sports }: { sports: Partial<Sport>[] }) 
         aria-expanded={open ? 'true' : undefined}
         onClick={() => setOpen(true)}
       >
-        <MenuIcon fontSize="large" className="text-black"/>
+        <MenuIcon fontSize="large" sx={{ color: "black" }}/>
       </IconButton>
 
       <Drawer

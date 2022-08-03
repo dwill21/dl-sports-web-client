@@ -32,7 +32,8 @@ const ArticlesMenu = ({ sports }: { sports: Partial<Sport>[] }) => {
         onClick={handleClick}
         component={Button}
         endIcon={<ArrowDropDownIcon className="-ml-2"/>}
-        className="text-white normal-case"
+        className="normal-case"
+        sx={{ color: 'inherit' }}
       >
         Articles
       </Typography>

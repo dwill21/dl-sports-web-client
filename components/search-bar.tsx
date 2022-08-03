@@ -2,7 +2,8 @@ import { InputBase, InputBaseProps } from 'formik-mui';
 import SearchIcon from '@mui/icons-material/Search';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React  from 'react';
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
 
 interface SearchBarProps {
   component?: React.ComponentType<InputBaseProps>
@@ -11,6 +12,13 @@ interface SearchBarProps {
 
 export default function SearchBar({ component = InputBase, className }: SearchBarProps) {
   const router = useRouter();
+  const [focused, setFocused] = useState(false);
+  const handleFocus = () => {
+    setFocused(true);
+  }
+  const handleBlur = () => {
+    setFocused(false);
+  }
 
   return (
     <Formik
@@ -34,7 +42,11 @@ export default function SearchBar({ component = InputBase, className }: SearchBa
             className="my-0"
           >
             {({ field, form, meta }: FieldProps) => (
-              <div className="w-full flex items-center rounded bg-white opacity-95 hover:opacity-100">
+              <Box
+                className="w-full relative flex items-center rounded bg-white hover:opacity-100"
+                border="1px solid black"
+                sx={{ opacity: focused ? 1 : 0.95 }}
+              >
                 <SearchIcon className="ml-2 text-black"/>
                 {React.createElement(component, {
                   field,
@@ -43,8 +55,11 @@ export default function SearchBar({ component = InputBase, className }: SearchBa
                   placeholder: "Search",
                   className: "py-1 pl-2 pr-2 w-full",
                   disabled: isSubmitting,
+                  onFocus: handleFocus,
+                  onBlur: handleBlur,
+                  sx: { color: 'black' },
                 })}
-              </div>
+              </Box>
             )}
           </Field>
         </Form>

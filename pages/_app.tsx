@@ -17,6 +17,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#00B8E6',
+    },
+    background: {
+      default: '#323232',
+      paper: '#191919',
+    },
+  },
   components: {
     MuiTypography: {
       defaultProps: {
