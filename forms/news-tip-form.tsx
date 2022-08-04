@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import * as React from 'react';
 import { TextField } from 'formik-mui';
 import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 const requiredMessage = "This field is required";
 const emailOrPhoneMessage = "At least one of email address or phone number is required";
@@ -53,6 +55,17 @@ export default function NewsTipForm() {
   }
   const defaultButtonSx = { my: 2 };
 
+  const {enqueueSnackbar} = useSnackbar();
+  const [success, setSuccess] = useState(false);
+  const handleSubmit = () => {
+    if (success) {
+      enqueueSnackbar('Thanks for your tip!', { variant: 'success' });
+    } else {
+      enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error' });
+    }
+    setSuccess(!success);
+  }
+
   return (
     <Formik
       initialValues={{
@@ -65,10 +78,8 @@ export default function NewsTipForm() {
       validationSchema={newsTipSchema}
       validateOnMount={true}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
+        handleSubmit();
+        setSubmitting(false);
       }}
     >
       {({ isSubmitting, isValid }) => (

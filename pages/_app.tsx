@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { SnackbarProvider } from 'notistack';
 
 const theme = createTheme({
   palette: {
@@ -64,9 +65,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <Layout navbarProps={{...pageProps.navbar}}>
-          <Component {...pageProps} />
-        </Layout>
+
+        <SnackbarProvider maxSnack={3}>
+          <Layout navbarProps={{...pageProps.navbar}}>
+            <Component {...pageProps} />
+          </Layout>
+        </SnackbarProvider>
       </ThemeProvider>
 
       <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
