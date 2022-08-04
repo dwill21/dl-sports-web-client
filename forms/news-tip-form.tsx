@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import * as React from 'react';
 import { TextField } from 'formik-mui';
 import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
 import { useSnackbar } from 'notistack';
+import { useEmail } from 'utils/hooks/use_email';
 
 const requiredMessage = "This field is required";
 const emailOrPhoneMessage = "At least one of email address or phone number is required";
@@ -55,16 +55,8 @@ export default function NewsTipForm() {
   }
   const defaultButtonSx = { my: 2 };
 
-  const {enqueueSnackbar} = useSnackbar();
-  const [success, setSuccess] = useState(false);
-  const handleSubmit = () => {
-    if (success) {
-      enqueueSnackbar('Thanks for your tip!', { variant: 'success' });
-    } else {
-      enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error' });
-    }
-    setSuccess(!success);
-  }
+  const { enqueueSnackbar } = useSnackbar();
+  const { sendEmail } = useEmail();
 
   return (
     <Formik
@@ -78,8 +70,20 @@ export default function NewsTipForm() {
       validationSchema={newsTipSchema}
       validateOnMount={true}
       onSubmit={(values, { setSubmitting }) => {
-        handleSubmit();
-        setSubmitting(false);
+        sendEmail({
+          from_name: `${values.firstName} ${values.lastName}`,
+          tip: values.tip,
+          contact: [values.email, values.phone].filter(e => !!e).join(", "),
+        })
+          .then(() => {
+            enqueueSnackbar('Thanks for your tip!', { variant: 'success' });
+          })
+          .catch(() => {
+            enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error' });
+          })
+          .finally(() => {
+            setSubmitting(false);
+          });
       }}
     >
       {({ isSubmitting, isValid }) => (
