@@ -5,8 +5,12 @@ import * as Yup from 'yup';
 import * as React from 'react';
 import { TextField } from 'formik-mui';
 import { useTheme } from '@mui/material/styles';
-import { useSnackbar } from 'notistack';
+import { SnackbarKey, useSnackbar } from 'notistack';
 import { useEmail } from 'utils/hooks/use_email';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const requiredMessage = "This field is required";
 const emailOrPhoneMessage = "At least one of email address or phone number is required";
@@ -55,8 +59,15 @@ export default function NewsTipForm() {
   }
   const defaultButtonSx = { my: 2 };
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { sendEmail } = useEmail();
+  const snackbarAction = (snackbarId: SnackbarKey) => (
+    <IconButton onClick={() => {
+      closeSnackbar(snackbarId)
+    }}>
+      <CloseIcon/>
+    </IconButton>
+  )
 
   return (
     <Formik
@@ -76,10 +87,10 @@ export default function NewsTipForm() {
           contact: [values.email, values.phone].filter(e => !!e).join(", "),
         })
           .then(() => {
-            enqueueSnackbar('Thanks for your tip!', { variant: 'success' });
+            enqueueSnackbar('Thanks for your tip!', { variant: 'success', action: snackbarAction });
           })
           .catch(() => {
-            enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error' });
+            enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error', action: snackbarAction });
           })
           .finally(() => {
             setSubmitting(false);
@@ -87,24 +98,38 @@ export default function NewsTipForm() {
       }}
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="py-4 flex flex-col">
-          <InputField name="firstName" label="First name" required/>
-          <InputField name="lastName" label="Last name" required/>
-          <InputField name="tip" label="News to report" required multiline rows={10}/>
+        <Box position="relative">
+          <Form className={`py-4 flex flex-col${isSubmitting ? ' blur-sm' : ''}`}>
+            <InputField name="firstName" label="First name" required/>
+            <InputField name="lastName" label="Last name" required/>
+            <InputField name="tip" label="News to report" required multiline rows={10}/>
 
-          <InputField name="email" type="email" label="Email address"/>
-          <Typography variant="subtitle2" paragraph align="center" mb={-1} className="font-bold">OR</Typography>
-          <InputField name="phone" type="tel" label="Phone number"/>
+            <InputField name="email" type="email" label="Email address"/>
+            <Typography variant="subtitle2" paragraph align="center" mb={-1} className="font-bold">OR</Typography>
+            <InputField name="phone" type="tel" label="Phone number"/>
 
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isSubmitting || !isValid}
-            sx={(!isSubmitting && isValid) ? { ...buttonColors, ...defaultButtonSx} : defaultButtonSx}
-          >
-            Submit
-          </Button>
-        </Form>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting || !isValid}
+              sx={(!isSubmitting && isValid) ? { ...buttonColors, ...defaultButtonSx} : defaultButtonSx}
+            >
+              Submit
+            </Button>
+          </Form>
+
+          {isSubmitting && (
+            <Box sx={{
+              position: 'absolute',
+              top: '45%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+            }}>
+              <CircularProgress size={48}/>
+            </Box>
+          )}
+        </Box>
       )}
     </Formik>
   )
