@@ -51,7 +51,7 @@ const InputField = ({ name, label, type, required=false, ...otherProps }: FieldA
   )
 }
 
-export default function NewsTipForm({ onSubmit }: { onSubmit: () => void }) {
+export default function NewsTipForm() {
   const theme = useTheme();
   const buttonColors = {
     bgcolor: `${theme.palette.primary.main}!important`,
@@ -80,7 +80,7 @@ export default function NewsTipForm({ onSubmit }: { onSubmit: () => void }) {
       }}
       validationSchema={newsTipSchema}
       validateOnMount={true}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={(values, { setSubmitting, resetForm }) => {
         sendEmail({
           from_name: `${values.firstName} ${values.lastName}`,
           tip: values.tip,
@@ -93,7 +93,7 @@ export default function NewsTipForm({ onSubmit }: { onSubmit: () => void }) {
             enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error', action: snackbarAction });
           })
           .finally(() => {
-            onSubmit();
+            resetForm();
             setSubmitting(false);
           });
       }}
