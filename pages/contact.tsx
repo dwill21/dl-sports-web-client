@@ -9,6 +9,7 @@ import parse from 'html-react-parser';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { useTheme } from '@mui/material/styles';
 
 interface ContactPageProps {
   contact: {
@@ -17,6 +18,8 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ contact }: ContactPageProps) {
+  const theme = useTheme();
+
   return (
     <>
       <NextSeo
@@ -38,7 +41,7 @@ export default function ContactPage({ contact }: ContactPageProps) {
 
               <Typography component="div" sx={{
                 'a:hover': {
-                  color: 'blue',
+                  color: theme.palette.primary.main,
                   textDecoration: 'underline',
                 }
               }}>
