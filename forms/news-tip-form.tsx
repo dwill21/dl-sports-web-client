@@ -51,7 +51,7 @@ const InputField = ({ name, label, type, required=false, ...otherProps }: FieldA
   )
 }
 
-export default function NewsTipForm() {
+export default function NewsTipForm({ onSubmit }: { onSubmit: () => void }) {
   const theme = useTheme();
   const buttonColors = {
     bgcolor: `${theme.palette.primary.main}!important`,
@@ -93,6 +93,7 @@ export default function NewsTipForm() {
             enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error', action: snackbarAction });
           })
           .finally(() => {
+            onSubmit();
             setSubmitting(false);
           });
       }}

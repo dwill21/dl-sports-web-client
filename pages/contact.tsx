@@ -9,6 +9,9 @@ import parse from 'html-react-parser';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { useState } from 'react';
 
 interface ContactPageProps {
   contact: {
@@ -17,6 +20,8 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ contact }: ContactPageProps) {
+  const [hideForm, setHideForm] = useState(false);
+
   return (
     <>
       <NextSeo
@@ -56,7 +61,22 @@ export default function ContactPage({ contact }: ContactPageProps) {
                 Fill one out below!
               </Typography>
 
-              <NewsTipForm/>
+              {!hideForm && (
+                <NewsTipForm onSubmit={() => { setHideForm(true) }}/>
+              )}
+
+              {hideForm && (
+                <Stack height={450} mb={10} justifyContent="center">
+                  <Typography align="center">
+                    Got another tip for us?
+                  </Typography>
+                  <Button onClick={() => {
+                    setHideForm(false)
+                  }}>
+                    Fill out the form again.
+                  </Button>
+                </Stack>
+              )}
             </Paper>
           </Grid>
         </Grid>
