@@ -5,15 +5,16 @@ import { ReactNode } from 'react';
 interface TopicCardProps {
   children: ReactNode
   title: string
+  disableListIndent?: boolean
 }
 
-export default function TopicCard({ children, title }: TopicCardProps) {
+export default function TopicCard({ children, title, disableListIndent = false }: TopicCardProps) {
   return (
     <Paper className="p-2 h-full">
       <Typography variant="h6" component="h3" align="center" className="mb-2">
         {title}
       </Typography>
-      <Typography sx={{
+      <Typography sx={disableListIndent ? {} : {
         'ul': {
           listStyleType: 'disc',
         },

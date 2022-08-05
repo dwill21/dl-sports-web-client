@@ -60,7 +60,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
             ))}
 
             <Grid item xs={12} md={6} lg={4}>
-              <TopicCard title="Highlights">
+              <TopicCard title="Highlights" disableListIndent>
                 <List>
                   {sport.highlights?.map(highlight => (
                     <ListItem key={highlight.title} disableGutters divider>
