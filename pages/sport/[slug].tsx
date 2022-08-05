@@ -10,6 +10,9 @@ import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragmen
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
+import { useState } from 'react';
+import HighlightDialog from '../../components/highlight-dialog';
+import Button from '@mui/material/Button';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -17,6 +20,8 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
+  const [openHighlights, setOpenHighlights] = useState(false);
+
   return (
     <>
       <NextSeo
@@ -53,11 +58,19 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
 
             <Grid item xs={12} md={6} lg={4}>
               <TopicCard title="Highlights">
-
+                <Button onClick={() => {
+                  setOpenHighlights(true);
+                }}>
+                  View a highlight!
+                </Button>
               </TopicCard>
             </Grid>
           </Grid>
         </Grid>
+
+        <HighlightDialog open={openHighlights} title="Home Run Derby 2022" onClose={() => {
+          setOpenHighlights(false)
+        }}/>
       </Container>
     </>
   )
