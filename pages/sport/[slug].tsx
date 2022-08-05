@@ -11,8 +11,11 @@ import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
 import { useState } from 'react';
-import HighlightDialog from '../../components/highlight-dialog';
-import Button from '@mui/material/Button';
+import Modal from 'components/modal';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import { Highlight } from 'additional';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -20,7 +23,7 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
-  const [openHighlights, setOpenHighlights] = useState(false);
+  const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
 
   return (
     <>
@@ -58,19 +61,27 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
 
             <Grid item xs={12} md={6} lg={4}>
               <TopicCard title="Highlights">
-                <Button onClick={() => {
-                  setOpenHighlights(true);
-                }}>
-                  View a highlight!
-                </Button>
+                <List>
+                  {sport.highlights?.map(highlight => (
+                    <ListItem key={highlight.title} disableGutters divider>
+                      <ListItemButton onClick={() => {
+                        setOpenHighlight(highlight);
+                      }}>
+                        View a highlight!
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
               </TopicCard>
             </Grid>
           </Grid>
         </Grid>
 
-        <HighlightDialog open={openHighlights} title="Home Run Derby 2022" onClose={() => {
-          setOpenHighlights(false)
-        }}/>
+        <Modal open={!!openHighlight} title={openHighlight?.title ?? ""} onClose={() => {
+          setOpenHighlight(undefined)
+        }}>
+          {parse(openHighlight?.content ?? "")}
+        </Modal>
       </Container>
     </>
   )
@@ -105,6 +116,10 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                     attributes {
                         name
                         topics {
+                            title
+                            content
+                        }
+                        highlights {
                             title
                             content
                         }
