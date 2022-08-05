@@ -15,11 +15,11 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
 import Image from 'next/image';
-import { SyncLoader } from 'react-spinners';
-import { CSSTransition } from 'react-transition-group';
 import SearchBar from 'components/search-bar';
 import { NextSeo } from 'next-seo';
 import TablePaginationActions from 'components/table-pagination-actions';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface SearchResultsPageProps {
   cmsUrl: string
@@ -109,11 +109,9 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
         </Container>
       )}
 
-      <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
-        <div className="fixed inset-0 bg-neutral-200 opacity-50">
-          <SyncLoader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
-        </div>
-      </CSSTransition>
+      <Backdrop open={loading} invisible>
+        <CircularProgress variant="indeterminate"/>
+      </Backdrop>
     </>
   )
 }
