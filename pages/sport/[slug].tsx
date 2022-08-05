@@ -1,4 +1,4 @@
-import ArticleCard from 'components/article-card';
+import ArticleCard from 'components/cards/article-card';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -9,7 +9,7 @@ import { Sport } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
-import TopicCard from '../../components/topic-card';
+import TopicCard from 'components/cards/topic-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
