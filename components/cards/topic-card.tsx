@@ -14,7 +14,7 @@ export default function TopicCard({ children, title, disableListIndent = false }
       <Typography variant="h6" component="h3" align="center" className="mb-2">
         {title}
       </Typography>
-      <Typography sx={disableListIndent ? {} : {
+      <Typography component="div" sx={disableListIndent ? {} : {
         'ul': {
           listStyleType: 'disc',
         },

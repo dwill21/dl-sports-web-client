@@ -67,7 +67,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
                       <ListItemButton onClick={() => {
                         setOpenHighlight(highlight);
                       }}>
-                        View a highlight!
+                        {highlight.title}
                       </ListItemButton>
                     </ListItem>
                   ))}
@@ -120,8 +120,13 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                             content
                         }
                         highlights {
-                            title
-                            content
+                            data {
+                                id
+                                attributes {
+                                    title
+                                    content
+                                }
+                            }
                         }
                         articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
