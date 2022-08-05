@@ -1,4 +1,4 @@
-import ArticleCard from 'components/article-card';
+import ArticleCard from 'components/cards/article-card';
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';

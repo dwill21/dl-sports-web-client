@@ -8,7 +8,7 @@ import { Column } from 'additional';
 import { NextSeo } from 'next-seo';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import ArticleCard from 'components/article-card';
+import ArticleCard from 'components/cards/article-card';
 import Stack from '@mui/material/Stack';
 
 interface ColumnsPageProps {

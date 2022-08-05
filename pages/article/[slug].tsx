@@ -6,7 +6,7 @@ import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
-import AuthorCard from 'components/author-card';
+import AuthorCard from 'components/cards/author-card';
 import { Article } from 'additional';
 import { ArticleJsonLd, NextSeo } from 'next-seo';
 import parse from 'html-react-parser';

@@ -1,6 +1,5 @@
-import ArticleCard from 'components/article-card';
+import ArticleCard from 'components/cards/article-card';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
@@ -10,6 +9,13 @@ import { Sport } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
+import TopicCard from 'components/cards/topic-card';
+import { useState } from 'react';
+import Modal from 'components/modal';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import { Highlight } from 'additional';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -17,6 +23,8 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
+  const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
+
   return (
     <>
       <NextSeo
@@ -45,29 +53,35 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           <Grid item xs={12} container spacing={2} justifyContent="center" mt={2}>
             {sport.topics?.map(topic => (
               <Grid key={topic.title} item xs={12} md={6} lg={4}>
-                <Paper className="p-2 h-full">
-                  <Typography variant="h6" component="h3" align="center" className="mb-2">
-                    {topic.title}
-                  </Typography>
-                  <Typography sx={{
-                    'ul': {
-                      listStyleType: 'disc',
-                    },
-                    'ul, ol': {
-                      pl: 4,
-                      pt: 1,
-                    },
-                    a: {
-                      textDecorationLine: 'underline',
-                    }
-                  }}>
-                    {parse(topic.content ?? "")}
-                  </Typography>
-                </Paper>
+                <TopicCard title={topic.title ?? ""}>
+                  {parse(topic.content ?? "")}
+                </TopicCard>
               </Grid>
             ))}
+
+            <Grid item xs={12} md={6} lg={4}>
+              <TopicCard title="Highlights" disableListIndent>
+                <List>
+                  {sport.highlights?.map(highlight => (
+                    <ListItem key={highlight.title} disableGutters divider>
+                      <ListItemButton onClick={() => {
+                        setOpenHighlight(highlight);
+                      }}>
+                        {highlight.title}
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </TopicCard>
+            </Grid>
           </Grid>
         </Grid>
+
+        <Modal open={!!openHighlight} title={openHighlight?.title ?? ""} onClose={() => {
+          setOpenHighlight(undefined)
+        }}>
+          {parse(openHighlight?.content ?? "")}
+        </Modal>
       </Container>
     </>
   )
@@ -104,6 +118,15 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                         topics {
                             title
                             content
+                        }
+                        highlights {
+                            data {
+                                id
+                                attributes {
+                                    title
+                                    content
+                                }
+                            }
                         }
                         articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
