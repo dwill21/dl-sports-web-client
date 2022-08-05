@@ -1,6 +1,5 @@
 import ArticleCard from 'components/article-card';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
@@ -10,6 +9,7 @@ import { Sport } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
+import TopicCard from '../../components/topic-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -45,27 +45,17 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           <Grid item xs={12} container spacing={2} justifyContent="center" mt={2}>
             {sport.topics?.map(topic => (
               <Grid key={topic.title} item xs={12} md={6} lg={4}>
-                <Paper className="p-2 h-full">
-                  <Typography variant="h6" component="h3" align="center" className="mb-2">
-                    {topic.title}
-                  </Typography>
-                  <Typography sx={{
-                    'ul': {
-                      listStyleType: 'disc',
-                    },
-                    'ul, ol': {
-                      pl: 4,
-                      pt: 1,
-                    },
-                    a: {
-                      textDecorationLine: 'underline',
-                    }
-                  }}>
-                    {parse(topic.content ?? "")}
-                  </Typography>
-                </Paper>
+                <TopicCard title={topic.title ?? ""}>
+                  {parse(topic.content ?? "")}
+                </TopicCard>
               </Grid>
             ))}
+
+            <Grid item xs={12} md={6} lg={4}>
+              <TopicCard title="Highlights">
+
+              </TopicCard>
+            </Grid>
           </Grid>
         </Grid>
       </Container>
