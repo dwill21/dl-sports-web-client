@@ -11,9 +11,11 @@ interface Sport {
   name: string
   slug: string
   description: string
+  powerRankings: string
   topics: Partial<Topic>[]
   highlights: Partial<Highlight>[]
   articles: Partial<Article>[]
+  powerRankingsArticle: Pick<Article, "id" | "slug">
 }
 interface Article {
   id: number
