@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
-import { Sport } from 'additional';
+import { Sport, Highlight } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
@@ -15,7 +15,9 @@ import Modal from 'components/modal';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import { Highlight } from 'additional';
+import Button from '@mui/material/Button';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import Link from 'next/link';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -24,6 +26,16 @@ interface SportPageProps {
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
   const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
+
+  console.log(sport.powerRankingsArticle)
+
+  const powerRankingsButton = (
+    <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
+      <Button variant="outlined" component="a" startIcon={<ReadMoreIcon/>}>
+        Read more
+      </Button>
+    </Link>
+  )
 
   return (
     <>
@@ -64,6 +76,12 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
                 ))}
               </List>
             </TopicCard>
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={4}>
+              <TopicCard title="Power Rankings" cardActions={powerRankingsButton}>
+                {parse(sport.powerRankings ?? "")}
+              </TopicCard>
           </Grid>
 
           {sport.topics?.map(topic => (
@@ -113,6 +131,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                 data {
                     attributes {
                         name
+                        powerRankings
                         topics {
                             title
                             content
@@ -126,9 +145,17 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                                 }
                             }
                         }
-                        articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
                                 ...ArticlePreview
+                            }
+                        }
+                        powerRankingsArticle: articles(filters: { powerRanking: {eq: true} }, pagination: {page: 1, pageSize: 1}, sort: "publishedAt:desc") {
+                            data {
+                                id
+                                attributes {
+                                    slug
+                                }
                             }
                         }
                     }
@@ -148,9 +175,13 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   }
 
+  // unwrap the array of one
+  const sport = flatten(data.sport);
+  sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];
+
   return {
     props: {
-      sport: flatten(data.sport),
+      sport,
       cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
