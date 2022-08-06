@@ -15,6 +15,7 @@ export const NAVBAR_FRAGMENT = gql`
 
 export const ARTICLE_PREVIEW_FRAGMENT = gql`
     fragment ArticlePreview on ArticleEntity {
+        id
         attributes {
             title
             description

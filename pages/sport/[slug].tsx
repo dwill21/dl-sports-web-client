@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
-import { Sport, Highlight } from 'additional';
+import { Sport, Highlight, Article } from 'additional';
 import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
@@ -26,8 +26,6 @@ interface SportPageProps {
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
   const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
-
-  console.log(sport.powerRankingsArticle)
 
   const powerRankingsButton = (
     <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
@@ -51,12 +49,12 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
 
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={5}>
-            <ArticleCard article={sport.articles?.[0] ?? null} cmsUrl={cmsUrl} height={615}/>
+            <ArticleCard article={sport.featuredArticle ?? null} cmsUrl={cmsUrl} height={615}/>
           </Grid>
 
           <Grid item xs={12} md={7} container spacing={2}>
-            {sport.articles?.slice(1).map(article => (
-              <Grid key={article.title} item xs={12} md={6}>
+            {sport.articles?.map(article => (
+              <Grid key={article.id} item xs={12} md={6}>
                 <ArticleCard article={article} cmsUrl={cmsUrl} height={300} smallText/>
               </Grid>
             ))}
@@ -145,7 +143,12 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                                 }
                             }
                         }
-                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+                        featuredArticle {
+                            data {
+                                ...ArticlePreview
+                            }
+                        }
+                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 6}, sort: "publishedAt:desc") {
                             data {
                                 ...ArticlePreview
                             }
@@ -175,9 +178,12 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   }
 
-  // unwrap the array of one
   const sport = flatten(data.sport);
-  sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];
+  sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];  // unwrap the array of one
+  const featuredArticleIndex = sport.articles.findIndex((article: Partial<Article>) => article.id === sport.featuredArticle.id);
+  sport.articles = featuredArticleIndex === -1 ?
+    sport.articles.slice(0, -1) :
+    sport.articles.slice(0, featuredArticleIndex).concat(sport.articles.slice(featuredArticleIndex+1));
 
   return {
     props: {
