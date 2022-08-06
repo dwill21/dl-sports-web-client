@@ -37,7 +37,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           {sport.name}
         </Typography>
 
-        <Grid container columns={12} spacing={2}>
+        <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={5}>
             <ArticleCard article={sport.articles?.[0] ?? null} cmsUrl={cmsUrl} height={615}/>
           </Grid>
@@ -50,31 +50,29 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
             ))}
           </Grid>
 
-          <Grid item xs={12} container spacing={2} justifyContent="center" mt={2}>
-            {sport.topics?.map(topic => (
-              <Grid key={topic.title} item xs={12} md={6} lg={4}>
-                <TopicCard title={topic.title ?? ""}>
-                  {parse(topic.content ?? "")}
-                </TopicCard>
-              </Grid>
-            ))}
+          <Grid item xs={12} md={6} lg={4}>
+            <TopicCard title="Highlights" disableListIndent>
+              <List>
+                {sport.highlights?.map(highlight => (
+                  <ListItem key={highlight.title} disableGutters divider>
+                    <ListItemButton onClick={() => {
+                      setOpenHighlight(highlight);
+                    }}>
+                      {highlight.title}
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </TopicCard>
+          </Grid>
 
-            <Grid item xs={12} md={6} lg={4}>
-              <TopicCard title="Highlights" disableListIndent>
-                <List>
-                  {sport.highlights?.map(highlight => (
-                    <ListItem key={highlight.title} disableGutters divider>
-                      <ListItemButton onClick={() => {
-                        setOpenHighlight(highlight);
-                      }}>
-                        {highlight.title}
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
+          {sport.topics?.map(topic => (
+            <Grid key={topic.title} item xs={12} md={6} lg={4}>
+              <TopicCard title={topic.title ?? ""}>
+                {parse(topic.content ?? "")}
               </TopicCard>
             </Grid>
-          </Grid>
+          ))}
         </Grid>
 
         <Modal open={!!openHighlight} title={openHighlight?.title ?? ""} onClose={() => {
