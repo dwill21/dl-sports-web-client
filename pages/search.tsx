@@ -1,6 +1,6 @@
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import { useRouter } from 'next/router';
 import { search } from 'utils/search';

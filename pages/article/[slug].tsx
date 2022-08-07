@@ -2,7 +2,7 @@ import client from "utils/client/apollo-client";
 import { gql } from "@apollo/client";
 import { getScripts } from "utils/script-helpers";
 import Script from "next/script";
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';

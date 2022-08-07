@@ -15,6 +15,7 @@ interface Sport {
   topics: Partial<Topic>[]
   highlights: Partial<Highlight>[]
   articles: Partial<Article>[]
+  featuredArticle: Partial<Article>
   powerRankingsArticle: Pick<Article, "id" | "slug">
 }
 interface Article {
