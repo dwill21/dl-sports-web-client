@@ -5,8 +5,8 @@ import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
-import { Sport, Highlight, Article } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { Sport, Highlight } from 'additional';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql-fragments';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
@@ -180,10 +180,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
   const sport = flatten(data.sport);
   sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];  // unwrap the array of one
-  const featuredArticleIndex = sport.articles.findIndex((article: Partial<Article>) => article.id === sport.featuredArticle.id);
-  sport.articles = featuredArticleIndex === -1 ?
-    sport.articles.slice(0, -1) :
-    sport.articles.slice(0, featuredArticleIndex).concat(sport.articles.slice(featuredArticleIndex+1));
+  sport.articles = removeFeaturedArticle(sport.articles, sport.featuredArticle);
 
   return {
     props: {

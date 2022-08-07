@@ -1,7 +1,7 @@
 import ArticleCard from 'components/cards/article-card';
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql-fragments';
 import { flatten } from 'utils/flatten';
 import { Article } from 'additional';
 import Typography from '@mui/material/Typography';
@@ -13,11 +13,12 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 interface HomePageProps {
+  featuredArticle: Partial<Article>
   articles: Partial<Article>[]
   cmsUrl: string
 }
 
-export default function HomePage({ articles, cmsUrl }: HomePageProps) {
+export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePageProps) {
   return (
     <>
       <NextSeo
@@ -31,7 +32,7 @@ export default function HomePage({ articles, cmsUrl }: HomePageProps) {
           spacing={2}
         >
           <Box className="w-full">
-            <ArticleCard article={articles?.[0]} cmsUrl={cmsUrl} height={500}/>
+            <ArticleCard article={featuredArticle} cmsUrl={cmsUrl} height={500}/>
           </Box>
 
           <Box className="w-full flex flex-col justify-between">
@@ -39,7 +40,7 @@ export default function HomePage({ articles, cmsUrl }: HomePageProps) {
               Latest News
             </Typography>
             <Grid container spacing={2}>
-              {articles.slice(1).map(article => (
+              {articles.map(article => (
                 <Grid key={article.title} item xs={12} md={6}>
                   <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription smallText/>
                 </Grid>
@@ -58,6 +59,17 @@ export async function getStaticProps() {
         ${NAVBAR_FRAGMENT}
         ${ARTICLE_PREVIEW_FRAGMENT}
         query HomePage {
+            home {
+                data {
+                    attributes {
+                        featuredArticle {
+                            data {
+                                ...ArticlePreview
+                            }
+                        }
+                    }
+                }
+            }
             articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc", filters: {column: {id: {eq: null}}}) {
                 data {
                     ...ArticlePreview
@@ -68,11 +80,13 @@ export async function getStaticProps() {
     `
   });
 
-  const flattenedArticles = flatten(data.articles);
+  const featuredArticle = flatten(data.home).featuredArticle;
+  const articles = removeFeaturedArticle(flatten(data.articles), featuredArticle);
 
   return {
     props: {
-      articles: flattenedArticles,
+      featuredArticle,
+      articles,
       cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
