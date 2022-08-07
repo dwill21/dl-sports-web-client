@@ -1,7 +1,7 @@
 import ArticleCard from 'components/cards/article-card';
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import { Article } from 'additional';
 import Typography from '@mui/material/Typography';

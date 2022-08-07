@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import { NextSeo } from 'next-seo';
 import NewsTipForm from 'forms/news-tip-form';

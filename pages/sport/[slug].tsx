@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
 import { Sport, Highlight } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';

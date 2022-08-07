@@ -1,6 +1,6 @@
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';

@@ -4,7 +4,7 @@ import { SpotifyAPI } from 'additional';
 import spotifyClient from 'utils/client/apollo-client-spotify';
 import { gql } from '@apollo/client';
 import apolloClient from 'utils/client/apollo-client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
