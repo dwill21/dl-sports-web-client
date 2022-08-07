@@ -91,9 +91,14 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           ))}
         </Grid>
 
-        <Modal open={!!openHighlight} title={openHighlight?.title ?? ""} onClose={() => {
-          setOpenHighlight(undefined)
-        }}>
+        <Modal
+          open={!!openHighlight}
+          title={openHighlight?.title ?? ""}
+          onClose={() => {
+            setOpenHighlight(undefined)
+          }}
+          contentSx={{ width: { xs: 300, md: 500, lg: 800 } }}
+        >
           {parse(openHighlight?.content ?? "")}
         </Modal>
       </Container>
