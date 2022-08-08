@@ -153,7 +153,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                                 ...ArticlePreview
                             }
                         }
-                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 6}, sort: "publishedAt:desc") {
+                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
                                 ...ArticlePreview
                             }
