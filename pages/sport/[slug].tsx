@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
 import { Sport, Highlight } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
+import { addHighlightThumbnail, ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
@@ -18,6 +18,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Button from '@mui/material/Button';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Link from 'next/link';
+import Image from 'next/image';
+import Stack from '@mui/material/Stack';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -33,6 +35,32 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
         Read more
       </Button>
     </Link>
+  )
+
+  const HighlightsCard = () => (
+    <TopicCard title="Highlights" disableListIndent>
+      <List>
+        {sport.highlights?.map(highlight => (
+          <ListItem key={highlight.title} disableGutters divider>
+            <ListItemButton onClick={() => {
+              setOpenHighlight(highlight);
+            }}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Image
+                  src={highlight.thumbnailUrl ?? ''}
+                  alt={`thumbnail: ${highlight.title}`}
+                  height={90}
+                  width={120}
+                />
+                <Typography>
+                  {highlight.title}
+                </Typography>
+              </Stack>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </TopicCard>
   )
 
   return (
@@ -61,19 +89,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <TopicCard title="Highlights" disableListIndent>
-              <List>
-                {sport.highlights?.map(highlight => (
-                  <ListItem key={highlight.title} disableGutters divider>
-                    <ListItemButton onClick={() => {
-                      setOpenHighlight(highlight);
-                    }}>
-                      {highlight.title}
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </TopicCard>
+            <HighlightsCard/>
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
@@ -186,6 +202,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const sport = flatten(data.sport);
   sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];  // unwrap the array of one
   sport.articles = removeFeaturedArticle(sport.articles, sport.featuredArticle);
+  sport.highlights = sport.highlights.map(addHighlightThumbnail);
 
   return {
     props: {

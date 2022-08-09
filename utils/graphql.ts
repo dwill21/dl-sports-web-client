@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Article } from 'additional';
+import { Article, Highlight } from 'additional';
 
 export const NAVBAR_FRAGMENT = gql`
     fragment Navbar on Query {
@@ -38,5 +38,11 @@ export const removeFeaturedArticle = (articles: Pick<Article, "id">[], featuredA
     return featuredArticleIndex === -1 ?
       articles.slice(0, -1) :
       articles.slice(0, featuredArticleIndex).concat(articles.slice(featuredArticleIndex + 1));
+}
 
+export const addHighlightThumbnail = (highlight: Partial<Highlight>) => {
+    const regex = /https:\/\/www\.youtube\.com\/embed\/(\w+)/;
+    const match = highlight.content?.match(regex);
+    const thumbnailUrl = match?.[1] ? `https://img.youtube.com/vi/${match[1]}/default.jpg` : '';
+    return { ...highlight, thumbnailUrl };
 }
