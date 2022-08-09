@@ -2,11 +2,11 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import { useSocials } from 'utils/hooks/use-socials';
 
 export default function Footer() {
+  const socials = useSocials();
+
   return (
     <footer className="w-screen">
       <Stack
@@ -16,10 +16,12 @@ export default function Footer() {
         mb={2}
         justifyContent="center"
       >
-        {[LinkedInIcon, InstagramIcon, TwitterIcon].map((SocialIcon, index) => (
-          <IconButton key={index} color="primary">
-            <SocialIcon/>
-          </IconButton>
+        {socials.map(({ Icon, link }) => (
+          <a key={link} href={link} target="_blank" rel="noopener noreferrer">
+            <IconButton color="primary">
+              <Icon/>
+            </IconButton>
+          </a>
         ))}
       </Stack>
 
