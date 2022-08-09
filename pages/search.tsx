@@ -35,8 +35,8 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
 
-  const { query } = useRouter();
-  const searchQuery = Array.isArray(query.q) ? query.q[0] : query.q;
+  const router = useRouter();
+  const searchQuery = Array.isArray(router.query.q) ? router.query.q[0] : router.query.q;
 
   const handlePageChange = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -76,7 +76,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
             <Table aria-label="Search results">
               <TableBody>
                 {searchResults.hits.map(article => (
-                  <TableRow key={article.title}>
+                  <TableRow key={article.title} onClick={() => router.push(`/article/${article.slug}`)} sx={{ cursor: 'pointer' }} hover>
                     <TableCell width={150} sx={{ p: { xs: 0, md: 2 } }}>
                       <Image
                         src={`${cmsUrl}${article.cover.formats?.['thumbnail']?.url ?? article.cover.url}`}

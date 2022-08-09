@@ -58,6 +58,7 @@ interface Topic {
 interface Highlight {
   title: string
   content: string
+  thumbnailUrl: string
 }
 
 interface NavbarProps {

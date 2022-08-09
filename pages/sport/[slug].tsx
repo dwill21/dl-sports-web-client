@@ -5,19 +5,15 @@ import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
-import { Sport, Highlight } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
+import { Sport } from 'additional';
+import { addHighlightThumbnail, ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
-import { useState } from 'react';
-import Modal from 'components/modal';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import Button from '@mui/material/Button';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Link from 'next/link';
+import HighlightsCard from 'components/cards/highlights-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -25,8 +21,6 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
-  const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
-
   const powerRankingsButton = (
     <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
       <Button variant="outlined" component="a" startIcon={<ReadMoreIcon/>}>
@@ -61,19 +55,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <TopicCard title="Highlights" disableListIndent>
-              <List>
-                {sport.highlights?.map(highlight => (
-                  <ListItem key={highlight.title} disableGutters divider>
-                    <ListItemButton onClick={() => {
-                      setOpenHighlight(highlight);
-                    }}>
-                      {highlight.title}
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </TopicCard>
+            <HighlightsCard highlights={sport.highlights}/>
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
@@ -90,12 +72,6 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
             </Grid>
           ))}
         </Grid>
-
-        <Modal open={!!openHighlight} title={openHighlight?.title ?? ""} onClose={() => {
-          setOpenHighlight(undefined)
-        }}>
-          {parse(openHighlight?.content ?? "")}
-        </Modal>
       </Container>
     </>
   )
@@ -148,7 +124,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                                 ...ArticlePreview
                             }
                         }
-                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 6}, sort: "publishedAt:desc") {
+                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
                             data {
                                 ...ArticlePreview
                             }
@@ -181,6 +157,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const sport = flatten(data.sport);
   sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];  // unwrap the array of one
   sport.articles = removeFeaturedArticle(sport.articles, sport.featuredArticle);
+  sport.highlights = sport.highlights.map(addHighlightThumbnail);
 
   return {
     props: {

@@ -6,7 +6,7 @@ import * as React from 'react';
 import { TextField } from 'formik-mui';
 import { useTheme } from '@mui/material/styles';
 import { SnackbarKey, useSnackbar } from 'notistack';
-import { useEmail } from 'utils/hooks/use_email';
+import { useEmail } from 'utils/hooks/use-email';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
