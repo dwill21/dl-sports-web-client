@@ -5,21 +5,15 @@ import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
-import { Sport, Highlight } from 'additional';
+import { Sport } from 'additional';
 import { addHighlightThumbnail, ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
 import TopicCard from 'components/cards/topic-card';
-import { useState } from 'react';
-import Modal from 'components/modal';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import Button from '@mui/material/Button';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Link from 'next/link';
-import Image from 'next/image';
-import Stack from '@mui/material/Stack';
+import HighlightsCard from 'components/cards/highlights-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -27,40 +21,12 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
-  const [openHighlight, setOpenHighlight] = useState<Partial<Highlight> | undefined>(undefined);
-
   const powerRankingsButton = (
     <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
       <Button variant="outlined" component="a" startIcon={<ReadMoreIcon/>}>
         Read more
       </Button>
     </Link>
-  )
-
-  const HighlightsCard = () => (
-    <TopicCard title="Highlights" disableListIndent>
-      <List>
-        {sport.highlights?.map(highlight => (
-          <ListItem key={highlight.title} disableGutters divider>
-            <ListItemButton onClick={() => {
-              setOpenHighlight(highlight);
-            }}>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Image
-                  src={highlight.thumbnailUrl ?? ''}
-                  alt={`thumbnail: ${highlight.title}`}
-                  height={90}
-                  width={120}
-                />
-                <Typography>
-                  {highlight.title}
-                </Typography>
-              </Stack>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </TopicCard>
   )
 
   return (
@@ -89,7 +55,7 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <HighlightsCard/>
+            <HighlightsCard highlights={sport.highlights}/>
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
@@ -106,17 +72,6 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
             </Grid>
           ))}
         </Grid>
-
-        <Modal
-          open={!!openHighlight}
-          title={openHighlight?.title ?? ""}
-          onClose={() => {
-            setOpenHighlight(undefined)
-          }}
-          contentSx={{ width: { xs: 300, md: 500, lg: 800 } }}
-        >
-          {parse(openHighlight?.content ?? "")}
-        </Modal>
       </Container>
     </>
   )
