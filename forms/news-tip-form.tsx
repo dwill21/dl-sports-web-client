@@ -1,7 +1,16 @@
-import { ErrorMessage, Field, FieldAttributes, Form, Formik, useFormikContext } from 'formik';
-import { Button, Input, Textarea, Typography } from '@material-tailwind/react';
+import { Field, FieldAttributes, Form, Formik } from 'formik';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import * as Yup from 'yup';
 import * as React from 'react';
+import { TextField } from 'formik-mui';
+import { useTheme } from '@mui/material/styles';
+import { SnackbarKey, useSnackbar } from 'notistack';
+import { useEmail } from 'utils/hooks/use-email';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const requiredMessage = "This field is required";
 const emailOrPhoneMessage = "At least one of email address or phone number is required";
@@ -27,22 +36,39 @@ const newsTipSchema = Yup.object().shape({
   [[ 'email', 'phone' ]]
 )
 
-const InputField = ({ as = Input, ...props }: FieldAttributes<any>) => {
-  const { errors, touched } = useFormikContext<{ [key: string]: never }>();
-
+const InputField = ({ name, label, type, required=false, ...otherProps }: FieldAttributes<any>) => {
   return (
-    <div className="py-2 flex flex-col">
-      <Field as={as} {...props} error={errors[props.name] && touched[props.name]}/>
-      <ErrorMessage name={props.name}>
-        {message => (
-            <Typography variant="small" color="red" className="px-2">{message}</Typography>
-        )}
-      </ErrorMessage>
-    </div>
+    <Field
+      name={name}
+      label={label}
+      type={type}
+      required={required}
+      size="small"
+      margin="normal"
+      component={TextField}
+      {...otherProps}
+    />
   )
 }
 
 export default function NewsTipForm() {
+  const theme = useTheme();
+  const buttonColors = {
+    bgcolor: `${theme.palette.primary.main}!important`,
+    color: `${theme.palette.text.primary}!important`,
+  }
+  const defaultButtonSx = { my: 2 };
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { sendEmail } = useEmail();
+  const snackbarAction = (snackbarId: SnackbarKey) => (
+    <IconButton onClick={() => {
+      closeSnackbar(snackbarId)
+    }}>
+      <CloseIcon/>
+    </IconButton>
+  )
+
   return (
     <Formik
       initialValues={{
@@ -54,32 +80,57 @@ export default function NewsTipForm() {
       }}
       validationSchema={newsTipSchema}
       validateOnMount={true}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        sendEmail({
+          from_name: `${values.firstName} ${values.lastName}`,
+          tip: values.tip,
+          contact: [values.email, values.phone].filter(e => !!e).join(", "),
+        })
+          .then(() => {
+            enqueueSnackbar('Thanks for your tip!', { variant: 'success', action: snackbarAction });
+          })
+          .catch(() => {
+            enqueueSnackbar('Uh oh! We didn\'t receive your tip!', { variant: 'error', action: snackbarAction });
+          })
+          .finally(() => {
+            resetForm();
+            setSubmitting(false);
+          });
       }}
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="py-4 flex flex-col">
-          <InputField name="firstName" label="* First name"/>
-          <InputField name="lastName" label="* Last name"/>
-          <InputField name="tip" label="* News to report" as={Textarea} rows="10"/>
+        <Box position="relative">
+          <Form className={`py-4 flex flex-col${isSubmitting ? ' blur-sm' : ''}`}>
+            <InputField name="firstName" label="First name" required/>
+            <InputField name="lastName" label="Last name" required/>
+            <InputField name="tip" label="News to report" required multiline rows={10}/>
 
-          <InputField name="email" type="email" label="Email address"/>
-          <Typography variant="small" className="text-center font-bold">OR</Typography>
-          <InputField name="phone" type="tel" label="Phone number"/>
+            <InputField name="email" type="email" label="Email address"/>
+            <Typography variant="subtitle2" paragraph align="center" mb={-1} className="font-bold">OR</Typography>
+            <InputField name="phone" type="tel" label="Phone number"/>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting || !isValid}
-            color={isSubmitting || !isValid ? 'grey' : 'blue'}
-            className="my-2"
-          >
-            Submit
-          </Button>
-        </Form>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting || !isValid}
+              sx={(!isSubmitting && isValid) ? { ...buttonColors, ...defaultButtonSx} : defaultButtonSx}
+            >
+              Submit
+            </Button>
+          </Form>
+
+          {isSubmitting && (
+            <Box sx={{
+              position: 'absolute',
+              top: '45%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+            }}>
+              <CircularProgress size={48}/>
+            </Box>
+          )}
+        </Box>
       )}
     </Formik>
   )

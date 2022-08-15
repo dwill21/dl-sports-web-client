@@ -11,8 +11,12 @@ interface Sport {
   name: string
   slug: string
   description: string
+  powerRankings: string
   topics: Partial<Topic>[]
+  highlights: Partial<Highlight>[]
   articles: Partial<Article>[]
+  featuredArticle: Partial<Article>
+  powerRankingsArticle: Pick<Article, "id" | "slug">
 }
 interface Article {
   id: number
@@ -51,6 +55,11 @@ interface Topic {
   title: string
   content: string
 }
+interface Highlight {
+  title: string
+  content: string
+  thumbnailUrl: string
+}
 
 interface NavbarProps {
   sports: Partial<Sport>[]
@@ -70,4 +79,4 @@ declare global {
   }
 }
 
-export { Article, Author, Column, Sport, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }
+export { Article, Author, Column, Sport, Highlight, SocialMedia, NavbarProps, NavbarMenuProps, SpotifyAPI }

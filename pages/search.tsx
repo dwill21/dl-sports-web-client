@@ -1,18 +1,25 @@
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
 import { useRouter } from 'next/router';
 import { search } from 'utils/search';
 import { Article } from 'additional';
-import { useEffect, useState } from 'react';
-import { Typography } from '@material-tailwind/react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import Container from '@mui/material/Container';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import Typography from '@mui/material/Typography';
+import TablePagination from '@mui/material/TablePagination';
 import Image from 'next/image';
-import SearchPaginationForm from 'forms/search-pagination-form';
-import { SyncLoader } from 'react-spinners';
-import { CSSTransition } from 'react-transition-group';
 import SearchBar from 'components/search-bar';
 import { NextSeo } from 'next-seo';
+import TablePaginationActions from 'components/table-pagination-actions';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface SearchResultsPageProps {
   cmsUrl: string
@@ -23,22 +30,32 @@ interface SearchResponse<T> {
 }
 
 export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
-  const { query } = useRouter();
   const [searchResults, setSearchResults] = useState<SearchResponse<Article>>({ hits: [], nbHits: 0});
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
-  const searchQuery = Array.isArray(query.q) ? query.q[0] : query.q;
 
-  const handleSearch = (offset?: number, limit?: number) => {
+  const router = useRouter();
+  const searchQuery = Array.isArray(router.query.q) ? router.query.q[0] : router.query.q;
+
+  const handlePageChange = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  }
+  const handleRowsPerPageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  }
+  const handleSearch = () => {
     if (searchQuery) {
       setLoading(true);
-      search('article', searchQuery, offset, limit)
+      search('article', searchQuery, page * rowsPerPage, rowsPerPage)
         .then(response => {
           setSearchResults(response as any as SearchResponse<Article>)
           setLoading(false);
         });
     }
   }
-  useEffect(handleSearch, [searchQuery]);
+  useEffect(handleSearch, [searchQuery, page, rowsPerPage]);
 
   return (
     <>
@@ -47,46 +64,54 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
         description="Search the DL Sports site to find what you're looking for"
         canonical={`${process.env.NEXT_PUBLIC_BASE_URL}/search`}
       />
-      <SearchBar className="px-4 pt-12 pb-6 mx-auto max-w-[600px]"/>
+      <SearchBar className="px-4 pt-12 pb-6 mx-auto w-full max-w-[600px]"/>
 
-      {searchQuery &&
-        <div className="px-1 md:px-12">
-          <Typography as="h1" variant="lead" className="pb-12 text-center text-2xl">
+      {searchQuery && (
+        <Container maxWidth="lg">
+          <Typography variant="h4" align="center" pb={8}>
             Search results for &quot;{searchQuery}&quot;
           </Typography>
 
-          <ul className="border-t">
-            {searchResults.hits.map(article => (
-              <li key={article.id} className="flex py-2 gap-x-2 border-b">
-                <Image
-                  src={`${cmsUrl}${article.cover.formats?.['thumbnail']?.url ?? article.cover.url}`}
-                  alt={article.cover.alternativeText}
-                  layout="intrinsic"
-                  width={150}
-                  height={150}
-                  objectFit="cover"
-                />
-                <div className="min-w-[300px]">
-                  <Typography variant="lead" className="mb-0.5 md:mb-1 leading-6 text-lg md:text-xl">{article.title}</Typography>
-                  <Typography variant="small" className="leading-5 md:text-base">{article.description}</Typography>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <TableContainer sx={{ mb: 4 }}>
+            <Table aria-label="Search results">
+              <TableBody>
+                {searchResults.hits.map(article => (
+                  <TableRow key={article.title} onClick={() => router.push(`/article/${article.slug}`)} sx={{ cursor: 'pointer' }} hover>
+                    <TableCell width={150} sx={{ p: { xs: 0, md: 2 } }}>
+                      <Image
+                        src={`${cmsUrl}${article.cover.formats?.['thumbnail']?.url ?? article.cover.url}`}
+                        alt={article.cover.alternativeText}
+                        layout="intrinsic"
+                        width={150}
+                        height={150}
+                        objectFit="cover"
+                      />
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 275, verticalAlign: "top" }}>
+                      <Typography variant="h6" mb={0.5} lineHeight={{ xs: 1.2, md: 1.4 }}>{article.title}</Typography>
+                      <Typography variant="body2">{article.description}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
 
-          <SearchPaginationForm
-            className="mt-8 md:mt-4 mb-4"
-            totalHits={searchResults.nbHits}
-            onSubmit={handleSearch}
-          />
-        </div>
-      }
+              <TablePagination
+                count={searchResults.nbHits}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                ActionsComponent={TablePaginationActions}
+              />
+            </Table>
+          </TableContainer>
+        </Container>
+      )}
 
-      <CSSTransition in={loading} classNames="loading-spinner" timeout={200} unmountOnExit>
-        <div className="fixed inset-0 bg-grey-200 opacity-50">
-          <SyncLoader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
-        </div>
-      </CSSTransition>
+      <Backdrop open={loading} invisible>
+        <CircularProgress variant="indeterminate"/>
+      </Backdrop>
     </>
   )
 }

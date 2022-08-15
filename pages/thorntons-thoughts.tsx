@@ -1,17 +1,22 @@
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
-import { Card, CardBody, Typography } from '@material-tailwind/react';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { Column } from 'additional';
 import { NextSeo } from 'next-seo';
-import TypographyLink from '../components/typography-link';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import ArticleCard from 'components/cards/article-card';
+import Stack from '@mui/material/Stack';
 
 interface ColumnsPageProps {
   columns: Column[]
+  cmsUrl: string
 }
 
-export default function ColumnsPage({ columns }: ColumnsPageProps) {
+export default function ColumnsPage({ columns, cmsUrl }: ColumnsPageProps) {
   return (
     <>
       <NextSeo
@@ -19,36 +24,29 @@ export default function ColumnsPage({ columns }: ColumnsPageProps) {
         description="Hear a fan's perspective on his personal favorite teams and other topics"
       />
 
-      <div className="my-20 md:px-8 w-screen">
-        <Typography as="h1" variant="lead" className="mt-4 mb-10 text-3xl text-center">
+      <Container maxWidth="lg" className="my-12">
+        <Typography variant="h4" align="center" mt={4} mb={8}>
           Thornton&apos;s Thoughts
         </Typography>
 
-        <div className="lg:w-full flex flex-wrap flex-col lg:flex-row justify-center gap-4">
+        <Grid container spacing={4} justifyContent="center">
           {columns.map(column => (
-            <Card
-              key={column.id}
-              className="w-full h-[500px] lg:basis-[30%] rounded-none"
-            >
-              <CardBody className="max-w-full max-h-full text-black">
-                <Typography as="h3" variant="lead" className="text-center mb-2">
-                  {column.title}
-                </Typography>
+            <Grid key={column.id} item xs={12} md={6} lg={4}>
+              <Typography variant="h5" align="center">
+                {column.title}
+              </Typography>
 
-                <ul className="pl-2 list-disc">
-                  {column.articles?.map(article => (
-                    <li key={article.id} className="my-1">
-                      <TypographyLink href={`/article/${article.slug}`} color="black" className="hover:text-[#0000FFFF] hover:underline">
-                        {article.title ?? ""}
-                      </TypographyLink>
-                    </li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
+              <Divider flexItem sx={{ mt: 0.5, mb: 1.5 }}/>
+
+              <Stack spacing={2}>
+                {column.articles?.map(article => (
+                  <ArticleCard key={article.id} article={article} cmsUrl={cmsUrl} height={400} smallText/>
+                ))}
+              </Stack>
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Container>
     </>
   )
 }
@@ -57,6 +55,7 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
         ${NAVBAR_FRAGMENT}
+        ${ARTICLE_PREVIEW_FRAGMENT}
         query ColumnsQuery {
             columns {
                 data {
@@ -65,11 +64,7 @@ export async function getStaticProps() {
                         title
                         articles {
                             data {
-                                id
-                                attributes {
-                                    title
-                                    slug
-                                }
+                                ...ArticlePreview
                             }
                         }
                     }
@@ -88,6 +83,7 @@ export async function getStaticProps() {
   return {
     props: {
       columns: flattenedColumns,
+      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

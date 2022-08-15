@@ -1,46 +1,67 @@
-import { IconButton, Input } from '@material-tailwind/react';
-import { IoSearchSharp } from 'react-icons/io5';
-import { Field, Form, Formik } from 'formik';
-import * as Yup from 'yup';
+import { InputBase, InputBaseProps } from 'formik-mui';
+import SearchIcon from '@mui/icons-material/Search';
+import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
 
 interface SearchBarProps {
-  autoFocus?: boolean
+  component?: React.ComponentType<InputBaseProps>
   className?: string
 }
 
-const searchBarSchema = Yup.object().shape({
-  searchInput: Yup.string().required("We need something to search for"),
-})
-
-export default function SearchBar({ autoFocus = false, className }: SearchBarProps) {
+export default function SearchBar({ component = InputBase, className }: SearchBarProps) {
   const router = useRouter();
-
-  const SearchButton = ({ disabled }: { disabled: boolean }) => (
-    <IconButton type="submit" size="sm" variant="text" className="relative -left-[2px] -top-[5px]" disabled={disabled}>
-      <IoSearchSharp size={18}/>
-    </IconButton>
-  )
+  const [focused, setFocused] = useState(false);
+  const handleFocus = () => {
+    setFocused(true);
+  }
+  const handleBlur = () => {
+    setFocused(false);
+  }
 
   return (
     <Formik
       initialValues={{searchInput: ''}}
-      validationSchema={searchBarSchema}
       onSubmit={(values, formikHelpers) => {
-        router.push(`/search?q=${values.searchInput}`);
-        formikHelpers.setSubmitting(false);
+        router.push(`/search?q=${values.searchInput}`)
+          .then(() => {
+            formikHelpers.setSubmitting(false);
+            values.searchInput = "";
+          });
       }}
     >
       {({ isSubmitting }) => (
-        <Form className={`w-full ${className}`}>
+        <Form className={`flex items-center gap-1 ${className}`}>
           <Field
             name="searchInput"
-            as={Input}
-            type="search"
             label="Search"
-            icon={<SearchButton disabled={isSubmitting}/>}
-            autoFocus={autoFocus}
-          />
+            type="search"
+            size="small"
+            variant="standard"
+            className="my-0"
+          >
+            {({ field, form, meta }: FieldProps) => (
+              <Box
+                className="w-full relative flex items-center rounded bg-white hover:opacity-100"
+                border="1px solid black"
+                sx={{ opacity: focused ? 1 : 0.95 }}
+              >
+                <SearchIcon className="ml-2 text-black"/>
+                {React.createElement(component, {
+                  field,
+                  form,
+                  meta,
+                  placeholder: "Search",
+                  className: "py-1 pl-2 pr-2 w-full",
+                  disabled: isSubmitting,
+                  onFocus: handleFocus,
+                  onBlur: handleBlur,
+                  sx: { color: 'black' },
+                })}
+              </Box>
+            )}
+          </Field>
         </Form>
       )}
     </Formik>

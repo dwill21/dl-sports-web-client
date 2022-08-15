@@ -1,13 +1,19 @@
-import ArticleCard from 'components/article-card';
-import { Card, CardBody, Typography } from '@material-tailwind/react';
+import ArticleCard from 'components/cards/article-card';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import { gql } from '@apollo/client';
 import client from 'utils/client/apollo-client';
 import { flatten } from 'utils/flatten';
 import { Sport } from 'additional';
-import { ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
-import { useRouter } from 'next/router';
+import { addHighlightThumbnail, ARTICLE_PREVIEW_FRAGMENT, NAVBAR_FRAGMENT, removeFeaturedArticle } from 'utils/graphql';
 import { NextSeo } from 'next-seo';
 import parse from 'html-react-parser';
+import TopicCard from 'components/cards/topic-card';
+import Button from '@mui/material/Button';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import Link from 'next/link';
+import HighlightsCard from 'components/cards/highlights-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
@@ -15,7 +21,13 @@ interface SportPageProps {
 }
 
 export default function SportPage({ sport, cmsUrl }: SportPageProps) {
-  const router = useRouter();
+  const powerRankingsButton = (
+    <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
+      <Button variant="outlined" component="a" startIcon={<ReadMoreIcon/>}>
+        Read more
+      </Button>
+    </Link>
+  )
 
   return (
     <>
@@ -24,42 +36,43 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
         description={`${sport.name} news, highlights, & analysis`}
       />
 
-      <div className="my-16 md:px-20">
-        <Typography as="h1" variant="lead" className="mt-4 mb-6 text-3xl text-center md:text-left">
+      <Container maxWidth="lg" className="my-16">
+        <Typography variant="h4" mt={4} mb={6} className="text-center md:text-left">
           {sport.name}
         </Typography>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {sport.articles?.[0] && <ArticleCard className="w-full h-64" article={sport.articles[0]} cmsUrl={cmsUrl}/>}
 
-          <div className="w-full md:h-64 md:col-span-2">
-            <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-8 lg:overflow-scroll">
-              {sport.articles?.slice(1).map(article => (
-                <Card
-                  key={article.title}
-                  color="grey"
-                  className="cursor-pointer rounded-none"
-                  onClick={() => router.push(`/article/${article.slug}`)}
-                >
-                  <CardBody className="max-w-full max-h-full">
-                    <Typography as="h5" variant="small" className="mb-2 font-bold">
-                      {article.title}
-                    </Typography>
-                  </CardBody>
-                </Card>
-              ))}
-            </div>
-          </div>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item xs={12} md={5}>
+            <ArticleCard article={sport.featuredArticle ?? null} cmsUrl={cmsUrl} height={615}/>
+          </Grid>
+
+          <Grid item xs={12} md={7} container spacing={2}>
+            {sport.articles?.map(article => (
+              <Grid key={article.id} item xs={12} md={6}>
+                <ArticleCard article={article} cmsUrl={cmsUrl} height={300} smallText/>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={4}>
+            <HighlightsCard highlights={sport.highlights}/>
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={4}>
+              <TopicCard title="Power Rankings" cardActions={powerRankingsButton}>
+                {parse(sport.powerRankings ?? "")}
+              </TopicCard>
+          </Grid>
 
           {sport.topics?.map(topic => (
-            <Card key={topic.title} className="w-full h-64 px-8 py-2 overflow-y-scroll topic-card rounded-none">
-              <Typography as="h3" variant="lead" className="text-center font-bold mb-2">
-                {topic.title}
-              </Typography>
-              {parse(topic.content ?? "")}
-            </Card>
+            <Grid key={topic.title} item xs={12} md={6} lg={4}>
+              <TopicCard title={topic.title ?? ""}>
+                {parse(topic.content ?? "")}
+              </TopicCard>
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Container>
     </>
   )
 }
@@ -92,13 +105,36 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                 data {
                     attributes {
                         name
+                        powerRankings
                         topics {
                             title
                             content
                         }
-                        articles(pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+                        highlights {
+                            data {
+                                id
+                                attributes {
+                                    title
+                                    content
+                                }
+                            }
+                        }
+                        featuredArticle {
                             data {
                                 ...ArticlePreview
+                            }
+                        }
+                        articles(filters: { powerRanking: {eq: false} }, pagination: {page: 1, pageSize: 5}, sort: "publishedAt:desc") {
+                            data {
+                                ...ArticlePreview
+                            }
+                        }
+                        powerRankingsArticle: articles(filters: { powerRanking: {eq: true} }, pagination: {page: 1, pageSize: 1}, sort: "publishedAt:desc") {
+                            data {
+                                id
+                                attributes {
+                                    slug
+                                }
                             }
                         }
                     }
@@ -118,9 +154,14 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     }
   }
 
+  const sport = flatten(data.sport);
+  sport.powerRankingsArticle = sport.powerRankingsArticle?.[0];  // unwrap the array of one
+  sport.articles = removeFeaturedArticle(sport.articles, sport.featuredArticle);
+  sport.highlights = sport.highlights.map(addHighlightThumbnail);
+
   return {
     props: {
-      sport: flatten(data.sport),
+      sport,
       cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)

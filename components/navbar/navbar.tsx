@@ -1,33 +1,42 @@
-import { IconButton, Navbar } from '@material-tailwind/react';
-import TypographyLink from 'components/typography-link';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import NavbarContent from 'components/navbar/navbar-content';
 import { NavbarProps } from 'additional';
-import { IoSearchSharp } from 'react-icons/io5';
+import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
 import HamburgerMenu from 'components/navbar/hamburger-menu';
-import { useSmallScreen } from 'utils/hooks/use-small-screen';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Image from 'next/image';
+import logo from 'public/logo.png';
+import Link from 'next/link';
 
 export default function AppNavbar({ sports }: NavbarProps) {
   const router = useRouter();
-  const isSmallScreen = useSmallScreen();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <Navbar fullWidth={true}>
-      <div className="mx-auto container flex items-center justify-between text-grey-900">
-        <TypographyLink href="/" variant="h4" className="py-1.5 font-normal">
-          DL Sports
-        </TypographyLink>
+    <AppBar position="static" className="w-screen" enableColorOnDark>
+      <Toolbar className="flex items-center md:gap-4">
+        <Link href="/">
+          <a className="flex bg-black rounded">
+            <Image src={logo} alt="DL Sports logo" height={50} width={195}/>
+          </a>
+        </Link>
 
-        {isSmallScreen !== null && (isSmallScreen ?
-          <div className="flex items-center">
+        {matches ?
+          <NavbarContent sports={sports}/> :
+          <>
+            <span className="flex-grow"></span>
             <HamburgerMenu sports={sports}/>
-            <IconButton variant="text" onClick={() => router.push('/search')}>
-              <IoSearchSharp size={24} className="cursor-pointer text-black"/>
+            <IconButton aria-label="search" onClick={() => router.push('/search')} sx={{ ml: -1 }}>
+              <SearchIcon fontSize="large" sx={{ color: "black" }}/>
             </IconButton>
-          </div>
-          : <NavbarContent sports={sports}/>
-        )}
-      </div>
-    </Navbar>
+          </>
+        }
+      </Toolbar>
+    </AppBar>
   );
 }

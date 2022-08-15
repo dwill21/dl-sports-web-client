@@ -1,14 +1,18 @@
 import client from 'utils/client/apollo-client';
 import { gql } from '@apollo/client';
-import { NAVBAR_FRAGMENT } from 'utils/graphql-fragments';
+import { NAVBAR_FRAGMENT } from 'utils/graphql';
 import { flatten } from 'utils/flatten';
-import { Button, Typography } from '@material-tailwind/react';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import searchParty from 'public/searchparty2.webp'
 import Link from 'next/link';
 import { NextSeo } from 'next-seo';
+import { useTheme } from '@mui/material/styles';
 
 export default function NotFoundPage() {
+  const theme = useTheme();
+
   return (
     <>
       <NextSeo
@@ -17,19 +21,22 @@ export default function NotFoundPage() {
         noindex={true}
       />
 
-      <div className="w-screen h-screen relative flex justify-center items-center">
+      <div className="w-screen h-screen mb-4 relative flex justify-center items-center">
         <Image src={searchParty} alt="Lost golf ball" layout="fill" objectFit="cover" className="opacity-90"/>
       </div>
 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center">
-        <span className="flex justify-center items-center text-white">
-          <Typography as="h1" className="pr-4 border-r font-bold text-9xl drop-shadow-xl">404</Typography>
-          <Typography className="pl-4 text-3xl font-bold drop-shadow-xl">We&apos;re off searching for this page</Typography>
+        <span className="mb-4 flex justify-center items-center text-white">
+          <Typography variant="h1" className="pr-4 border-r !text-9xl drop-shadow-xl">404</Typography>
+          <Typography variant="h3" className="pl-4 drop-shadow-xl">We&apos;re off searching for this page</Typography>
         </span>
 
         <Link href="/" passHref>
           <a>
-            <Button className="mt-4 w-full">
+            <Button variant="contained" className="w-full" sx={{
+              bgcolor: `${theme.palette.primary.main}!important`,
+              color: `${theme.palette.text.primary}!important`
+            }}>
               Back to the tee box
             </Button>
           </a>
