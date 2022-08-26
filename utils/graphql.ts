@@ -5,6 +5,7 @@ export const NAVBAR_FRAGMENT = gql`
     fragment Navbar on Query {
         sports {
             data {
+                id
                 attributes {
                     name
                     slug
@@ -23,6 +24,7 @@ export const ARTICLE_PREVIEW_FRAGMENT = gql`
             slug
             cover {
                 data {
+                    id
                     attributes {
                         url
                         alternativeText

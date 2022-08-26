@@ -83,6 +83,7 @@ export async function getStaticPaths() {
         query AllSports {
             sports {
                 data {
+                    id
                     attributes {
                         slug
                     }
@@ -103,6 +104,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
         query Sport($slug: String!) {
             sport(slug: $slug) {
                 data {
+                    id
                     attributes {
                         name
                         powerRankings

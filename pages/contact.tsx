@@ -75,6 +75,7 @@ export async function getStaticProps() {
         query ContactPage {
             contact {
                 data {
+                    id
                     attributes {
                         body
                     }

@@ -100,6 +100,7 @@ export async function getStaticPaths() {
         query Articles {
             articles {
                 data {
+                    id
                     attributes {
                         slug
                     }
@@ -122,6 +123,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
         query Article($slug: String!) {
             article(slug: $slug) {
                 data {
+                    id
                     attributes {
                         title
                         slug
@@ -131,6 +133,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                         updatedAt
                         cover {
                             data {
+                                id
                                 attributes {
                                     url
                                     alternativeText
@@ -141,12 +144,14 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                         }
                         author {
                             data {
+                                id
                                 attributes {
                                     firstName
                                     lastName
                                     email
                                     avatar {
                                         data {
+                                            id
                                             attributes {
                                                 url
                                                 alternativeText
@@ -158,6 +163,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                         }
                         sport {
                             data {
+                                id
                                 attributes {
                                     name
                                 }
@@ -165,6 +171,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
                         }
                         column {
                             data {
+                                id
                                 attributes {
                                     title
                                 }
