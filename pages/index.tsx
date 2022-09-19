@@ -61,6 +61,7 @@ export async function getStaticProps() {
         query HomePage {
             home {
                 data {
+                    id
                     attributes {
                         featuredArticle {
                             data {
