@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [process.env.APP_HOST, 'img.youtube.com'],
+    domains: [process.env.IMAGES_DOMAIN, 'img.youtube.com'],
   },
 }
 
