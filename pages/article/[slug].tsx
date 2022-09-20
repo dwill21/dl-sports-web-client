@@ -13,10 +13,9 @@ import parse from 'html-react-parser';
 
 interface ArticlePageProps {
   article: Partial<Article>
-  cmsUrl: string
 }
 
-export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
+export default function ArticlePage({ article }: ArticlePageProps ) {
   const externalScripts = article.body ? getScripts(article.body) : [];
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/article/${article.slug}`;
 
@@ -64,7 +63,7 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
         <div className="flex justify-center">
           {article.cover?.url &&
             <Image
-              src={`${cmsUrl}${article.cover.url}`}
+              src={article.cover.url}
               alt={article.cover.alternativeText}
               layout="intrinsic"
               width="1000"
@@ -88,7 +87,7 @@ export default function ArticlePage({ article, cmsUrl }: ArticlePageProps ) {
           </Typography>
         </div>
 
-        {article.author && <AuthorCard author={article.author} cmsUrl={cmsUrl}/>}
+        {article.author && <AuthorCard author={article.author}/>}
       </div>
     </>
   )
@@ -197,7 +196,6 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   return {
     props: {
       article: flatten(data.article),
-      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       },
