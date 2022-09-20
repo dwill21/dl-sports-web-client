@@ -76,7 +76,7 @@ export default function SearchResultsPage() {
                   <TableRow key={article.title} onClick={() => router.push(`/article/${article.slug}`)} sx={{ cursor: 'pointer' }} hover>
                     <TableCell width={150} sx={{ p: { xs: 0, md: 2 } }}>
                       <Image
-                        src={article.cover.formats?.['thumbnail']?.url ?? article.cover.url}
+                        src={article.cover.formats?.['thumbnail']?.url ?? article.cover.url ?? ""}
                         alt={article.cover.alternativeText}
                         layout="intrinsic"
                         width={150}
