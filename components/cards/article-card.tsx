@@ -9,14 +9,13 @@ import { useRouter } from 'next/router';
 
 interface ArticleCardProps {
   article: Partial<Article> | null
-  cmsUrl: string
   imageHeight: number
   imageWidth: number
   smallText?: boolean
   noDescription?: boolean
 }
 
-export default function ArticleCard({ article, cmsUrl, imageHeight=250, imageWidth=300, smallText=false, noDescription=false }: ArticleCardProps) {
+export default function ArticleCard({ article, imageHeight=250, imageWidth=300, smallText=false, noDescription=false }: ArticleCardProps) {
   const router = useRouter();
   if (!article) {
     return null;
@@ -37,7 +36,7 @@ export default function ArticleCard({ article, cmsUrl, imageHeight=250, imageWid
       <CardActionArea disableRipple sx={{ height: '100%' }}>
         <Stack direction="column" height="100%">
           <Image
-            src={`${cmsUrl}${article.cover?.url}`}
+            src={article.cover?.url ?? ""}
             alt={article.cover?.alternativeText}
             priority={true}
             height={imageHeight}

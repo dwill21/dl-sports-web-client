@@ -21,15 +21,12 @@ import TablePaginationActions from 'components/table-pagination-actions';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-interface SearchResultsPageProps {
-  cmsUrl: string
-}
 interface SearchResponse<T> {
   hits: T[]
   nbHits: number
 }
 
-export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
+export default function SearchResultsPage() {
   const [searchResults, setSearchResults] = useState<SearchResponse<Article>>({ hits: [], nbHits: 0});
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -79,7 +76,7 @@ export default function SearchResultsPage({ cmsUrl }: SearchResultsPageProps) {
                   <TableRow key={article.title} onClick={() => router.push(`/article/${article.slug}`)} sx={{ cursor: 'pointer' }} hover>
                     <TableCell width={150} sx={{ p: { xs: 0, md: 2 } }}>
                       <Image
-                        src={`${cmsUrl}${article.cover.formats?.['thumbnail']?.url ?? article.cover.url}`}
+                        src={article.cover.formats?.['thumbnail']?.url ?? article.cover.url}
                         alt={article.cover.alternativeText}
                         layout="intrinsic"
                         width={150}
@@ -128,7 +125,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

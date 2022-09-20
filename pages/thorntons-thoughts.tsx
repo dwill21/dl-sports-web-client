@@ -13,10 +13,9 @@ import Stack from '@mui/material/Stack';
 
 interface ColumnsPageProps {
   columns: Column[]
-  cmsUrl: string
 }
 
-export default function ColumnsPage({ columns, cmsUrl }: ColumnsPageProps) {
+export default function ColumnsPage({ columns }: ColumnsPageProps) {
   return (
     <>
       <NextSeo
@@ -40,7 +39,7 @@ export default function ColumnsPage({ columns, cmsUrl }: ColumnsPageProps) {
 
               <Stack spacing={2}>
                 {column.articles?.map(article => (
-                  <ArticleCard key={article.id} article={article} cmsUrl={cmsUrl} imageHeight={175} imageWidth={200} smallText/>
+                  <ArticleCard key={article.id} article={article} imageHeight={175} imageWidth={200} smallText/>
                 ))}
               </Stack>
             </Grid>
@@ -83,7 +82,6 @@ export async function getStaticProps() {
   return {
     props: {
       columns: flattenedColumns,
-      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

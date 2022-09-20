@@ -17,10 +17,9 @@ import HighlightsCard from 'components/cards/highlights-card';
 
 interface SportPageProps {
   sport: Partial<Sport>
-  cmsUrl: string
 }
 
-export default function SportPage({ sport, cmsUrl }: SportPageProps) {
+export default function SportPage({ sport }: SportPageProps) {
   const powerRankingsButton = (
     <Link href={`/article/${sport.powerRankingsArticle?.slug}`} passHref>
       <Button variant="outlined" component="a" startIcon={<ReadMoreIcon/>}>
@@ -43,13 +42,13 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
 
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={5}>
-            <ArticleCard article={sport.featuredArticle ?? null} cmsUrl={cmsUrl} imageHeight={325} imageWidth={300}/>
+            <ArticleCard article={sport.featuredArticle ?? null} imageHeight={325} imageWidth={300}/>
           </Grid>
 
           <Grid item xs={12} md={7} container spacing={2}>
             {sport.articles?.map(article => (
               <Grid key={article.id} item xs={12} md={6}>
-                <ArticleCard article={article} cmsUrl={cmsUrl} imageHeight={250} imageWidth={300} smallText/>
+                <ArticleCard article={article} imageHeight={250} imageWidth={300} smallText/>
               </Grid>
             ))}
           </Grid>
@@ -164,7 +163,6 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   return {
     props: {
       sport,
-      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       },
