@@ -40,7 +40,7 @@ export default function ColumnsPage({ columns, cmsUrl }: ColumnsPageProps) {
 
               <Stack spacing={2}>
                 {column.articles?.map(article => (
-                  <ArticleCard key={article.id} article={article} cmsUrl={cmsUrl} height={400} smallText/>
+                  <ArticleCard key={article.id} article={article} cmsUrl={cmsUrl} imageHeight={175} imageWidth={200} smallText/>
                 ))}
               </Stack>
             </Grid>

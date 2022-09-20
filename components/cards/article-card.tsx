@@ -2,7 +2,7 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography, { TypographyProps } from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { Article } from 'additional';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -10,12 +10,13 @@ import { useRouter } from 'next/router';
 interface ArticleCardProps {
   article: Partial<Article> | null
   cmsUrl: string
-  height: number
+  imageHeight: number
+  imageWidth: number
   smallText?: boolean
   noDescription?: boolean
 }
 
-export default function ArticleCard({ article, cmsUrl, height, smallText=false, noDescription=false }: ArticleCardProps) {
+export default function ArticleCard({ article, cmsUrl, imageHeight=250, imageWidth=300, smallText=false, noDescription=false }: ArticleCardProps) {
   const router = useRouter();
   if (!article) {
     return null;
@@ -32,21 +33,19 @@ export default function ArticleCard({ article, cmsUrl, height, smallText=false, 
   } : {};
 
   return (
-    <Card onClick={() => router.push(`/article/${article.slug}`)}>
-      <CardActionArea disableRipple>
-        <Box height={0.6 * height} position="relative">
-          {article.cover?.url && (
-            <Image
-              src={`${cmsUrl}${article.cover.url}`}
-              alt={article.cover.alternativeText}
-              priority={true}
-              layout="fill"
-              objectFit="cover"
-            />
-          )}
-        </Box>
+    <Card onClick={() => router.push(`/article/${article.slug}`)} sx={{ height: '100%' }}>
+      <CardActionArea disableRipple sx={{ height: '100%' }}>
+        <Stack direction="column" height="100%">
+          <Image
+            src={`${cmsUrl}${article.cover?.url}`}
+            alt={article.cover?.alternativeText}
+            priority={true}
+            height={imageHeight}
+            width={imageWidth}
+            layout="responsive"
+            objectFit="cover"
+          />
 
-        <Box height={0.4 * height}>
           <CardContent>
             <Typography {...titleProps}>
               {article.title}
@@ -57,7 +56,7 @@ export default function ArticleCard({ article, cmsUrl, height, smallText=false, 
               </Typography>
             )}
           </CardContent>
-        </Box>
+        </Stack>
       </CardActionArea>
     </Card>
   )

@@ -32,7 +32,7 @@ export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePage
           spacing={2}
         >
           <Box className="w-full">
-            <ArticleCard article={featuredArticle} cmsUrl={cmsUrl} height={500}/>
+            <ArticleCard article={featuredArticle} cmsUrl={cmsUrl} imageHeight={275} imageWidth={300}/>
           </Box>
 
           <Box className="w-full flex flex-col justify-between">
@@ -42,7 +42,7 @@ export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePage
             <Grid container spacing={2}>
               {articles.map(article => (
                 <Grid key={article.title} item xs={12} md={6}>
-                  <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription smallText/>
+                  <ArticleCard article={article} cmsUrl={cmsUrl} imageHeight={250} imageWidth={300} noDescription smallText/>
                 </Grid>
               ))}
             </Grid>

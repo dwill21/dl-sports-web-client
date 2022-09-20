@@ -43,13 +43,13 @@ export default function SportPage({ sport, cmsUrl }: SportPageProps) {
 
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={5}>
-            <ArticleCard article={sport.featuredArticle ?? null} cmsUrl={cmsUrl} height={615}/>
+            <ArticleCard article={sport.featuredArticle ?? null} cmsUrl={cmsUrl} imageHeight={325} imageWidth={300}/>
           </Grid>
 
           <Grid item xs={12} md={7} container spacing={2}>
             {sport.articles?.map(article => (
               <Grid key={article.id} item xs={12} md={6}>
-                <ArticleCard article={article} cmsUrl={cmsUrl} height={300} smallText/>
+                <ArticleCard article={article} cmsUrl={cmsUrl} imageHeight={250} imageWidth={300} smallText/>
               </Grid>
             ))}
           </Grid>
