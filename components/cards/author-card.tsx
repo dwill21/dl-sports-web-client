@@ -4,15 +4,14 @@ import { Author } from 'additional';
 
 interface AuthorCardProps {
   author: Partial<Author>
-  cmsUrl: string
 }
 
-export default function AuthorCard({ author, cmsUrl }: AuthorCardProps) {
+export default function AuthorCard({ author }: AuthorCardProps) {
   return (
     <div className="flex justify-center items-center gap-4">
       {author.avatar?.url &&
         <Image
-          src={`${cmsUrl}${author.avatar.url}`}
+          src={author.avatar.url}
           alt={author.avatar.alternativeText}
           layout="intrinsic"
           width={80}

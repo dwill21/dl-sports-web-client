@@ -15,10 +15,9 @@ import Grid from '@mui/material/Grid';
 interface HomePageProps {
   featuredArticle: Partial<Article>
   articles: Partial<Article>[]
-  cmsUrl: string
 }
 
-export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePageProps) {
+export default function HomePage({ featuredArticle, articles }: HomePageProps) {
   return (
     <>
       <NextSeo
@@ -32,7 +31,7 @@ export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePage
           spacing={2}
         >
           <Box className="w-full">
-            <ArticleCard article={featuredArticle} cmsUrl={cmsUrl} height={500}/>
+            <ArticleCard article={featuredArticle} imageHeight={275} imageWidth={300}/>
           </Box>
 
           <Box className="w-full flex flex-col justify-between">
@@ -42,7 +41,7 @@ export default function HomePage({ featuredArticle, articles, cmsUrl }: HomePage
             <Grid container spacing={2}>
               {articles.map(article => (
                 <Grid key={article.title} item xs={12} md={6}>
-                  <ArticleCard article={article} cmsUrl={cmsUrl} height={200} noDescription smallText/>
+                  <ArticleCard article={article} imageHeight={250} imageWidth={300} noDescription smallText/>
                 </Grid>
               ))}
             </Grid>
@@ -88,7 +87,6 @@ export async function getStaticProps() {
     props: {
       featuredArticle,
       articles,
-      cmsUrl: process.env.CMS_BASE_URL,
       navbar: {
         sports: flatten(data.sports)
       }

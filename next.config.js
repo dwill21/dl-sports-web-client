@@ -2,8 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // TODO use real domain when running in production mode
-    domains: ['localhost', 'img.youtube.com'],
+    domains: [process.env.IMAGES_DOMAIN, 'img.youtube.com'],
   },
 }
 
