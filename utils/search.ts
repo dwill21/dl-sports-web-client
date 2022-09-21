@@ -1,7 +1,7 @@
 import { MeiliSearch } from 'meilisearch';
 
 const searchClient = new MeiliSearch({
-  host: 'http://127.0.0.1:7700',
+  host: process.env.NEXT_PUBLIC_CMS_SEARCH_URL ?? "",
   // apiKey: 'masterKey',
 });
 
