@@ -166,6 +166,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
       navbar: {
         sports: flatten(data.sports)
       },
-    }
+    },
+    revalidate: 300,
   };
 }
