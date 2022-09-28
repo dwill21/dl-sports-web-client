@@ -200,5 +200,6 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
         sports: flatten(data.sports)
       },
     },
+    revalidate: 300,
   };
 }
