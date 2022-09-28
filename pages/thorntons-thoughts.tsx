@@ -85,6 +85,7 @@ export async function getStaticProps() {
       navbar: {
         sports: flatten(data.sports)
       }
-    }
+    },
+    revalidate: 300,
   };
 }
