@@ -66,9 +66,9 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
               src={article.cover.url}
               alt={article.cover.alternativeText}
               layout="intrinsic"
-              width="1000"
-              height="400"
-              objectFit="cover"
+              width="1200"
+              height="630"
+              objectFit="contain"
               priority={true}
             />
           }
