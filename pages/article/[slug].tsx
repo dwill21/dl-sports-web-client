@@ -56,7 +56,7 @@ export default function ArticlePage({ article }: ArticlePageProps ) {
       />
 
       <div className="md:w-3/4 xl:w-2/3 mx-auto py-14 items-center">
-        <Typography variant="h4" align="center" className="mb-8">
+        <Typography variant="h4" align="center" className="!mb-8">
           {article.title}
         </Typography>
 
