@@ -18,6 +18,10 @@ interface HomePageProps {
 }
 
 export default function HomePage({ featuredArticle, articles }: HomePageProps) {
+  const introText = 'Welcome to DL Sports! Find your news on the DL. Founded by Sam Thornton. Sports news, "On The DL" ' +
+    'podcast via Spotify every week, opinionated blogs, and more. Make sure to follow the DL Sports Instagram page ' +
+    '@dlsportscom for additional content. Our goal is to bring you the best sports coverage on a personal basis.';
+
   return (
     <>
       <NextSeo
@@ -25,6 +29,10 @@ export default function HomePage({ featuredArticle, articles }: HomePageProps) {
       />
 
       <Container maxWidth="lg" className="py-16">
+        <Typography align="center" className="pb-6 font-normal">
+          {introText}
+        </Typography>
+
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           divider={<Divider orientation="vertical" flexItem/>}
@@ -35,7 +43,7 @@ export default function HomePage({ featuredArticle, articles }: HomePageProps) {
           </Box>
 
           <Box className="w-full flex flex-col justify-between">
-            <Typography variant="h4" component="h2" align="center" className="pb-6 font-normal">
+            <Typography  align="center" className="pb-6 font-normal">
               Latest News
             </Typography>
             <Grid container spacing={2}>
