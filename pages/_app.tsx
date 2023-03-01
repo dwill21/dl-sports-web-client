@@ -13,6 +13,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 import NProgressBar from 'components/nprogress-bar';
+import Script from "next/script";
 
 const theme = createTheme({
   palette: {
@@ -37,10 +38,25 @@ const theme = createTheme({
   },
 });
 
+const AnalyticsScripts = () => (
+  <>
+    <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-KJEBLE3MV8" />
+    <Script strategy="afterInteractive" id='gtag-script'>
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KJEBLE3MV8');
+      `}
+    </Script>
+  </>
+);
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo {...SEO} />
+      <AnalyticsScripts />
       <NProgressBar/>
 
       <ThemeProvider theme={theme}>
