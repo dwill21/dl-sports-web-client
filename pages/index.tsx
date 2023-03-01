@@ -43,7 +43,7 @@ export default function HomePage({ featuredArticle, articles }: HomePageProps) {
           </Box>
 
           <Box className="w-full flex flex-col justify-between">
-            <Typography  align="center" className="pb-6 font-normal">
+            <Typography variant="h4" component="h2" align="center" className="pb-6 font-normal">
               Latest News
             </Typography>
             <Grid container spacing={2}>
